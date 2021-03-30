@@ -20,7 +20,20 @@ echo this is a test script
 
 FILE=task_1/Users.csv
 if [ -f "$FILE" ]; then
-    echo "$FILE exists."
+    echo -e "$FILE exists.\n\n" 
+    cat $FILE
 else 
     echo "$FILE does not exist."
 fi
+DATE=$(date)
+echo $DATE
+#git fetch to get the data
+mkdir repo
+cd repo
+pwd
+git status
+git clone https://github.com/leggant/2021-OS-Assignment.git
+cd 2021-OS-Assignment
+pwd
+dir
+#cat ../../task_1/Users.csv
