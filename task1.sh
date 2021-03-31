@@ -1,5 +1,10 @@
 #!/bin/bash
+
+chmod 700 task1.sh
+# set -x will force the output of debugger
 set -x
+
+#run a loop
 for i in {1..10} ;do
     echo $i
 done
@@ -8,30 +13,30 @@ for i in {a..z} ;do
     echo $i
 done
 
-echo this is a test script
+#echo text 
+echo "this is a test script"
 
-# Make make intermediary directories
-#mkdir -p parent/child/grandchild
+DATE=$(date)
+echo $DATE
 
-#output results to a text file.
-#bash TutorialSeries/chapter1.sh 2> debug.txt
+#git fetch to get the data
 
+git clone https://github.com/leggant/2021-OS-Assignment.git
+cd 2021-OS-Assignment
+git checkout automated-io
+git status
+pwd
 # Check If Users File Exists
-
-FILE=task_1/Users.csv
+FILE=Users.csv
 if [ -f "$FILE" ]; then
     echo -e "$FILE exists.\n\n" 
     cat $FILE
 else 
     echo "$FILE does not exist."
 fi
-DATE=$(date)
-echo $DATE
-#git fetch to get the data
-#mkdir repo
-#cd repo
-git status
-git clone https://github.com/leggant/2021-OS-Assignment.git
-cd 2021-OS-Assignment
-git checkout Test-Code
-pwd
+
+# Make make intermediary directories
+#mkdir -p parent/child/grandchild
+
+#output results to a text file.
+#bash TutorialSeries/chapter1.sh 2> debug.txt
