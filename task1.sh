@@ -28,12 +28,10 @@ fi
 DATE=$(date)
 echo $DATE
 #git fetch to get the data
-mkdir repo
-cd repo
-pwd
+#mkdir repo
+#cd repo
 git status
 git clone https://github.com/leggant/2021-OS-Assignment.git
 cd 2021-OS-Assignment
+git checkout Test-Code
 pwd
-dir
-#cat ../../task_1/Users.csv
