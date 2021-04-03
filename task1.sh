@@ -1,42 +1,50 @@
 #!/bin/bash
 
-chmod 700 task1.sh
-# set -x will force the output of debugger
-set -x
-
-#run a loop
-for i in {1..10} ;do
-    echo $i
-done
-set +x
-for i in {a..z} ;do
-    echo $i
-done
-
-#echo text 
-echo "this is a test script"
-
-DATE=$(date)
-echo $DATE
-
-#git fetch to get the data
-
+# Download User.csv from Github Repo URL
 git clone https://github.com/leggant/2021-OS-Assignment.git
 cd 2021-OS-Assignment
 git checkout automated-io
 git status
+
+# move file out of folder into top level dir
+mv Users.csv ../
+cd ../
 pwd
-# Check If Users File Exists
+
+# Check If Users File Exists - Make A Function
 FILE=Users.csv
+EXISTS=false
 if [ -f "$FILE" ]; then
     echo -e "$FILE exists.\n\n" 
     cat $FILE
+    echo
+    $EXISTS = true
 else 
     echo "$FILE does not exist."
+    $EXISTS = false
+    echo "Please enter a new file url: "
 fi
 
-# Make make intermediary directories
-#mkdir -p parent/child/grandchild
 
-#output results to a text file.
-#bash TutorialSeries/chapter1.sh 2> debug.txt
+# Check if file is parsable. - Make A Function
+
+
+
+# Parse User File
+
+IFS=";"
+while read -r email dob group shared
+do
+    echo "Email: $email"
+    echo "DOB: $dob"
+    echo "Groups: $group"
+    echo "Shared Folder: $shared"
+    echo
+
+done < $FILE
+
+
+#Create User Function
+
+# set -x will force the output of debugger
+set -x
