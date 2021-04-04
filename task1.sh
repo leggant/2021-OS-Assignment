@@ -2,7 +2,7 @@
 
 # Download User.csv from Github Repo URL
 git clone https://github.com/leggant/2021-OS-Assignment.git
-cd 2021-OS-Assignment
+cd 2021-OS-Assignment/
 git checkout automated-io
 git status
 
@@ -10,9 +10,6 @@ git status
 mv Users.csv ../
 cd ../
 pwd
-<<<<<<< HEAD
-# Check If Users File Exists
-=======
 
 # Check If Users File Exists - Make A Function
 FILE=Users.csv
@@ -30,7 +27,8 @@ else
 fi
 
 
-# Check if file is parsable. - Make A Function
+# Check if file is parsable. - Make A Function, change user execution persission if needed.
+
 
 
 
@@ -41,33 +39,18 @@ fi
     while IFS=";", read -r email dob group shared
     do
         password=$(date -d $dob +'%m%Y')
-        echo "Password: $password"
-        echo "Email: $email"
-        echo "DOB: $dob"
+        echo "Converting $dob to Password: $password"
+        echo "Converting $email to username:"
+        # first name
+
+        # last name
         echo "Groups: $group"
         echo "Shared Folder: $shared"
         echo
     done
 } < $FILE
 
-
-
-# IFS=";"
-# while read -r email dob group shared
-# do
-#     password=$(date -d $dob +'%m%Y')
-#     echo "Password: $password"
-#     echo "Email: $email"
-#     echo "DOB: $dob"
-#     echo "Groups: $group"
-#     echo "Shared Folder: $shared"
-#     echo
-
-# done < $FILE
-
-
 #Create User Function
 
 # set -x will force the output of debugger
 set -x
->>>>>>> origin/task-1
