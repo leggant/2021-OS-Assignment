@@ -35,6 +35,8 @@ fi
 IFS=";"
 while read -r email dob group shared
 do
+    password=$(date -d $dob +'%m%Y')
+    echo "Password: $password"
     echo "Email: $email"
     echo "DOB: $dob"
     echo "Groups: $group"
