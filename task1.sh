@@ -17,7 +17,8 @@ EXISTS=false
 if [ -f "$FILE" ]; then
     echo -e "$FILE exists.\n\n" 
     cat $FILE
-    echo
+    echo "
+    "
     $EXISTS = true
 else 
     echo "$FILE does not exist."
@@ -32,18 +33,34 @@ fi
 
 # Parse User File
 
-IFS=";"
-while read -r email dob group shared
-do
-    password=$(date -d $dob +'%m%Y')
-    echo "Password: $password"
-    echo "Email: $email"
-    echo "DOB: $dob"
-    echo "Groups: $group"
-    echo "Shared Folder: $shared"
-    echo
+{
+    read
+    while IFS=";", read -r email dob group shared
+    do
+        password=$(date -d $dob +'%m%Y')
+        echo "Password: $password"
+        echo "Email: $email"
+        echo "DOB: $dob"
+        echo "Groups: $group"
+        echo "Shared Folder: $shared"
+        echo
+    done
+} < $FILE
 
-done < $FILE
+
+
+# IFS=";"
+# while read -r email dob group shared
+# do
+#     password=$(date -d $dob +'%m%Y')
+#     echo "Password: $password"
+#     echo "Email: $email"
+#     echo "DOB: $dob"
+#     echo "Groups: $group"
+#     echo "Shared Folder: $shared"
+#     echo
+
+# done < $FILE
 
 
 #Create User Function
