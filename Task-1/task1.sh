@@ -2,6 +2,10 @@
 
 # Function Declarations
 
+createUsers() {
+
+}
+
 # Check If Group Exists, 
 # If Not, Create Group
 # $1 = group
@@ -21,15 +25,6 @@ createUserName() {
     last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
     name=$initial$last
     echo "Converted $1 to username: $name"
-    
-}
-
-addUserToGroup() {
-    echo $1
-}
-
-alternativeDownloadOnFail() {
-    echo $1
 }
 
 # Global Variables
@@ -43,18 +38,16 @@ git checkout automated-io
 git status
 
 # move file out of folder into top level dir
+# remove repo file
 cp Users.csv ../
 cd ../
 rm -rf 2021-OS-Assignment
-pwd
 
 # Check If Users File Exists - Make A Function
 FILE=Users.csv
 if [ -f "$FILE" ]; then
-    echo -e "$FILE exists.\n\n" 
-    #awk 'END { print NR;}' $FILE
-    echo "
-    "
+    echo -e "$FILE exists.
+    " 
 else 
     echo "$FILE does not exist."
     echo "Please enter a new file url: "
@@ -74,17 +67,11 @@ fi
         echo "Converting $dob to Password: $password"
         echo "Converting $email to username:"
         
-
         echo "Groups: $group"
         #parse group string
-
         #check if group exists
         #create if not
         #add this user to group
         echo "Shared Folder: $shared"
-        echo
     done
 } < $FILE
-
-# set -x will force the output of debugger
-set -x
