@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Global Variables
-
-downloadSuccess=false
-
 # Function Declarations
 
 # Check If Group Exists, 
@@ -20,8 +16,12 @@ if grep -q $1 /etc/group
 }
 
 createUserName() {
-    name="new name"
-    echo $name: $1
+    xname=$1
+    initial=${xname:0:1}
+    last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
+    name=$initial$last
+    echo "Converted $1 to username: $name"
+    
 }
 
 addUserToGroup() {
@@ -31,6 +31,10 @@ addUserToGroup() {
 alternativeDownloadOnFail() {
     echo $1
 }
+
+# Global Variables
+count=0
+gitCloneSuccess=false
 
 # Download User.csv from Github Repo URL
 git clone https://github.com/leggant/2021-OS-Assignment.git
@@ -44,33 +48,27 @@ cd ../
 rm -rf 2021-OS-Assignment
 pwd
 
-
 # Check If Users File Exists - Make A Function
 FILE=Users.csv
-EXISTS=false
 if [ -f "$FILE" ]; then
     echo -e "$FILE exists.\n\n" 
-    cat $FILE
+    #awk 'END { print NR;}' $FILE
     echo "
     "
-    $EXISTS = true
 else 
     echo "$FILE does not exist."
-    $EXISTS = false
     echo "Please enter a new file url: "
 fi
 
-# Check if file is parsable. - Make A Function, change user execution persission if needed.
-
+# Check if file is parsable. - Make A Function, 
+# change user execution persission if needed.
 # Parse User File
-
 {
     read
     while IFS=";", read -r email dob group shared
     do
         # create username from email
         # format first letter of first name followed by full last name.
-        echo "Converting $email to username"
         createUserName $email
         password=$(date -d $dob +'%m%Y')
         echo "Converting $dob to Password: $password"
@@ -88,9 +86,5 @@ fi
     done
 } < $FILE
 
-#Create User Function
-
 # set -x will force the output of debugger
 set -x
-
-
