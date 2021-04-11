@@ -2,14 +2,10 @@
 
 # Function Declarations
 
-createUsers() {
-
-}
-
 # Check If Group Exists, 
 # If Not, Create Group
 # $1 = group
-checkGroup() {
+
 if grep -q $1 /etc/group
     then
         echo "$1 already exists"
@@ -17,15 +13,15 @@ if grep -q $1 /etc/group
         echo "$1 does not exist"
         # create group
     fi
-}
 
-createUserName() {
-    xname=$1
-    initial=${xname:0:1}
-    last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
-    name=$initial$last
-    echo "Converted $1 to username: $name"
-}
+
+
+xname=$1
+initial=${xname:0:1}
+last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
+name=$initial$last
+echo "Converted $1 to username: $name"
+
 
 # Global Variables
 count=0
