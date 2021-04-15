@@ -16,10 +16,11 @@ downloadDefaultCSV() {
 checkFileExists() {
     echo "checking"
     FILE=$1
-    if [ -f "$FILE" ]; then
-        echo -e "$FILE exists.    " 
+    if [ -f -r -s "$FILE" ]; then
+        echo -e "$FILE exists, readable, has content.    " 
     else 
         echo "$FILE does not exist."
+        exit 1
     fi
 }
 
@@ -36,7 +37,7 @@ checkIfGroupExists() {
     fi
 }
 
-createUser() {
+createUserName() {
     xname=$1
     initial=${xname:0:1}
     last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
@@ -47,6 +48,10 @@ createUser() {
 createGroup () {
     echo $1
 }
+
+
+
+### Start of Program Output To User ###
 
 echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
 1) Download and Use the Default CSV File 
@@ -62,8 +67,10 @@ do
         1) 
             echo -e "\tChecking Users CSV File URL\n";
             checkCSV_URI $default;
+            ## Get Return Value
             echo -e "\tDownloading Users CSV File\n";
             downloadDefaultCSV $default;
+            ## Get Return Values
             exit 0;;
         2) 
             echo -e "\t\nChecking Default Local User File"; 
@@ -80,6 +87,10 @@ do
         exit 1
     fi
 done
+
+#############################################
+## If Successful THen Check & Parse CSV file
+############################################
 
 ## Parse User CSV File
 {
@@ -101,3 +112,5 @@ done
         echo "Shared Folder: $shared"
     done
 } < $FILE
+
+
