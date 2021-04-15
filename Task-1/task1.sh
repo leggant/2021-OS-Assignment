@@ -48,6 +48,8 @@ createGroup () {
     echo $1
 }
 
+### Start of Program Output To User ###
+
 echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
 1) Download and Use the Default CSV File 
 2) Enter a New URL to a CSV File For Download
@@ -62,8 +64,10 @@ do
         1) 
             echo -e "\tChecking Users CSV File URL\n";
             checkCSV_URI $default;
+            ## Get Return Value
             echo -e "\tDownloading Users CSV File\n";
             downloadDefaultCSV $default;
+            ## Get Return Values
             exit 0;;
         2) 
             echo -e "\t\nChecking Default Local User File"; 
@@ -80,6 +84,10 @@ do
         exit 1
     fi
 done
+
+#############################################
+## If Successful THen Check & Parse CSV file
+############################################
 
 ## Parse User CSV File
 {
