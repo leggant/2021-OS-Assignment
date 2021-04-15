@@ -29,7 +29,13 @@ checkIfGroupExists() {
     echo $1
 }
 
+createUser() {
+    echo $1
+}
 
+createGroup () {
+    echo $1
+}
 
 echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
 1) download the default CSV file from GitHub 
