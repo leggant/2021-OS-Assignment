@@ -20,3 +20,12 @@ a year down the road, and what documentation you will need to understand the scr
 authored, how to run them, and what their purposes are.
 
 NOTE: The other components of the formal aspects of this assignment (including error handling, code commenting and code modularity) are all assessed during review of your scripts for Task 1 and Task 2.
+
+# Task 1
+
+• The email address of the user
+• The birth date of the user (in the format YYYY/MM/DD, for example, 1991/11/17)
+• The secondary groups the user should be added to
+• A shared folder that the user requires full access to (full rwx permissions)
+
+# Task 2
