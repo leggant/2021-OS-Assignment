@@ -36,7 +36,7 @@ checkIfGroupExists() {
     fi
 }
 
-createUser() {
+createUserName() {
     xname=$1
     initial=${xname:0:1}
     last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
