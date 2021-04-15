@@ -16,10 +16,11 @@ downloadDefaultCSV() {
 checkFileExists() {
     echo "checking"
     FILE=$1
-    if [ -f "$FILE" ]; then
-        echo -e "$FILE exists.    " 
+    if [ -f -r -s "$FILE" ]; then
+        echo -e "$FILE exists, readable, has content.    " 
     else 
         echo "$FILE does not exist."
+        exit 1
     fi
 }
 
@@ -47,6 +48,8 @@ createUserName() {
 createGroup () {
     echo $1
 }
+
+
 
 ### Start of Program Output To User ###
 
@@ -109,3 +112,5 @@ done
         echo "Shared Folder: $shared"
     done
 } < $FILE
+
+
