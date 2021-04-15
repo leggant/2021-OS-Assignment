@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Download Default User.csv from Github Repo URL
 downloadDefaultCSV() {
     git clone https://github.com/leggant/2021-OS-Assignment.git
@@ -76,7 +75,6 @@ do
     fi
 done
 
-
 # Check If Group Exists, 
 # If Not, Create Group
 # $1 = group
@@ -89,14 +87,11 @@ done
 #         # create group
 #     fi
 
-
-
 # xname=$1
 # initial=${xname:0:1}
 # last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
 # name=$initial$last
 # echo "Converted $1 to username: $name"
-
 
 # Check If Users File Exists - Make A Function
 # FILE=Users.csv
