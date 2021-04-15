@@ -1,6 +1,7 @@
 #!/bin/bash
 
-default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
+#default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
+default="https://github.com/leggant/2021-OS-Assignment/blob/assignment-code/users.csv"
 # Check Download URI resource, check it starts with http:// 
 # and ends in .csv
 checkCSV_URI() {
@@ -50,36 +51,37 @@ createGroup () {
 echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
 1) Download and Use the Default CSV File 
 2) Enter a New URL to a CSV File For Download
-
+3) Exit The Program
 "
 
 x=1
-until [[ $x -eq 4 || $option -eq 1 || $option -eq 2 ]]
+until [[ $x -eq 5 || $option -ge 1 && $option -le 3 ]]
 do
-    read -p "Enter 1 or 2: " option
+    read -p "Enter 1, 2 or 3: " option
     case $option in 
-        1*) 
+        1) 
             echo -e "\tChecking Users CSV File URL\n";
             checkCSV_URI $default;
             echo -e "\tDownloading Users CSV File\n";
             downloadDefaultCSV $default;
             exit 0;;
-        2*) 
+        2) 
             echo -e "\t\nChecking Default Local User File"; 
             exit 0 ;;
+        3) 
+            echo -e "\t\nExiting The Program"; 
+            exit 1 ;;
         *) 
             echo -e "\f\t>> Error, Please try again <<\n" ;;
     esac 
     x=$(( x+1 ))
-    if [ $x -eq 4 ]; then
+    if [ $x -eq 5 ]; then
         echo -e "Input Error Please Try Again Later"
         exit 1
     fi
 done
 
-# # Check if file is parsable. - Make A Function, 
-# # change user execution persission if needed.
-# # Parse User File
+## Parse User CSV File
 {
     read
     while IFS=";", read -r email dob group shared
