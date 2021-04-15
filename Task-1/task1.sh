@@ -11,6 +11,12 @@ downloadDefaultCSV() {
     #rm -rf 2021-OS-Assignment
 }
 
+downloadAlternateCSV() {
+    #wget $1
+    #git clone $1
+    echo $1
+}
+
 checkFileExists() {
     echo "checking"
 }
@@ -19,21 +25,40 @@ checkFileIsParsable() {
     echo "also checking"
 }
 
-echo -e "This script will auto new user creation on this system. Do you wish to: \n
-1) download the default CSV file from GitHub\f 
-2) use a locally stored CSV file?\f"
+checkIfGroupExists() {
+    echo $1
+}
+
+
+
+echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
+1) download the default CSV file from GitHub 
+2) use the default locally stored CSV file?
+3) enter a path to a new local CSV file, or
+4) enter a different GitHub URL "
 
 x=1
 until [[ $x -eq 4 || $option -eq $x ]]
 do
-    read -p "Enter 1 or 2: " option
+    read -p "Enter 1, 2, 3 or 4: " option
     case $option in 
-        *1*) 
+        1*) 
             echo -e "\t\nDownload Users From GitHub\n";
             downloadDefaultCSV;
+            # check successful 
+            # then exit - if Error, 
+            # then..... exit 1
             exit 0;;
-        *2*) 
-            echo -e "\t\nChecking Local User File"; 
+        2*) 
+            echo -e "\t\nChecking Default Local User File"; 
+            exit 0 ;;
+        3*) 
+            echo -e "\t\nChecking New Local User File"; 
+            exit 0 ;;
+        4*) 
+            read -p "Enter the GitHub Repos URL: " repo;
+            echo -e "\t\nDownloading New GitHub Repo"; 
+            downloadAlternateCSV $repo;
             exit 0 ;;
         *) 
             echo -e "\f\t>>Error, Please try again\n" ;;
@@ -45,9 +70,6 @@ do
     fi
 done
 
-
-
-# Function Declarations
 
 # Check If Group Exists, 
 # If Not, Create Group
@@ -69,22 +91,6 @@ done
 # name=$initial$last
 # echo "Converted $1 to username: $name"
 
-
-# # Global Variables
-# count=0
-# gitCloneSuccess=false
-
-# Download User.csv from Github Repo URL
-# git clone https://github.com/leggant/2021-OS-Assignment.git
-# cd 2021-OS-Assignment/
-# git checkout automated-io
-# git status
-
-# # move file out of folder into top level dir
-# # remove repo file
-# cp Users.csv ../
-# cd ../
-# rm -rf 2021-OS-Assignment
 
 # Check If Users File Exists - Make A Function
 # FILE=Users.csv
