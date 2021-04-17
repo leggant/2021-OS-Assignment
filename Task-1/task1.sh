@@ -56,7 +56,13 @@ createGroup () {
     echo $1
 }
 
+createSharedFolder() {
+    echo "Shared Folder Created"
+}
 
+createSharedFolderLink() {
+    echo "Link Created"
+}
 
 # ---------------------------------------------------------------------------- #
 #                        Start of Program Output To User                       #
@@ -110,14 +116,10 @@ done
         password=$(date -d $dob +'%m%Y')
         echo "Converting $dob to Password: $password"
         echo "Converting $email to username:"
-        
         echo "Groups: $group"
-        #parse group string
-        #check if group exists
-        #create if not
-        #add this user to group
         echo "Shared Folder: $shared"
     done
 } < $FILE
 
-
+# ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
+echo 'alias off=”systemctl poweroff”' >> ~/.bashrc
