@@ -1,17 +1,24 @@
-# 2021 OS Assignment
-Repo for the assignment code and documents
+# 2021 OS Assignment 
 
-## Your README.md file must contain:
+## Anthony Legg (leggtc1)
 
- 1. Author details:
-– Your full name
-– You student code (aka. login name)
-– A timestamp of last date when changes were made
+### Items still to add:
 
+1.  A timestamp of last date when changes were made
 2. Project details for each of the two scripts:
-– Summary of the purpose of the script
-– Pre-requisites of running the script
-– Instructions on how to run the script, including example commands
+   – Summary of the purpose of the script
+   – Pre-requisites of running the script
+   – Instructions on how to run the script, including example commands
+
+## Bash Script Instructions
+
+#### Downloading Files:
+
+#### Setting Permissions:
+
+#### Running script:
+
+#### What to do if an error occurs:
 
 When writing your README file, think about the reader as someone who does not know the
 instructions provided in this document. Make sure to write the documentation for someone
@@ -23,9 +30,16 @@ NOTE: The other components of the formal aspects of this assignment (including e
 
 # Task 1
 
+## Purpose and Expected Output
+
+This script will automate the creation and administration of new system users. User information is downloaded from github then parsed byinto the script from an external .csv file.  assignment to user groups,
+
 • The email address of the user
 • The birth date of the user (in the format YYYY/MM/DD, for example, 1991/11/17)
 • The secondary groups the user should be added to
 • A shared folder that the user requires full access to (full rwx permissions)
 
 # Task 2
+
+## Purpose and Expected Output
+
