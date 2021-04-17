@@ -1,7 +1,14 @@
 #!/bin/bash
-
+# ---------------------------------------------------------------------------- #
+#                         GLOBAL VARIABLE DECLARATIONS                         #
+# ---------------------------------------------------------------------------- #
 #default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
 default="https://github.com/leggant/2021-OS-Assignment/blob/assignment-code/users.csv"
+
+# ---------------------------------------------------------------------------- #
+#                         SCRIPT FUNCTION DECLARATIONS                         #
+# ---------------------------------------------------------------------------- #
+
 # Check Download URI resource, check it starts with http:// 
 # and ends in .csv
 checkCSV_URI() {
@@ -51,7 +58,9 @@ createGroup () {
 
 
 
-### Start of Program Output To User ###
+# ---------------------------------------------------------------------------- #
+#                        Start of Program Output To User                       #
+# ---------------------------------------------------------------------------- #
 
 echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
 1) Download and Use the Default CSV File 
@@ -88,11 +97,9 @@ do
     fi
 done
 
-#############################################
-## If Successful THen Check & Parse CSV file
-############################################
+# ----------------- If Successful, THen Check & Parse CSV file ---------------- #
+# ---------------------------- Parse User CSV File --------------------------- #
 
-## Parse User CSV File
 {
     read
     while IFS=";", read -r email dob group shared
