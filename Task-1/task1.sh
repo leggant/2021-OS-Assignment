@@ -2,8 +2,12 @@
 # ---------------------------------------------------------------------------- #
 #                         GLOBAL VARIABLE DECLARATIONS                         #
 # ---------------------------------------------------------------------------- #
-#default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
-default="https://github.com/leggant/2021-OS-Assignment/blob/assignment-code/users.csv"
+default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
+#default="http://127.0.0.1:5500/TESTusers.csv"
+#local="LocalUsers.csv"
+local="TESTusers.csv"
+log="log.txt"
+ok=0
 
 # ---------------------------------------------------------------------------- #
 #                         SCRIPT FUNCTION DECLARATIONS                         #
@@ -12,22 +16,46 @@ default="https://github.com/leggant/2021-OS-Assignment/blob/assignment-code/user
 # Check Download URI resource, check it starts with http:// 
 # and ends in .csv
 checkCSV_URI() {
-    echo $1
+    if wget --spider "${1}" 2>> $log; then
+        echo "This page exists.";
+        return 0
+    else
+        echo "This file does not exist."
+        return 1
+    fi
 }
 
 # Download Default user.csv
 downloadDefaultCSV() {
-    echo $1
+    if wget - $default 2>> $log; then
+        echo "$default Dowloading";
+        return 0;
+    else
+        echo "An Error Occured";
+        return 1;
+    fi
+}
+
+checkAndDownloadCSV() {
+    echo -e "\tChecking Users CSV File URL\n";
+    checkCSV_URI $default;
+    if [ $? -eq 0 ]; then
+        ok=0
+        echo -e "\tDownloading Users CSV File\n";
+        downloadDefaultCSV $default;
+    else
+        echo -e "An Error has occured; Please try again";
+        ok=1
+    fi
 }
 
 checkFileExists() {
-    echo "checking"
-    FILE=$1
-    if [ -f -r -s "$FILE" ]; then
-        echo -e "$FILE exists, readable, has content.    " 
+    if [[ -f $local && -r $local && -s $local ]]; then
+        echo -e "$local exists, readable, has content."
+        ok=0
     else 
-        echo "$FILE does not exist."
-        exit 1
+        echo "$local does not exist."
+        ok=1
     fi
 }
 
@@ -70,26 +98,20 @@ createSharedFolderLink() {
 
 echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
 1) Download and Use the Default CSV File 
-2) Enter a New URL to a CSV File For Download
+2) Use a Locally Stored CSV File
 3) Exit The Program
 "
 
 x=1
-until [[ $x -eq 5 || $option -ge 1 && $option -le 3 ]]
+until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
 do
     read -p "Enter 1, 2 or 3: " option
     case $option in 
         1) 
-            echo -e "\tChecking Users CSV File URL\n";
-            checkCSV_URI $default;
-            ## Get Return Value
-            echo -e "\tDownloading Users CSV File\n";
-            downloadDefaultCSV $default;
-            ## Get Return Values
-            exit 0;;
+            checkAndDownloadCSV ;;
         2) 
-            echo -e "\t\nChecking Default Local User File"; 
-            exit 0 ;;
+            echo -e "\t\nChecking Default Local User File";
+            checkFileExists $local ;;
         3) 
             echo -e "\t\nExiting The Program"; 
             exit 1 ;;
@@ -97,7 +119,7 @@ do
             echo -e "\f\t>> Error, Please try again <<\n" ;;
     esac 
     x=$(( x+1 ))
-    if [ $x -eq 5 ]; then
+    if [ $x -eq 4 ]; then
         echo -e "Input Error Please Try Again Later"
         exit 1
     fi
@@ -119,7 +141,7 @@ done
         echo "Groups: $group"
         echo "Shared Folder: $shared"
     done
-} < $FILE
+} < $local
 
 # ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
 echo 'alias off=”systemctl poweroff”' >> ~/.bashrc
