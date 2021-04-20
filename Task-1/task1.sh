@@ -4,12 +4,61 @@
 # ---------------------------------------------------------------------------- #
 default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
 downloaded="users.csv"
-local="LocalUsers.csv"
+local="LocalUser.csv"
 log="log.txt"
+newPath=""
 ok=0
 # ---------------------------------------------------------------------------- #
 #                         SCRIPT FUNCTION DECLARATIONS                         #
 # ---------------------------------------------------------------------------- #
+
+
+checkAndDownloadCSV() {
+    echo -e "\n>>> Checking If Users File Is Already Downloaded <<<"
+    checkFile $downloaded
+    present=$?
+    if [ $present -eq 0 ]; then
+        echo -e ">>> $downloaded Is Already On The Local System\n">>$log;
+        echo -e "\n>>> File Is Already Downloaded To The Local System";
+        echo -e ">>> Checking Already Downloaded CSV File\n";
+        checkFile $downloaded;
+        URLok=$?
+        if [ $URLok -eq 0 ]; then
+            echo -e "\nParsing CSV File User Data\n">>$log;
+        fi
+    else 
+        echo -e "\tChecking Users CSV File URL\n";
+        checkCSV_URI $default;
+        URLok=$?
+        if [ $URLok -eq 0 ]; then
+            echo -e "\nDownloading Users CSV File\n";
+            downloadDefaultCSV $default 2>>$log;
+        else 
+            echo -e "\nAn Error Occured During Download";
+            echo -e "An Error Occured During Download">>$log;
+            exit 1
+        fi
+    fi
+}
+
+checkAndParseLocalCSV() {
+    echo -e "\nChecking Default Local User File \n";
+    echo -e ">>> Checking The Default Local User File">>$log;
+    checkFile $local
+    ok=$?
+    if [ $ok -eq 0 ]; then
+        echo -e ">>> $local is ok to parse user data from">>$log;
+        echo -e ">>> $local is ok to parse user data from";
+        return 0
+    else 
+        echo -e "Error Parsing User Data From Local File";
+        read -p "Enter A New File Path Here:: " newPath 
+        checkFile $newPath
+        if [ $? -eq 0 ]; then
+            local=$newPath
+        else
+    fi
+}
 
 # Check Download URI resource, check it starts with http:// 
 # and ends in .csv
@@ -26,46 +75,21 @@ checkCSV_URI() {
 # Download Default user.csv
 downloadDefaultCSV() {
     if wget - $default 2>> $log; then
-        echo -e "\n$default CSV File Download Completed....." >> $log;
+        echo -e "$default CSV File Download Completed.....">>$log;
+        echo -e "\n$default CSV File Download Completed....."
         return 0;
     else
         return 1;
     fi
 }
 
-checkAndDownloadCSV() {
-    echo -e "\nChecking If Users File Is Already Downloaded"
-    checkFile $downloaded
-    present=$?
-    if [ $present -eq 0 ]; then
-        echo -e "File Is Already Downloaded To The Local System\f">>$log;
-        echo -e "File Is Already Downloaded To The Local System\f";
-        echo -e "\tChecking Already Downloaded CSV File\n";
-        checkCSV_URI $downloaded;
-        URLok=$?
-        if $URLok -eq 0 2>>$log; then
-            echo -e "\nParsing CSV File User Data\n";
-        fi
-    else 
-        echo -e "\tChecking Users CSV File URL\n";
-        checkCSV_URI $default;
-        URLok=$?
-        if $URLok -eq 0 2>>$log; then
-            echo -e "\nDownloading Users CSV File\n";
-            downloadDefaultCSV $default;
-        else 
-            echo -e "\n An Error Occured During Download">>$log;
-            exit 1
-        fi
-    fi
-}
-
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 ]]; then
-        echo -e "$1 exists, readable, has content."
+        echo -e "$1 is readable and contains parsable content.\n"
+        echo -e "$1 is readable and contains parsable content.\n">>$log
         return 0
     else 
-        echo "$1 does not exist."
+        echo -e "\n>>> $1 does not exist."
         return 1
     fi
 }
@@ -117,8 +141,7 @@ do
         1) 
             checkAndDownloadCSV ;;
         2) 
-            echo -e "\t\nChecking Default Local User File";
-            checkFile $local ;;
+            checkAndParseLocalCSV ;;
         3) 
             echo -e "\t\nExiting The Program"; 
             exit 1 ;;

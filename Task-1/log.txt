@@ -1,8 +1,37 @@
-File Is Already Downloaded To The Local System
-File Is Already Downloaded To The Local System
-File Is Already Downloaded To The Local System
+Checking Default Local User File 
+
+LocalUsers.csv is readable and contains parsable content.
+
+LocalUsers.csv is readable and contains parsable content.
+
 Spider mode enabled. Check if remote file exists.
---2021-04-20 05:20:09--  http://users.csv/
-Resolving users.csv (users.csv)... failed: Name or service not known.
-wget: unable to resolve host address ‘users.csv’
-./task1.sh: line 46: 1: command not found
+--2021-04-20 05:57:20--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
+Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
+Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 519 [text/csv]
+Remote file exists.
+
+--2021-04-20 05:57:21--  http://-/
+Resolving - (-)... failed: Temporary failure in name resolution.
+wget: unable to resolve host address ‘-’
+--2021-04-20 05:57:21--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
+Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
+Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 519 [text/csv]
+Saving to: ‘users.csv’
+
+     0K                                                       100% 53.3M=0s
+
+2021-04-20 05:57:21 (53.3 MB/s) - ‘users.csv’ saved [519/519]
+
+FINISHED --2021-04-20 05:57:21--
+Total wall clock time: 0.4s
+Downloaded: 1 files, 519 in 0s (53.3 MB/s)
+>>> Checking The Default Local User File
+>>> Checking The Default Local User File
+>>> Checking The Default Local User File
+>>> Checking The Default Local User File
+LocalUsers.csv is readable and contains parsable content.
+
