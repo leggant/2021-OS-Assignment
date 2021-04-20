@@ -1,0 +1,8 @@
+File Is Already Downloaded To The Local System
+File Is Already Downloaded To The Local System
+File Is Already Downloaded To The Local System
+Spider mode enabled. Check if remote file exists.
+--2021-04-20 05:20:09--  http://users.csv/
+Resolving users.csv (users.csv)... failed: Name or service not known.
+wget: unable to resolve host address ‘users.csv’
+./task1.sh: line 46: 1: command not found

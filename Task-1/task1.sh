@@ -3,12 +3,10 @@
 #                         GLOBAL VARIABLE DECLARATIONS                         #
 # ---------------------------------------------------------------------------- #
 default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
-#default="http://127.0.0.1:5500/TESTusers.csv"
-#local="LocalUsers.csv"
-local="TESTusers.csv"
+downloaded="users.csv"
+local="LocalUsers.csv"
 log="log.txt"
 ok=0
-
 # ---------------------------------------------------------------------------- #
 #                         SCRIPT FUNCTION DECLARATIONS                         #
 # ---------------------------------------------------------------------------- #
@@ -17,7 +15,7 @@ ok=0
 # and ends in .csv
 checkCSV_URI() {
     if wget --spider "${1}" 2>> $log; then
-        echo "This page exists.";
+        echo "This file exists and is downloadable.";
         return 0
     else
         echo "This file does not exist."
@@ -28,47 +26,55 @@ checkCSV_URI() {
 # Download Default user.csv
 downloadDefaultCSV() {
     if wget - $default 2>> $log; then
-        echo "$default Dowloading";
+        echo -e "\n$default CSV File Download Completed....." >> $log;
         return 0;
     else
-        echo "An Error Occured";
         return 1;
     fi
 }
 
 checkAndDownloadCSV() {
-    echo -e "\tChecking Users CSV File URL\n";
-    checkCSV_URI $default;
-    if [ $? -eq 0 ]; then
-        ok=0
-        echo -e "\tDownloading Users CSV File\n";
-        downloadDefaultCSV $default;
-    else
-        echo -e "An Error has occured; Please try again";
-        ok=1
-    fi
-}
-
-checkFileExists() {
-    if [[ -f $local && -r $local && -s $local ]]; then
-        echo -e "$local exists, readable, has content."
-        ok=0
+    echo -e "\nChecking If Users File Is Already Downloaded"
+    checkFile $downloaded
+    present=$?
+    if [ $present -eq 0 ]; then
+        echo -e "File Is Already Downloaded To The Local System\f">>$log;
+        echo -e "File Is Already Downloaded To The Local System\f";
+        echo -e "\tChecking Already Downloaded CSV File\n";
+        checkCSV_URI $downloaded;
+        URLok=$?
+        if $URLok -eq 0 2>>$log; then
+            echo -e "\nParsing CSV File User Data\n";
+        fi
     else 
-        echo "$local does not exist."
-        ok=1
+        echo -e "\tChecking Users CSV File URL\n";
+        checkCSV_URI $default;
+        URLok=$?
+        if $URLok -eq 0 2>>$log; then
+            echo -e "\nDownloading Users CSV File\n";
+            downloadDefaultCSV $default;
+        else 
+            echo -e "\n An Error Occured During Download">>$log;
+            exit 1
+        fi
     fi
 }
 
-checkFileIsParsable() {
-    echo "also checking"
+checkFile() {
+    if [[ -f $1 && -r $1 && -s $1 ]]; then
+        echo -e "$1 exists, readable, has content."
+        return 0
+    else 
+        echo "$1 does not exist."
+        return 1
+    fi
 }
 
 checkIfGroupExists() {
-    if [ grep -q $1 /etc/group]; then
+    if grep -q $1 /etc/group 2>> $log; then
         echo "$1 already exists"
     else
         echo "$1 does not exist"
-        # create group
     fi
 }
 
@@ -78,6 +84,7 @@ createUserName() {
     last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
     name=$initial$last
     echo "Converted $1 to username: $name"
+    echo $name
 }
 
 createGroup () {
@@ -111,7 +118,7 @@ do
             checkAndDownloadCSV ;;
         2) 
             echo -e "\t\nChecking Default Local User File";
-            checkFileExists $local ;;
+            checkFile $local ;;
         3) 
             echo -e "\t\nExiting The Program"; 
             exit 1 ;;
@@ -132,8 +139,6 @@ done
     read
     while IFS=";", read -r email dob group shared
     do
-        # create username from email
-        # format first letter of first name followed by full last name.
         createUserName $email
         password=$(date -d $dob +'%m%Y')
         echo "Converting $dob to Password: $password"
