@@ -21,11 +21,11 @@ checkAndDownloadCSV() {
         echo -e ">>> $downloaded Is Already On The Local System\n">>$log;
         echo -e "\n>>> File Is Already Downloaded To The Local System";
         echo -e ">>> Checking Already Downloaded CSV File\n";
-        checkFile $downloaded;
-        URLok=$?
-        if [ $URLok -eq 0 ]; then
-            echo -e "\nParsing CSV File User Data\n">>$log;
-        fi
+        # checkFile $downloaded;
+        # URLok=$?
+        # if [ $URLok -eq 0 ]; then
+        #     echo -e "\nParsing CSV File User Data\n">>$log;
+        # fi
     else 
         echo -e "\tChecking Users CSV File URL\n";
         checkCSV_URI $default;
@@ -51,12 +51,24 @@ checkAndParseLocalCSV() {
         echo -e ">>> $local is ok to parse user data from";
         return 0
     else 
+        x=0
+        ok=1
         echo -e "Error Parsing User Data From Local File";
-        read -p "Enter A New File Path Here:: " newPath 
-        checkFile $newPath
-        if [ $? -eq 0 ]; then
-            local=$newPath
-        else
+        until [[ $x -eq 3 || $ok -eq 0 ]]
+        do
+            read -p "Enter A New File Path Here:: " newPath 
+            checkFile $newPath
+            if [ $? -eq 0 ]; then
+                local=$newPath;
+                ok=0;
+            else
+                x=$(( x+1 ))
+                if [ $x -eq 3 ]; then
+                    echo -e "Input Error Please Try Again Later";
+                    exit 1
+                fi
+            fi
+        done
     fi
 }
 
@@ -85,7 +97,6 @@ downloadDefaultCSV() {
 
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 ]]; then
-        echo -e "$1 is readable and contains parsable content.\n"
         echo -e "$1 is readable and contains parsable content.\n">>$log
         return 0
     else 
@@ -102,6 +113,18 @@ checkIfGroupExists() {
     fi
 }
 
+createGroup () {
+    echo $1
+}
+
+checkIfUserExists() {
+    if id -u "$1" >>$log; then
+        echo "user exists"
+    else
+        echo "user does not exist"
+    fi
+}
+
 createUserName() {
     xname=$1
     initial=${xname:0:1}
@@ -111,9 +134,7 @@ createUserName() {
     echo $name
 }
 
-createGroup () {
-    echo $1
-}
+
 
 createSharedFolder() {
     echo "Shared Folder Created"
@@ -156,20 +177,22 @@ do
 done
 
 # ----------------- If Successful, THen Check & Parse CSV file ---------------- #
-# ---------------------------- Parse User CSV File --------------------------- #
+# ---------------------------- Parse User CSV File ---------------------------- #
 
-{
-    read
-    while IFS=";", read -r email dob group shared
-    do
-        createUserName $email
-        password=$(date -d $dob +'%m%Y')
-        echo "Converting $dob to Password: $password"
-        echo "Converting $email to username:"
-        echo "Groups: $group"
-        echo "Shared Folder: $shared"
-    done
-} < $local
 
+parseUsers() {
+    {
+        read
+        while IFS=";", read -r email dob group shared
+        do
+            createUserName $email
+            password=$(date -d $dob +'%m%Y')
+            echo "Converting $dob to Password: $password"
+            echo "Converting $email to username:"
+            echo "Groups: $group"
+            echo "Shared Folder: $shared"
+        done
+    } < $local
+}
 # ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
 echo 'alias off=”systemctl poweroff”' >> ~/.bashrc
