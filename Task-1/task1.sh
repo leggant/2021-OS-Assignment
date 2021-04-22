@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------- #
 #                         GLOBAL VARIABLE DECLARATIONS                         #
 # ---------------------------------------------------------------------------- #
-default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
+default="http://kate.ict.op.ac.n/~faisalh/IN617linux/users.csv"
 downloaded="users.csv"
 local="LocalUser.csv"
 log="log.txt"
@@ -20,22 +20,17 @@ checkAndDownloadCSV() {
     if [ $present -eq 0 ]; then
         echo -e ">>> $downloaded Is Already On The Local System\n">>$log;
         echo -e "\n>>> File Is Already Downloaded To The Local System";
-        echo -e ">>> Checking Already Downloaded CSV File\n";
-        # checkFile $downloaded;
-        # URLok=$?
-        # if [ $URLok -eq 0 ]; then
-        #     echo -e "\nParsing CSV File User Data\n">>$log;
-        # fi
+        echo -e ">>> Parsing this Downloaded CSV File\n";
     else 
-        echo -e "\tChecking Users CSV File URL\n";
-        checkCSV_URI $default;
+        echo -e ">>> Checking User CSV File URL";
+        checkCSV_URI $default 2>>$log;
         URLok=$?
         if [ $URLok -eq 0 ]; then
             echo -e "\nDownloading Users CSV File\n";
             downloadDefaultCSV $default 2>>$log;
         else 
-            echo -e "\nAn Error Occured During Download";
-            echo -e "An Error Occured During Download">>$log;
+            echo -e "\n\t>>> An Error Occured During Download\n\t>>> Please Try Again Later <<<";
+            echo -e "An Error Occured During Download\n>>> Exiting The Program">>$log;
             exit 1
         fi
     fi
@@ -60,7 +55,7 @@ checkAndParseLocalCSV() {
             checkFile $newPath
             if [ $? -eq 0 ]; then
                 local=$newPath;
-                ok=0;
+                checkAndParseLocalCSV 
             else
                 x=$(( x+1 ))
                 if [ $x -eq 3 ]; then
@@ -79,7 +74,7 @@ checkCSV_URI() {
         echo "This file exists and is downloadable.";
         return 0
     else
-        echo "This file does not exist."
+        echo -e ">>> This File/URL Does Not Exist. <<<"
         return 1
     fi
 }
@@ -96,11 +91,11 @@ downloadDefaultCSV() {
 }
 
 checkFile() {
-    if [[ -f $1 && -r $1 && -s $1 ]]; then
+    if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
         echo -e "$1 is readable and contains parsable content.\n">>$log
         return 0
     else 
-        echo -e "\n>>> $1 does not exist."
+        echo -e "\n>>> $1 does not exist locally or is not a CSV file.\n"
         return 1
     fi
 }
