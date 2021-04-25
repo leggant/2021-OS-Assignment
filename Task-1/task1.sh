@@ -1,17 +1,19 @@
 #!/bin/bash
+
 # ---------------------------------------------------------------------------- #
 #                         GLOBAL VARIABLE DECLARATIONS                         #
 # ---------------------------------------------------------------------------- #
-default="http://kate.ict.op.ac.n/~faisalh/IN617linux/users.csv"
+
+default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
 downloaded="users.csv"
 local="LocalUser.csv"
 log="log.txt"
 newPath=""
 ok=0
+
 # ---------------------------------------------------------------------------- #
 #                         SCRIPT FUNCTION DECLARATIONS                         #
 # ---------------------------------------------------------------------------- #
-
 
 checkAndDownloadCSV() {
     echo -e "\n>>> Checking If Users File Is Already Downloaded <<<"
@@ -26,6 +28,7 @@ checkAndDownloadCSV() {
         checkCSV_URI $default 2>>$log;
         URLok=$?
         if [ $URLok -eq 0 ]; then
+            echo -e "CSV File URL Checked and OK">>$log;
             echo -e "\nDownloading Users CSV File\n";
             downloadDefaultCSV $default 2>>$log;
         else 
@@ -129,8 +132,6 @@ createUserName() {
     echo $name
 }
 
-
-
 createSharedFolder() {
     echo "Shared Folder Created"
 }
@@ -174,7 +175,6 @@ done
 # ----------------- If Successful, THen Check & Parse CSV file ---------------- #
 # ---------------------------- Parse User CSV File ---------------------------- #
 
-
 parseUsers() {
     {
         read
@@ -189,5 +189,6 @@ parseUsers() {
         done
     } < $local
 }
+
 # ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
 echo 'alias off=”systemctl poweroff”' >> ~/.bashrc
