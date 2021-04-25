@@ -1,79 +1,63 @@
-Spider mode enabled. Check if remote file exists.
---2021-04-22 00:40:27--  http://kate.ict.op.ac.n/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.n (kate.ict.op.ac.n)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ict.op.ac.n’
-An Error Occured During Download
->>> Exiting The Program
 >>> Checking The Default Local User File
+LocalUsers.csv is readable and contains parsable content.
+
+>>> Checking The Default Local User File
+LocalUsers.csv is readable and contains parsable content.
+
+>>> LocalUsers.csv is ok to parse user data from
 Spider mode enabled. Check if remote file exists.
---2021-04-22 00:41:37--  http://kate.ict.op.ac.n/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.n (kate.ict.op.ac.n)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ict.op.ac.n’
-An Error Occured During Download
->>> Exiting The Program
-Spider mode enabled. Check if remote file exists.
---2021-04-22 00:42:54--  http://kate.ict.op.ac.n/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.n (kate.ict.op.ac.n)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ict.op.ac.n’
-An Error Occured During Download
->>> Exiting The Program
-Spider mode enabled. Check if remote file exists.
---2021-04-22 00:43:18--  http://kate.ict.op.ac.n/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.n (kate.ict.op.ac.n)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ict.op.ac.n’
-An Error Occured During Download
->>> Exiting The Program
-Spider mode enabled. Check if remote file exists.
---2021-04-22 00:44:10--  http://kate.ict.op.ac.n/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.n (kate.ict.op.ac.n)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ict.op.ac.n’
-An Error Occured During Download
->>> Exiting The Program
-Spider mode enabled. Check if remote file exists.
---2021-04-22 00:44:33--  http://kate.ict.op.ac.n/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.n (kate.ict.op.ac.n)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ict.op.ac.n’
-An Error Occured During Download
->>> Exiting The Program
-Spider mode enabled. Check if remote file exists.
---2021-04-22 00:44:51--  http://kate.ict.op.ac.n/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.n (kate.ict.op.ac.n)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ict.op.ac.n’
-An Error Occured During Download
->>> Exiting The Program
-Spider mode enabled. Check if remote file exists.
---2021-04-22 00:45:12--  http://kate.ict.op.ac.n/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.n (kate.ict.op.ac.n)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ict.op.ac.n’
-An Error Occured During Download
->>> Exiting The Program
-Spider mode enabled. Check if remote file exists.
---2021-04-22 00:46:29--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
+--2021-04-25 22:18:19--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
 Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
 Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 519 [text/csv]
 Remote file exists.
 
---2021-04-22 00:46:30--  http://-/
+CSV File URL Checked and OK
+--2021-04-25 22:18:19--  http://-/
 Resolving - (-)... failed: Temporary failure in name resolution.
 wget: unable to resolve host address ‘-’
---2021-04-22 00:46:30--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
+--2021-04-25 22:18:20--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
 Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
 Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 519 [text/csv]
 Saving to: ‘users.csv’
 
-     0K                                                       100% 35.6M=0s
+     0K                                                       100% 46.1M=0s
 
-2021-04-22 00:46:31 (35.6 MB/s) - ‘users.csv’ saved [519/519]
+2021-04-25 22:18:20 (46.1 MB/s) - ‘users.csv’ saved [519/519]
 
-FINISHED --2021-04-22 00:46:31--
-Total wall clock time: 0.5s
-Downloaded: 1 files, 519 in 0s (35.6 MB/s)
+FINISHED --2021-04-25 22:18:20--
+Total wall clock time: 0.4s
+Downloaded: 1 files, 519 in 0s (46.1 MB/s)
 users.csv is readable and contains parsable content.
 
 >>> users.csv Is Already On The Local System
 
->>> Checking The Default Local User File
+Spider mode enabled. Check if remote file exists.
+--2021-04-25 22:19:47--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
+Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
+Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 519 [text/csv]
+Remote file exists.
+
+CSV File URL Checked and OK
+--2021-04-25 22:19:48--  http://-/
+Resolving - (-)... failed: Temporary failure in name resolution.
+wget: unable to resolve host address ‘-’
+--2021-04-25 22:19:48--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
+Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
+Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 519 [text/csv]
+Saving to: ‘users.csv’
+
+     0K                                                       100% 70.1M=0s
+
+2021-04-25 22:19:48 (70.1 MB/s) - ‘users.csv’ saved [519/519]
+
+FINISHED --2021-04-25 22:19:48--
+Total wall clock time: 0.4s
+Downloaded: 1 files, 519 in 0s (70.1 MB/s)

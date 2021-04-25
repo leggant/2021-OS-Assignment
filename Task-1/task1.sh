@@ -107,6 +107,8 @@ checkIfGroupExists() {
     if grep -q $1 /etc/group 2>> $log; then
         echo "$1 already exists"
     else
+        # Create new group
+        createGroup $1
         echo "$1 does not exist"
     fi
 }
@@ -116,8 +118,8 @@ createGroup () {
 }
 
 checkIfUserExists() {
-    if id -u "$1" >>$log; then
-        echo "user exists"
+    if id -un "$1" 2>>$log; then
+        echo "$1 already exists"
     else
         echo "user does not exist"
     fi
