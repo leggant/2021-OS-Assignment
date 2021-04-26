@@ -95,9 +95,11 @@ downloadDefaultCSV() {
 
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
-        echo -e "$1 is readable and contains parsable content.\n">>$log
+        echo -e "$1 is a readable CSV file that contains parsable content.\n">>$log
+ 	echo -e "$1 is a readable CSV file that contains parsable content.\n"
         return 0
     else 
+        echo -e "\n>>>ERROR<<< $1 does not exist locally or is not a CSV file.\n">>$log
         echo -e "\n>>> $1 does not exist locally or is not a CSV file.\n"
         return 1
     fi
@@ -158,9 +160,15 @@ do
     read -p "Enter 1, 2 or 3: " option
     case $option in 
         1) 
-            checkAndDownloadCSV ;;
+            checkAndDownloadCSV 
+	    if $? == 0; then
+		parseUsers
+            fi  ;;
         2) 
-            checkAndParseLocalCSV ;;
+            checkAndParseLocalCSV 
+	    if $? == 0; then
+               parseUsers
+            fi ;;
         3) 
             echo -e "\t\nExiting The Program"; 
             exit 1 ;;
