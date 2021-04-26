@@ -108,10 +108,12 @@ checkFile() {
 checkIfGroupExists() {
     if grep -q $1 /etc/group 2>> $log; then
         echo "$1 already exists"
+        return 1
     else
         # Create new group
         createGroup $1
         echo "$1 does not exist"
+        return 0
     fi
 }
 
@@ -122,19 +124,13 @@ createGroup () {
 checkIfUserExists() {
     if id -un "$1" 2>>$log; then
         echo "$1 already exists"
+        return 1;
     else
         echo "user does not exist"
+        return 0;
     fi
 }
 
-createUserName() {
-    xname=$1
-    initial=${xname:0:1}
-    last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
-    name=$initial$last
-    echo "Converted $1 to username: $name"
-    echo $name
-}
 
 createSharedFolder() {
     echo "Shared Folder Created"
@@ -161,14 +157,14 @@ do
     case $option in 
         1) 
             checkAndDownloadCSV 
-	    if $? == 0; then
-		parseUsers
-            fi  ;;
+	    if $? -eq 0; then
+		    parseData $downloaded;
+        fi  ;;
         2) 
             checkAndParseLocalCSV 
-	    if $? == 0; then
-               parseUsers
-            fi ;;
+	    if $? -eq 0; then
+            parseData $local;
+        fi ;;
         3) 
             echo -e "\t\nExiting The Program"; 
             exit 1 ;;
@@ -185,19 +181,36 @@ done
 # ----------------- If Successful, THen Check & Parse CSV file ---------------- #
 # ---------------------------- Parse User CSV File ---------------------------- #
 
-parseUsers() {
+parseData() {
     {
         read
         while IFS=";", read -r email dob group shared
         do
-            createUserName $email
-            password=$(date -d $dob +'%m%Y')
+            ## Create User Name From Email
+            xname=$email
+            initial=${xname:0:1}
+            last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
+            name=$initial$last
+            echo "Converted $1 to username: $name"
+            ## Check If User Name Exists
+            checkIfUserExists $name
+            ## Split Group List
+
+            ## Check if Group Exists
+            checkIfGroupExists $group
+
+            ## create Group If It Doesnt Exist
+            
+            ## Create User If they Do Not Exist
+            echo "Converted $email to username: $name"
+
             echo "Converting $dob to Password: $password"
-            echo "Converting $email to username:"
+            password=$(date -d $dob +'%m%Y')
             echo "Groups: $group"
+
             echo "Shared Folder: $shared"
         done
-    } < $local
+    } < $1
 }
 
 # ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
