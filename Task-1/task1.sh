@@ -105,86 +105,6 @@ checkFile() {
     fi
 }
 
-checkIfGroupExists() {
-    if grep -q $1 /etc/group 2>> $log; then
-        echo "$1 already exists"
-        return 1
-    else
-        # Create new group
-        createGroup $1
-        echo "$1 does not exist"
-        return 0
-    fi
-}
-
-createNewGroup () {
-    echo $1
-}
-
-checkIfUserExists() {
-    if id -un "$1" 2>>$log; then
-        echo "$1 already exists"
-        return 1;
-    else
-        echo "user does not exist"
-        return 0;
-    fi
-}
-
-createUser() {
-
-}
-
-newGroup() {
-
-}
-
-createSharedFolder() {
-    echo "Shared Folder Created"
-}
-
-createSharedFolderLink() {
-    echo "Link Created"
-}
-
-# ---------------------------------------------------------------------------- #
-#                        Start of Program Output To User                       #
-# ---------------------------------------------------------------------------- #
-
-echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
-1) Download and Use the Default CSV File 
-2) Use a Locally Stored CSV File
-3) Exit The Program
-"
-
-x=1
-until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
-do
-    read -p "Enter 1, 2 or 3: " option
-    case $option in 
-        1) 
-            checkAndDownloadCSV 
-	    if $? -eq 0; then
-		    parseData $downloaded;
-        fi  ;;
-        2) 
-            checkAndParseLocalCSV 
-	    if $? -eq 0; then
-            parseData $local;
-        fi ;;
-        3) 
-            echo -e "\t\nExiting The Program"; 
-            exit 1 ;;
-        *) 
-            echo -e "\f\t>> Error, Please try again <<\n" ;;
-    esac 
-    x=$(( x+1 ))
-    if [ $x -eq 4 ]; then
-        echo -e "Input Error Please Try Again Later"
-        exit 1
-    fi
-done
-
 # ----------------- If Successful, THen Check & Parse CSV file ---------------- #
 # ---------------------------- Parse User CSV File ---------------------------- #
 
@@ -215,6 +135,86 @@ parseData() {
         done
     } < $1
 }
+
+checkIfGroupExists() {
+    if grep -q $1 /etc/group 2>> $log; then
+        echo "$1 already exists"
+        return 1
+    else
+        # Create new group
+        createGroup $1
+        echo "$1 does not exist"
+        return 0
+    fi
+}
+
+createNewGroup () {
+    echo $1
+}
+
+checkIfUserExists() {
+    if id -un "$1" 2>>$log; then
+        echo "$1 already exists"
+        return 1;
+    else
+        echo "user does not exist"
+        return 0;
+    fi
+}
+
+createUser() {
+    echo $1
+}
+
+newGroup() {
+    echo $1
+}
+
+createSharedFolder() {
+    echo "Shared Folder Created"
+}
+
+createSharedFolderLink() {
+    echo "Link Created"
+}
+
+# ---------------------------------------------------------------------------- #
+#                        Start of Program Output To User                       #
+# ---------------------------------------------------------------------------- #
+
+echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
+1) Download and Use the Default CSV File 
+2) Use a Locally Stored CSV File
+3) Exit The Program
+"
+
+x=1
+until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
+do
+    read -p "Enter 1, 2 or 3: " option
+    case $option in 
+        1) 
+            checkAndDownloadCSV 
+	    if [ $? -eq 0 ]; then
+		    parseData $downloaded;
+        fi  ;;
+        2) 
+            checkAndParseLocalCSV 
+	    if [ $? -eq 0 ]; then
+            parseData $local;
+        fi ;;
+        3) 
+            echo -e "\t\nExiting The Program"; 
+            exit 1 ;;
+        *) 
+            echo -e "\f\t>> Error, Please try again <<\n" ;;
+    esac 
+    x=$(( x+1 ))
+    if [ $x -eq 4 ]; then
+        echo -e "Input Error Please Try Again Later"
+        exit 1
+    fi
+done
 
 # ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
 echo 'alias off=”systemctl poweroff”' >> ~/.bashrc
