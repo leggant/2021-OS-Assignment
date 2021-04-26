@@ -6,7 +6,7 @@
 
 default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
 downloaded="users.csv"
-local="LocalUser.csv"
+local="test.csv"
 log="log.txt"
 newPath=""
 ok=0
