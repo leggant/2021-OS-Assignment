@@ -96,7 +96,7 @@ downloadDefaultCSV() {
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
         echo -e "$1 is a readable CSV file that contains parsable content.\n">>$log
- 	echo -e "$1 is a readable CSV file that contains parsable content.\n"
+ 	    echo -e "$1 is a readable CSV file that contains parsable content.\n"
         return 0
     else 
         echo -e "\n>>>ERROR<<< $1 does not exist locally or is not a CSV file.\n">>$log
@@ -111,24 +111,27 @@ checkFile() {
 parseData() {
     {
         read
-        while IFS=";", read -r email dob group shared
+        while IFS=";" read -r email dob group shared
         do
             ## Create User Name From Email
             xname=$email
             initial=${xname:0:1}
             last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
             name=$initial$last
-            echo "Converted $1 to username: $name"
+            echo "Converted $xname to username: $name"
             ## Check If User Name Exists
             checkIfUserExists $name
-            ## Split Group List
-            echo $group
-            ## Check if Group Exists
+            if [ $? -eq 0 ]; then
+                echo "Create New User $name"
+            elif [ $? -eq 1 ]; then 
+                continue
+            fi
+            ## Check if Group(s) Exist
             checkIfGroupExists $group
             ## create Group If It Doesnt Exist
-            echo "Converting $dob to Password: $password"
             password=$(date -d $dob +'%m%Y')
-            echo "Groups: $group"
+            echo "Converting $dob to Password: $password"
+            #echo "Groups: $group"
             echo "Shared Folder: $shared"
             ## Create User If they Do Not Exist
             echo "Converted $email to username: $name"
@@ -137,15 +140,15 @@ parseData() {
 }
 
 checkIfGroupExists() {
-    if grep -q $1 /etc/group 2>> $log; then
-        echo "$1 already exists"
-        return 1
-    else
-        # Create new group
-        createGroup $1
-        echo "$1 does not exist"
-        return 0
-    fi
+    IFS=',' read -r -a groups <<< "$1"
+    for group in "${groups[@]}"
+    do
+        if grep -qw $group /etc/group; then
+            echo "$group already exists"
+        else
+            echo "$group does not exist"
+        fi
+    done
 }
 
 createNewGroup () {
@@ -195,9 +198,9 @@ do
     case $option in 
         1) 
             checkAndDownloadCSV 
-	    if [ $? -eq 0 ]; then
-		    parseData $downloaded;
-        fi  ;;
+	        if [ $? -eq 0 ]; then
+		        parseData $downloaded;
+            fi  ;;
         2) 
             checkAndParseLocalCSV 
 	    if [ $? -eq 0 ]; then
