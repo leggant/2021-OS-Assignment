@@ -117,7 +117,7 @@ checkIfGroupExists() {
     fi
 }
 
-createGroup () {
+createNewGroup () {
     echo $1
 }
 
@@ -131,6 +131,13 @@ checkIfUserExists() {
     fi
 }
 
+createUser() {
+
+}
+
+newGroup() {
+
+}
 
 createSharedFolder() {
     echo "Shared Folder Created"
@@ -195,20 +202,16 @@ parseData() {
             ## Check If User Name Exists
             checkIfUserExists $name
             ## Split Group List
-
+            echo $group
             ## Check if Group Exists
             checkIfGroupExists $group
-
             ## create Group If It Doesnt Exist
-            
-            ## Create User If they Do Not Exist
-            echo "Converted $email to username: $name"
-
             echo "Converting $dob to Password: $password"
             password=$(date -d $dob +'%m%Y')
             echo "Groups: $group"
-
             echo "Shared Folder: $shared"
+            ## Create User If they Do Not Exist
+            echo "Converted $email to username: $name"
         done
     } < $1
 }
