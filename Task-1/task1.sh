@@ -9,35 +9,15 @@ downloaded="users.csv"
 local="test.csv"
 log="log.txt"
 newPath=""
-ok=0
 
 # ---------------------------------------------------------------------------- #
 #                         SCRIPT FUNCTION DECLARATIONS                         #
 # ---------------------------------------------------------------------------- #
 
-checkAndDownloadCSV() {
-    echo -e "\n>>> Checking If Users File Is Already Downloaded <<<"
-    checkFile $downloaded
-    present=$?
-    if [ $present -eq 0 ]; then
-        echo -e ">>> $downloaded Is Already On The Local System\n">>$log;
-        echo -e "\n>>> File Is Already Downloaded To The Local System";
-        echo -e ">>> Parsing this Downloaded CSV File\n";
-    else 
-        echo -e ">>> Checking User CSV File URL";
-        checkCSV_URI $default 2>>$log;
-        URLok=$?
-        if [ $URLok -eq 0 ]; then
-            echo -e "CSV File URL Checked and OK">>$log;
-            echo -e "\nDownloading Users CSV File\n";
-            downloadDefaultCSV $default 2>>$log;
-        else 
-            echo -e "\n\t>>> An Error Occured During Download\n\t>>> Please Try Again Later <<<";
-            echo -e "An Error Occured During Download\n>>> Exiting The Program">>$log;
-            exit 1
-        fi
-    fi
-}
+
+# ---------------------------------------------------------------------------- #
+#          CHECK THE LOCALLY STORED FILE IS BOTH PRESENT AND PARSABLE          #
+# ---------------------------------------------------------------------------- #
 
 checkAndParseLocalCSV() {
     echo -e "\nChecking Default Local User File \n";
@@ -70,28 +50,9 @@ checkAndParseLocalCSV() {
     fi
 }
 
-# Check Download URI resource, check it starts with http:// 
-# and ends in .csv
-checkCSV_URI() {
-    if wget --spider "${1}" 2>> $log; then
-        echo "This file exists and is downloadable.";
-        return 0
-    else
-        echo -e ">>> This File/URL Does Not Exist. <<<"
-        return 1
-    fi
-}
-
-# Download Default user.csv
-downloadDefaultCSV() {
-    if wget - $default 2>> $log; then
-        echo -e "$default CSV File Download Completed.....">>$log;
-        echo -e "\n$default CSV File Download Completed....."
-        return 0;
-    else
-        return 1;
-    fi
-}
+# ---------------------------------------------------------------------------- #
+#             CHECK IF THE FILE IS ON THE SYSTEM AND CAN BE PARSED             #
+# ---------------------------------------------------------------------------- #
 
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
@@ -104,6 +65,64 @@ checkFile() {
         return 1
     fi
 }
+
+# ---------------------------------------------------------------------------- #
+#           CHECK URL TO CSV FILE AND DOWNLOAD CSV FILE IF URL IS OK           #
+# ---------------------------------------------------------------------------- #
+
+checkAndDownloadCSV() {
+    echo -e "\n>>> Checking If Users File Is Already Downloaded <<<"
+    checkFile $downloaded
+    present=$?
+    if [ $present -eq 0 ]; then
+        echo -e ">>> $downloaded Is Already On The Local System\n">>$log;
+        echo -e "\n>>> File Is Already Downloaded To The Local System";
+        echo -e ">>> Parsing this Downloaded CSV File\n";
+    else 
+        echo -e ">>> Checking User CSV File URL";
+        checkCSV_URI $default 2>>$log;
+        URLok=$?
+        if [ $URLok -eq 0 ]; then
+            echo -e "CSV File URL Checked and OK">>$log;
+            echo -e "\nDownloading Users CSV File\n";
+            downloadDefaultCSV $default 2>>$log;
+        else 
+            echo -e "\n\t>>> An Error Occured During Download\n\t>>> Please Try Again Later <<<";
+            echo -e "An Error Occured During Download\n>>> Exiting The Program">>$log;
+            exit 1
+        fi
+    fi
+}
+
+# ---------------------------------------------------------------------------- #
+#               Check Download URI resource, check it starts with              #
+#                           http:// and ends in .csv                           #
+# ---------------------------------------------------------------------------- #
+
+checkCSV_URI() {
+    if wget --spider "${1}" 2>> $log; then
+        echo "This file exists and is downloadable.";
+        return 0
+    else
+        echo -e ">>> This File/URL Does Not Exist. <<<"
+        return 1
+    fi
+}
+
+# ---------------------------------------------------------------------------- #
+#              DOWNLOAD THE CSV FILE FROM THE DEFAULT URL RESOURSE             #
+# ---------------------------------------------------------------------------- #
+
+downloadDefaultCSV() {
+    if wget - $default 2>> $log; then
+        echo -e "$default CSV File Download Completed.....">>$log;
+        echo -e "\n$default CSV File Download Completed....."
+        return 0;
+    else
+        return 1;
+    fi
+}
+
 
 # ----------------- If Successful, THen Check & Parse CSV file ---------------- #
 # ---------------------------- Parse User CSV File ---------------------------- #
@@ -140,6 +159,10 @@ parseData() {
     } < $1
 }
 
+# ---------------------------------------------------------------------------- #
+#              CHECK IF A GROUP EXISTS, CREATE THIS IF IT DOES NOT             #
+# ---------------------------------------------------------------------------- #
+
 checkIfGroupExists() {
     IFS=',' read -r -a groups <<< "$1"
     for group in "${groups[@]}"
@@ -159,6 +182,10 @@ createNewGroup () {
     sudo groupadd $1
 }
 
+# ---------------------------------------------------------------------------- #
+#         CHECK IF A USER CURRENTLY EXISTS, CREATE USER IF THEY DO NOT         #
+# ---------------------------------------------------------------------------- #
+
 checkIfUserExists() {
     if id -un "$1" 2>>$log; then
         echo "$1 already exists"
@@ -170,13 +197,9 @@ checkIfUserExists() {
 }
 
 createUser() {
-    echo "Create New User $1"
-    sudo useradd -d /home/$1 -m -s /bin/bash -p $2 $1
+    echo "Create New User $1";
+    sudo useradd -d /home/$1 -m -s /bin/bash -p $2 $1;
     sudo chage -d 0 $1;
-}
-
-newGroup() {
-    echo $1
 }
 
 createSharedFolder() {
@@ -185,6 +208,13 @@ createSharedFolder() {
 
 createSharedFolderLink() {
     echo "Link Created"
+}
+
+# ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
+# ------------------------- THAT HAS SUDO PERMISSIONS ------------------------ #
+
+createUsersAlias() {
+    echo 'alias off=”systemctl poweroff”' >> ~/.bashrc
 }
 
 # ---------------------------------------------------------------------------- #
@@ -224,6 +254,3 @@ do
         exit 1
     fi
 done
-
-# ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
-echo 'alias off=”systemctl poweroff”' >> ~/.bashrc
