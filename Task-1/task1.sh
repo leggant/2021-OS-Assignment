@@ -113,6 +113,15 @@ parseData() {
         read
         while IFS=";" read -r email dob group shared
         do
+            ## Check if Group(s) Exist
+            ## This will call a second function if
+            ## the group does not exist
+            checkIfGroupExists $group
+            ## Parsing Users Password From DOB
+            echo "Converting $dob to Password: $password"
+            password=$(date -d $dob +'%m%Y')
+            ## Creating Shared Folder If It Does Not Exist
+            echo "Shared Folder: $shared"
             ## Create User Name From Email
             xname=$email
             initial=${xname:0:1}
@@ -122,19 +131,13 @@ parseData() {
             ## Check If User Name Exists
             checkIfUserExists $name
             if [ $? -eq 0 ]; then
+                # create user with all parsed params
                 echo "Create New User $name"
+                sudo useradd -d /home/$name -m -s /bin/bash -p $password $name
+                sudo chage -d 0 $name;
             elif [ $? -eq 1 ]; then 
                 continue
             fi
-            ## Check if Group(s) Exist
-            checkIfGroupExists $group
-            ## create Group If It Doesnt Exist
-            password=$(date -d $dob +'%m%Y')
-            echo "Converting $dob to Password: $password"
-            #echo "Groups: $group"
-            echo "Shared Folder: $shared"
-            ## Create User If they Do Not Exist
-            echo "Converted $email to username: $name"
         done
     } < $1
 }
@@ -143,16 +146,19 @@ checkIfGroupExists() {
     IFS=',' read -r -a groups <<< "$1"
     for group in "${groups[@]}"
     do
-        if grep -qw $group /etc/group; then
-            echo "$group already exists"
+    egrep -iq $group /etc/group;
+        if [ $? -eq 0 ]; then
+            echo ">>> Group: $group already exists";
         else
-            echo "$group does not exist"
+            echo ">>> Group: $group does not exist";
+            createNewGroup $group;
         fi
     done
 }
 
 createNewGroup () {
-    echo $1
+    echo "Making Group >> $1";
+    sudo groupadd $1
 }
 
 checkIfUserExists() {
