@@ -70,11 +70,10 @@ checkFile() {
 checkAndDownloadCSV() {
     echo -e "\n### Checking If Users File Is Already Downloaded ###"
     checkFile $downloaded
-    present=$?
-    if [ $present -eq 0 ]; then
+    if [ $? -eq 0 ]; then
         echo -e ">>> $downloaded Is Already On The Local System\n">>$log;
-        echo -e "\n### File Is Already Downloaded To The Local System ###";
-        echo -e "### Parsing this Downloaded CSV File ###\n";
+        echo -e "\n### File Is Already Present In The Local File System ###\n";
+        ConfirmUserNumber $downloaded;
     else 
         echo -e "### Checking User CSV File URL ###";
         checkCSV_URI $default 2>>$log;
@@ -134,8 +133,9 @@ downloadDefaultCSV() {
 ConfirmUserNumber() {
     x=1;
     userNum=$(awk '{n+=1} END {print n}' $1);
-    while [[ $x <= 3 ]]; do
-        read -p "Do You Wish to Proceed in creating $userNum Users? " confirm;
+    while [[ $x -le 3 ]]; do
+        read -p "This Script Is Now Ready to Create $userNum Users.
+Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
                 echo -e "\nProceeding....\n"
@@ -147,11 +147,12 @@ ConfirmUserNumber() {
             ;;
             *)
                 echo -e "\nPlease enter yes or no...\n";
+                if [ $x -eq 3 ]; then
+                    errorOut "An Error Occured During Confirmation. Please try Again";
+                fi
             ;;
+        
         esac
-        if $x == 3; then
-            errorOut "An Error Occured During Confirmation. Please try Again";
-        fi
         x=$(( x+1 ))
     done
 }

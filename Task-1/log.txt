@@ -1,230 +1,88 @@
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:00:25--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Remote file exists.
-
-CSV File URL Checked and OK
---2021-04-28 01:00:26--  http://-/
-Resolving - (-)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address ‘-’
---2021-04-28 01:00:26--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Saving to: ‘users.csv’
-
-     0K                                                       100% 15.4M=0s
-
-2021-04-28 01:00:26 (15.4 MB/s) - ‘users.csv’ saved [519/519]
-
-FINISHED --2021-04-28 01:00:26--
-Total wall clock time: 0.4s
-Downloaded: 1 files, 519 in 0s (15.4 MB/s)
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:03:30--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Remote file exists.
-
-CSV File URL Checked and OK
---2021-04-28 01:03:31--  http://-/
-Resolving - (-)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address ‘-’
---2021-04-28 01:03:31--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Saving to: ‘users.csv’
-
-     0K                                                       100% 51.9M=0s
-
-2021-04-28 01:03:31 (51.9 MB/s) - ‘users.csv’ saved [519/519]
-
-FINISHED --2021-04-28 01:03:31--
-Total wall clock time: 0.4s
-Downloaded: 1 files, 519 in 0s (51.9 MB/s)
-users.csv is a readable CSV file that contains parsable content.
-
->>> users.csv Is Already On The Local System
-
-id: ‘edijkstra’: no such user
-id: ‘jmccarthy’: no such user
-id: ‘atanenbaum’: no such user
-id: ‘aturing’: no such user
-id: ‘ltorvalds’: no such user
-id: ‘bstroustroup’: no such user
-id: ‘kthompson’: no such user
-id: ‘jgosling’: no such user
-id: ‘tberners-lee’: no such user
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:10:23--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Remote file exists.
-
-CSV File URL Checked and OK
---2021-04-28 01:10:23--  http://-/
-Resolving - (-)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address ‘-’
---2021-04-28 01:10:23--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Saving to: ‘users.csv’
-
-     0K                                                       100% 61.3M=0s
-
-2021-04-28 01:10:24 (61.3 MB/s) - ‘users.csv’ saved [519/519]
-
-FINISHED --2021-04-28 01:10:24--
-Total wall clock time: 0.5s
-Downloaded: 1 files, 519 in 0s (61.3 MB/s)
-
->>>> Error During Download. Please Try Again
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:11:19--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Remote file exists.
-
-CSV File URL Checked and OK
---2021-04-28 01:11:19--  http://-/
-Resolving - (-)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address ‘-’
---2021-04-28 01:11:19--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Saving to: ‘users.csv’
-
-     0K                                                       100% 52.7M=0s
-
-2021-04-28 01:11:20 (52.7 MB/s) - ‘users.csv’ saved [519/519]
-
-FINISHED --2021-04-28 01:11:20--
-Total wall clock time: 0.4s
-Downloaded: 1 files, 519 in 0s (52.7 MB/s)
-users.csv is a readable CSV file that contains parsable content.
-
-id: ‘edijkstra’: no such user
-id: ‘jmccarthy’: no such user
-id: ‘atanenbaum’: no such user
-id: ‘aturing’: no such user
-id: ‘ltorvalds’: no such user
-id: ‘bstroustroup’: no such user
-id: ‘kthompson’: no such user
-id: ‘jgosling’: no such user
-id: ‘tberners-lee’: no such user
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:11:55--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Remote file exists.
-
-CSV File URL Checked and OK
---2021-04-28 01:11:56--  http://-/
-Resolving - (-)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address ‘-’
---2021-04-28 01:11:56--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Saving to: ‘users.csv’
-
-     0K                                                       100% 55.6M=0s
-
-2021-04-28 01:11:56 (55.6 MB/s) - ‘users.csv’ saved [519/519]
-
-FINISHED --2021-04-28 01:11:56--
-Total wall clock time: 0.5s
-Downloaded: 1 files, 519 in 0s (55.6 MB/s)
-users.csv is a readable CSV file that contains parsable content.
-
-id: ‘edijkstra’: no such user
-id: ‘jmccarthy’: no such user
-id: ‘atanenbaum’: no such user
-id: ‘aturing’: no such user
-id: ‘ltorvalds’: no such user
-id: ‘bstroustroup’: no such user
-id: ‘kthompson’: no such user
-id: ‘jgosling’: no such user
-id: ‘tberners-lee’: no such user
-users.csv is a readable CSV file that contains parsable content.
-
->>> users.csv Is Already On The Local System
-
-id: ‘edijkstra’: no such user
-id: ‘jmccarthy’: no such user
-id: ‘atanenbaum’: no such user
-id: ‘aturing’: no such user
-id: ‘ltorvalds’: no such user
-id: ‘bstroustroup’: no such user
-id: ‘kthompson’: no such user
-id: ‘jgosling’: no such user
-id: ‘tberners-lee’: no such user
-users.csv is a readable CSV file that contains parsable content.
-
->>> users.csv Is Already On The Local System
-
-id: ‘edijkstra’: no such user
-id: ‘jmccarthy’: no such user
-id: ‘atanenbaum’: no such user
-id: ‘aturing’: no such user
-id: ‘ltorvalds’: no such user
-id: ‘bstroustroup’: no such user
-id: ‘kthompson’: no such user
-id: ‘jgosling’: no such user
-id: ‘tberners-lee’: no such user
-users.csv is a readable CSV file that contains parsable content.
-
->>> users.csv Is Already On The Local System
-
-id: ‘edijkstra’: no such user
-id: ‘jmccarthy’: no such user
-id: ‘atanenbaum’: no such user
-id: ‘aturing’: no such user
-id: ‘ltorvalds’: no such user
-id: ‘bstroustroup’: no such user
-id: ‘kthompson’: no such user
-id: ‘jgosling’: no such user
-id: ‘tberners-lee’: no such user
 >>> Checking The Default Local User File
-test.csv is a readable CSV file that contains parsable content.
+
+### test.csv is a readable CSV file that contains parsable content. ###
 
 >>> test.csv is ok to parse user data from
 id: ‘edijkstra’: no such user
-users.csv is a readable CSV file that contains parsable content.
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+id: ‘edijkstra’: no such user
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+
+>>>ERROR<<< users.csv does not exist locally or is not a CSV file.
+
+Spider mode enabled. Check if remote file exists.
+--2021-04-28 04:32:24--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
+Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
+Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 519 [text/csv]
+Remote file exists.
+
+### CSV File URL Checked and OK ###
+--2021-04-28 04:32:25--  http://-/
+Resolving - (-)... failed: Temporary failure in name resolution.
+wget: unable to resolve host address ‘-’
+--2021-04-28 04:32:25--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
+Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
+Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 519 [text/csv]
+Saving to: ‘users.csv’
+
+     0K                                                       100% 74.3M=0s
+
+2021-04-28 04:32:25 (74.3 MB/s) - ‘users.csv’ saved [519/519]
+
+FINISHED --2021-04-28 04:32:25--
+Total wall clock time: 0.4s
+Downloaded: 1 files, 519 in 0s (74.3 MB/s)
+
+### users.csv is a readable CSV file that contains parsable content. ###
+
+
+>>>> 
+Exiting The Program....
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> 
+Exiting The Program....
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+
+### users.csv is a readable CSV file that contains parsable content. ###
 
 >>> users.csv Is Already On The Local System
 
@@ -238,322 +96,38 @@ id: ‘kthompson’: no such user
 id: ‘jgosling’: no such user
 id: ‘tberners-lee’: no such user
 
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
+### users.csv is a readable CSV file that contains parsable content. ###
 
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:17:48--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Remote file exists.
+>>> users.csv Is Already On The Local System
 
-CSV File URL Checked and OK
---2021-04-28 01:17:49--  http://-/
-Resolving - (-)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address ‘-’
---2021-04-28 01:17:49--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Saving to: ‘users.csv’
 
-     0K                                                       100% 84.7M=0s
-
-2021-04-28 01:17:50 (84.7 MB/s) - ‘users.csv’ saved [519/519]
-
-FINISHED --2021-04-28 01:17:50--
-Total wall clock time: 0.4s
-Downloaded: 1 files, 519 in 0s (84.7 MB/s)
-
->>>> Error During Download. Please Try Again
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:18:55--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Remote file exists.
-
-CSV File URL Checked and OK
---2021-04-28 01:18:55--  http://-/
-Resolving - (-)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address ‘-’
---2021-04-28 01:18:55--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Saving to: ‘users.csv’
-
-     0K                                                       100% 69.8M=0s
-
-2021-04-28 01:18:56 (69.8 MB/s) - ‘users.csv’ saved [519/519]
-
-FINISHED --2021-04-28 01:18:56--
-Total wall clock time: 0.4s
-Downloaded: 1 files, 519 in 0s (69.8 MB/s)
-users.csv is a readable CSV file that contains parsable content.
-
-id: ‘edijkstra’: no such user
-id: ‘jmccarthy’: no such user
-id: ‘atanenbaum’: no such user
-id: ‘aturing’: no such user
-id: ‘ltorvalds’: no such user
-id: ‘bstroustroup’: no such user
-id: ‘kthompson’: no such user
-id: ‘jgosling’: no such user
-id: ‘tberners-lee’: no such user
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:19:13--  http://kate.ictp.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ictp.ac.nz (kate.ictp.ac.nz)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ictp.ac.nz’
-An Error Occured During Download
->>> Exiting The Program
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:22:46--  http://kate.ictp.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ictp.ac.nz (kate.ictp.ac.nz)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ictp.ac.nz’
-
->>>> >>> An Error Occured During Download
->>> Please Try Again Using a Local File <<<
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:24:18--  http://kate.ictp.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ictp.ac.nz (kate.ictp.ac.nz)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ictp.ac.nz’
-
->>>> 
->>> There is A Issue With The Resource URL Preventing File Download
->>> Please Try Again Using a Local File <<<
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:25:08--  http://kate.ictp.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ictp.ac.nz (kate.ictp.ac.nz)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ictp.ac.nz’
-
->>>> 
->>>There is A Issue With The Resource URL Preventing File Download
->>> Please Try Again Using a Local File
-<<<
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:25:22--  http://kate.ictp.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ictp.ac.nz (kate.ictp.ac.nz)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ictp.ac.nz’
-
->>>> 
->>>
-There is A Issue With The Resource URL Preventing File Download
->>> Please Try Again Using a Local File
-<<<
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:25:34--  http://kate.ictp.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ictp.ac.nz (kate.ictp.ac.nz)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ictp.ac.nz’
-
->>>> 
->>>
->>>There is A Issue With The Resource URL Preventing File Download
->>> Please Try Again Using a Local File
-<<<
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:25:45--  http://kate.ictp.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ictp.ac.nz (kate.ictp.ac.nz)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ictp.ac.nz’
-
->>>> 
->>>
->>>There is A Issue With The Resource URL Preventing File Download
->>>Please Try Again Using a Local File
-<<<
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:29:04--  http://kate.ictp.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ictp.ac.nz (kate.ictp.ac.nz)... failed: Name or service not known.
-wget: unable to resolve host address ‘kate.ictp.ac.nz’
-
->>>> 
->>>
->>>There is A Issue With The Resource URL Preventing File Download
->>>Please Try Again Using a Local File
-<<<
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:29:58--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Remote file exists.
-
-### CSV File URL Checked and OK ###
---2021-04-28 01:29:59--  http://-/
-Resolving - (-)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address ‘-’
---2021-04-28 01:29:59--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Saving to: ‘users.csv’
-
-     0K                                                       100% 63.9M=0s
-
-2021-04-28 01:30:00 (63.9 MB/s) - ‘users.csv’ saved [519/519]
-
-FINISHED --2021-04-28 01:30:00--
-Total wall clock time: 0.4s
-Downloaded: 1 files, 519 in 0s (63.9 MB/s)
-users.csv is a readable CSV file that contains parsable content.
-
-id: ‘edijkstra’: no such user
-id: ‘jmccarthy’: no such user
-id: ‘atanenbaum’: no such user
-id: ‘aturing’: no such user
-id: ‘ltorvalds’: no such user
-id: ‘bstroustroup’: no such user
-id: ‘kthompson’: no such user
-id: ‘jgosling’: no such user
-id: ‘tberners-lee’: no such user
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:32:33--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Remote file exists.
-
-### CSV File URL Checked and OK ###
---2021-04-28 01:32:33--  http://-/
-Resolving - (-)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address ‘-’
---2021-04-28 01:32:33--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Saving to: ‘users.csv’
-
-     0K                                                       100% 73.1M=0s
-
-2021-04-28 01:32:34 (73.1 MB/s) - ‘users.csv’ saved [519/519]
-
-FINISHED --2021-04-28 01:32:34--
-Total wall clock time: 0.5s
-Downloaded: 1 files, 519 in 0s (73.1 MB/s)
-users.csv is a readable CSV file that contains parsable content.
-
-id: ‘edijkstra’: no such user
-id: ‘jmccarthy’: no such user
-id: ‘atanenbaum’: no such user
-id: ‘aturing’: no such user
-id: ‘ltorvalds’: no such user
-id: ‘bstroustroup’: no such user
-id: ‘kthompson’: no such user
-id: ‘jgosling’: no such user
-id: ‘tberners-lee’: no such user
-
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
-
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:36:17--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Remote file exists.
-
-### CSV File URL Checked and OK ###
---2021-04-28 01:36:17--  http://-/
-Resolving - (-)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address ‘-’
---2021-04-28 01:36:17--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Saving to: ‘users.csv’
-
-     0K                                                       100% 76.8M=0s
-
-2021-04-28 01:36:18 (76.8 MB/s) - ‘users.csv’ saved [519/519]
-
-FINISHED --2021-04-28 01:36:18--
-Total wall clock time: 0.5s
-Downloaded: 1 files, 519 in 0s (76.8 MB/s)
+>>>> An Error Occured During Confirmation. Please try Again
 
 ### users.csv is a readable CSV file that contains parsable content. ###
 
-id: ‘edijkstra’: no such user
-id: ‘jmccarthy’: no such user
-id: ‘atanenbaum’: no such user
-id: ‘aturing’: no such user
-id: ‘ltorvalds’: no such user
-id: ‘bstroustroup’: no such user
-id: ‘kthompson’: no such user
-id: ‘jgosling’: no such user
-id: ‘tberners-lee’: no such user
+>>> users.csv Is Already On The Local System
 
->>>ERROR<<< users.csv does not exist locally or is not a CSV file.
 
-Spider mode enabled. Check if remote file exists.
---2021-04-28 01:36:47--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Remote file exists.
-
-### CSV File URL Checked and OK ###
---2021-04-28 01:36:48--  http://-/
-Resolving - (-)... failed: Temporary failure in name resolution.
-wget: unable to resolve host address ‘-’
---2021-04-28 01:36:48--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
-Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
-Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 519 [text/csv]
-Saving to: ‘users.csv’
-
-     0K                                                       100% 52.4M=0s
-
-2021-04-28 01:36:48 (52.4 MB/s) - ‘users.csv’ saved [519/519]
-
-FINISHED --2021-04-28 01:36:48--
-Total wall clock time: 0.4s
-Downloaded: 1 files, 519 in 0s (52.4 MB/s)
+>>>> An Error Occured During Confirmation. Please try Again
 
 ### users.csv is a readable CSV file that contains parsable content. ###
+
+>>> users.csv Is Already On The Local System
+
+
+>>>> An Error Occured During Confirmation. Please try Again
+
+### users.csv is a readable CSV file that contains parsable content. ###
+
+>>> users.csv Is Already On The Local System
+
+
+>>>> 
+Exiting The Program....
+
+### users.csv is a readable CSV file that contains parsable content. ###
+
+>>> users.csv Is Already On The Local System
 
 id: ‘edijkstra’: no such user
 id: ‘jmccarthy’: no such user
