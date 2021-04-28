@@ -132,9 +132,7 @@ parseData() {
             checkIfUserExists $name
             if [ $? -eq 0 ]; then
                 # create user with all parsed params
-                echo "Create New User $name"
-                sudo useradd -d /home/$name -m -s /bin/bash -p $password $name
-                sudo chage -d 0 $name;
+                createUser $name $password 
             elif [ $? -eq 1 ]; then 
                 continue
             fi
@@ -172,7 +170,9 @@ checkIfUserExists() {
 }
 
 createUser() {
-    echo $1
+    echo "Create New User $1"
+    sudo useradd -d /home/$1 -m -s /bin/bash -p $2 $1
+    sudo chage -d 0 $1;
 }
 
 newGroup() {
