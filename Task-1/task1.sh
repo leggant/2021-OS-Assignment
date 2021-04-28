@@ -56,8 +56,8 @@ checkAndParseLocalCSV() {
 
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
-        echo -e "$1 is a readable CSV file that contains parsable content.\n">>$log
- 	    echo -e "$1 is a readable CSV file that contains parsable content.\n"
+        echo -e "\n### $1 is a readable CSV file that contains parsable content. ###\n">>$log
+ 	    echo -e "### $1 is a readable CSV file that contains parsable content. ###\n\t#### Parsing $1 ###\n"
         return 0
     else 
         echo -e "\n>>>ERROR<<< $1 does not exist locally or is not a CSV file.\n">>$log
@@ -71,25 +71,30 @@ checkFile() {
 # ---------------------------------------------------------------------------- #
 
 checkAndDownloadCSV() {
-    echo -e "\n>>> Checking If Users File Is Already Downloaded <<<"
+    echo -e "\n### Checking If Users File Is Already Downloaded ###"
     checkFile $downloaded
     present=$?
     if [ $present -eq 0 ]; then
         echo -e ">>> $downloaded Is Already On The Local System\n">>$log;
-        echo -e "\n>>> File Is Already Downloaded To The Local System";
-        echo -e ">>> Parsing this Downloaded CSV File\n";
+        echo -e "\n### File Is Already Downloaded To The Local System ###";
+        echo -e "### Parsing this Downloaded CSV File ###\n";
     else 
-        echo -e ">>> Checking User CSV File URL";
+        echo -e "### Checking User CSV File URL ###";
         checkCSV_URI $default 2>>$log;
         URLok=$?
         if [ $URLok -eq 0 ]; then
-            echo -e "CSV File URL Checked and OK">>$log;
-            echo -e "\nDownloading Users CSV File\n";
+            echo -e "### CSV File URL Checked and OK ###">>$log;
+            echo -e "### Downloading Users CSV File ###\n";
             downloadDefaultCSV $default 2>>$log;
+            if [ $? -eq 1 ]; then
+                echo -e "### Download Complete ###\n";
+                echo -e "### Checking Downloaded CSV File ###\n";
+                checkFile $downloaded;
+            else
+                errorOut "\n>>>\n>>>Error During Download. Please Try Again<<<\n<<<";
+            fi
         else 
-            echo -e "\n\t>>> An Error Occured During Download\n\t>>> Please Try Again Later <<<";
-            echo -e "An Error Occured During Download\n>>> Exiting The Program">>$log;
-            exit 1
+            errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<"
         fi
     fi
 }
@@ -101,7 +106,7 @@ checkAndDownloadCSV() {
 
 checkCSV_URI() {
     if wget --spider "${1}" 2>> $log; then
-        echo "This file exists and is downloadable.";
+        echo "### This file exists and is downloadable. ###";
         return 0
     else
         echo -e ">>> This File/URL Does Not Exist. <<<"
@@ -109,14 +114,15 @@ checkCSV_URI() {
     fi
 }
 
+
+
 # ---------------------------------------------------------------------------- #
 #              DOWNLOAD THE CSV FILE FROM THE DEFAULT URL RESOURSE             #
 # ---------------------------------------------------------------------------- #
 
 downloadDefaultCSV() {
     if wget - $default 2>> $log; then
-        echo -e "$default CSV File Download Completed.....">>$log;
-        echo -e "\n$default CSV File Download Completed....."
+        echo -e "\n$default CSV File Download Completed.....";
         return 0;
     else
         return 1;
@@ -215,6 +221,13 @@ createSharedFolderLink() {
 
 createUsersAlias() {
     echo 'alias off=”systemctl poweroff”' >> ~/.bashrc
+}
+
+errorOut() {
+    message=$1;
+    echo -e $message;
+    echo -e "\n>>>> $message">>$log;
+    exit 1
 }
 
 # ---------------------------------------------------------------------------- #
