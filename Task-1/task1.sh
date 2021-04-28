@@ -14,7 +14,6 @@ newPath=""
 #                         SCRIPT FUNCTION DECLARATIONS                         #
 # ---------------------------------------------------------------------------- #
 
-
 # ---------------------------------------------------------------------------- #
 #          CHECK THE LOCALLY STORED FILE IS BOTH PRESENT AND PARSABLE          #
 # ---------------------------------------------------------------------------- #
@@ -23,14 +22,12 @@ checkAndParseLocalCSV() {
     echo -e "\nChecking Default Local User File \n";
     echo -e ">>> Checking The Default Local User File">>$log;
     checkFile $local
-    ok=$?
-    if [ $ok -eq 0 ]; then
+    if [ $? -eq 0 ]; then
         echo -e ">>> $local is ok to parse user data from">>$log;
         echo -e ">>> $local is ok to parse user data from";
-        return 0
+        ConfirmUserNumber $local;
+        return $?
     else 
-        x=0
-        ok=1
         echo -e "Error Parsing User Data From Local File";
         until [[ $x -eq 3 || $ok -eq 0 ]]
         do
@@ -90,6 +87,9 @@ checkAndDownloadCSV() {
                 echo -e "### Download Complete ###\n";
                 echo -e "### Checking Downloaded CSV File ###\n";
                 checkFile $downloaded;
+                if [ $? -eq 0 ]; then 
+                    ConfirmUserNumber $downloaded;
+                fi
             else
                 errorOut "\n>>>\n>>>Error During Download. Please Try Again<<<\n<<<";
             fi
@@ -114,8 +114,6 @@ checkCSV_URI() {
     fi
 }
 
-
-
 # ---------------------------------------------------------------------------- #
 #              DOWNLOAD THE CSV FILE FROM THE DEFAULT URL RESOURSE             #
 # ---------------------------------------------------------------------------- #
@@ -129,6 +127,34 @@ downloadDefaultCSV() {
     fi
 }
 
+# ---------------------------------------------------------------------------- #
+#        CONFIRM THE USER WISHES TO CREATE X NUMBER OF USERS IN THE FILE       #
+# ---------------------------------------------------------------------------- #
+
+ConfirmUserNumber() {
+    x=1;
+    userNum=$(awk '{n+=1} END {print n}' $1);
+    while [[ $x <= 3 ]]; do
+        read -p "Do You Wish to Proceed in creating $userNum Users? " confirm;
+        case $confirm in
+            Y | Yes | y | yes)
+                echo -e "\nProceeding....\n"
+                return 0
+            ;;
+
+            N | No | n | no)
+                errorOut "\nExiting The Program....";
+            ;;
+            *)
+                echo -e "\nPlease enter yes or no...\n";
+            ;;
+        esac
+        if $x == 3; then
+            errorOut "An Error Occured During Confirmation. Please try Again";
+        fi
+        x=$(( x+1 ))
+    done
+}
 
 # ----------------- If Successful, THen Check & Parse CSV file ---------------- #
 # ---------------------------- Parse User CSV File ---------------------------- #
@@ -205,6 +231,7 @@ checkIfUserExists() {
 createUser() {
     echo "Create New User $1";
     sudo useradd -d /home/$1 -m -s /bin/bash -p $2 $1;
+    # Force user to chance password
     sudo chage -d 0 $1;
 }
 
@@ -252,9 +279,9 @@ do
             fi  ;;
         2) 
             checkAndParseLocalCSV 
-	    if [ $? -eq 0 ]; then
-            parseData $local;
-        fi ;;
+            if [ $? -eq 0 ]; then
+                parseData $local;
+            fi ;;
         3) 
             echo -e "\t\nExiting The Program"; 
             exit 1 ;;
