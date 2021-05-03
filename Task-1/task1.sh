@@ -138,7 +138,6 @@ ConfirmUserNumber() {
 Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
-	    	sudo
                 echo -e "\nProceeding....\n"
                 return 0
             ;;
