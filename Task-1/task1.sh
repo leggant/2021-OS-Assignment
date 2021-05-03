@@ -234,7 +234,7 @@ createUser() {
     echo "Create New User $1";
     sudo useradd -d /home/$1 -m -s /bin/bash -p $2 $1;
     # Force user to chance password
-    sudo chage -d 0 $1;
+    # sudo chage -d 0 $1;
 }
 
 createSharedFolder() {
