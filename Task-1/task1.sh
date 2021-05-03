@@ -138,6 +138,7 @@ ConfirmUserNumber() {
 Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
+	    	su
                 echo -e "\nProceeding....\n"
                 return 0
             ;;
@@ -248,7 +249,7 @@ createSharedFolderLink() {
 # ------------------------- THAT HAS SUDO PERMISSIONS ------------------------ #
 
 createUsersAlias() {
-    echo 'alias off=”systemctl poweroff”' >> ~/.bashrc
+    echo 'alias off=”systemctl poweroff”' >> ~.bashrc
 }
 
 errorOut() {
