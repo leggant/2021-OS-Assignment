@@ -229,9 +229,9 @@ checkIfUserExists() {
 
 createUser() {
     echo "Create New User $1";
-    sudo useradd -d /home/$1 -m -s /bin/bash $1;
+    sudo useradd -d /home/$1 -m -p $2 -s /bin/bash $1;
     # set password
-    sudo passwd $2 $1
+    # sudo passwd $2 $1
     # Force user to chance password
     # sudo passwd --expire $1
 }
