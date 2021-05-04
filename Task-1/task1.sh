@@ -141,7 +141,6 @@ Do You Wish to Proceed? " confirm;
                 echo -e "\nProceeding....\n"
                 return 0
             ;;
-
             N | No | n | no)
                 errorOut "\nExiting The Program....";
             ;;
@@ -151,7 +150,6 @@ Do You Wish to Proceed? " confirm;
                     errorOut "An Error Occured During Confirmation. Please try Again";
                 fi
             ;;
-        
         esac
         x=$(( x+1 ))
     done
@@ -235,7 +233,7 @@ createUser() {
     # set password
     sudo passwd $2 $1
     # Force user to chance password
-    sudo passwd --expire $1
+    # sudo passwd --expire $1
 }
 
 createSharedFolder() {
@@ -250,7 +248,13 @@ createSharedFolderLink() {
 # ------------------------- THAT HAS SUDO PERMISSIONS ------------------------ #
 
 createUsersAlias() {
-    echo 'alias off=”systemctl poweroff”' >> ~.bashrc
+    checkAlias=$(cat ~.bashrc | grep -c "alias off='systemctl poweroff'")
+    if [ $checkAlias -eq 0 ]; then
+	   #string not contained in file
+    else
+	   #string is in file at least once
+    fi
+    echo "alias off='systemctl poweroff'” >> ~.bashrc
 }
 
 errorOut() {
