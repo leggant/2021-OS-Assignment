@@ -247,15 +247,9 @@ createSharedFolderLink() {
 # ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
 # ------------------------- THAT HAS SUDO PERMISSIONS ------------------------ #
 
-createUsersAlias() {
-    checkAlias=$(cat ~.bashrc | grep -c "alias off='systemctl poweroff'")
-    if [ $checkAlias -eq 0 ]; then
-	   #string not contained in file
-    else
-	   #string is in file at least once
-    fi
-    echo "alias off='systemctl poweroff'” >> ~.bashrc
-}
+# createUsersAlias() {
+    # echo "alias off='systemctl poweroff'” >> ~.bashrc
+# }
 
 errorOut() {
     message=$1;
