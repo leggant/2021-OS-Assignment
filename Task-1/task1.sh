@@ -108,7 +108,7 @@ checkAndDownloadCSV() {
 # ---------------------------------------------------------------------------- #
 
 checkCSV_URI() {
-    if wget --spider "${1}" 2>> $log; then
+    if wget --spider $1 2>> $log; then
         echo "### This file exists and is downloadable. ###";
         return 0
     else
@@ -136,9 +136,9 @@ downloadDefaultCSV() {
 
 ConfirmUserNumber() {
     x=1;
-    userNum=$(awk '{n+=1} END {print n}' "$1");
+    userNum=$(awk '{n+=1} END {print n}' $1);
     while [[ $x -le 3 ]]; do
-        read -pr "This Script Is Now Ready to Create $userNum Users.
+        read -p "This Script Is Now Ready to Create $userNum Users.
 Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
@@ -170,10 +170,10 @@ parseData() {
             ## Check if Group(s) Exist
             ## This will call a second function if
             ## the group does not exist
-            checkIfGroupExists "$group"
+            checkIfGroupExists $group
             ## Parsing Users Password From DOB
+            password=$(date -d $dob +'%m%Y')
             echo "Converting $dob to Password: $password"
-            password=$(date -d "$dob" +'%m%Y')
             ## Creating Shared Folder If It Does Not Exist
             echo "Shared Folder: $shared"
             ## Create User Name From Email
@@ -183,16 +183,16 @@ parseData() {
             name=$initial$last
             echo "Converted $xname to username: $name"
             ## Check If User Name Exists
-            checkIfUserExists "$name"
+            checkIfUserExists $name
             ok=$?
             if [ $ok -eq 0 ]; then
                 # create user with all parsed params
-                createUser "$name" "$password" 
+                createUser $name $password 
             elif [ $ok -eq 1 ]; then 
                 continue
             fi
         done
-    } < "$1"
+    } < $1
 }
 
 # ---------------------------------------------------------------------------- #
@@ -200,23 +200,24 @@ parseData() {
 # ---------------------------------------------------------------------------- #
 
 checkIfGroupExists() {
-    IFS=',' read -r -a groups <<< "$1"
+    IFS=',' read -r -a groups <<< $1
     for group in "${groups[@]}"
     do
-        grep -E-iq "$group" /etc/group;
+        egrep -iq $group /etc/group;
         ok=$?
         if [ $ok -eq 0 ]; then
-            echo ">>> Group: $group already exists";
+            echo -e ">>> Group: $group already exists\n";
         else
-            echo ">>> Group: $group does not exist";
-            createNewGroup "$group";
+            echo -e ">>> Group: $group does not exist\n";
+            createNewGroup $group;
         fi
     done
 }
 
 createNewGroup () {
-    echo "Making Group >> $1";
-    sudo groupadd "$1"
+    echo -e "Making Group >> $1";
+    echo "Making Group >> $1" >> $log;
+    sudo groupadd $1
 }
 
 # ---------------------------------------------------------------------------- #
@@ -224,7 +225,7 @@ createNewGroup () {
 # ---------------------------------------------------------------------------- #
 
 checkIfUserExists() {
-    if id -un "$1" 2>>$log; then
+    if id -un $1 2>>$log; then
         echo "$1 already exists"
         return 1;
     else
@@ -235,9 +236,9 @@ checkIfUserExists() {
 
 createUser() {
     echo "Create New User $1";
-    sudo useradd -d /home/"$1" -m -s /bin/bash "$1";
+    sudo useradd -d /home/$1 -m -s /bin/bash $1;
     # set password
-    sudo passwd -e "$2" "$1";
+    sudo passwd -e $2 $1;
     # Force user to chance password
     # sudo passwd --expire $1
 }
@@ -277,7 +278,7 @@ echo -e "\nThis script will auto new user creation on this system. Do you wish t
 x=1
 until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
 do
-    read -pr "Enter 1, 2 or 3: " option
+    read -p "Enter 1, 2 or 3: " option
     case $option in 
         1) 
             checkAndDownloadCSV 
@@ -289,7 +290,7 @@ do
             checkAndParseLocalCSV 
             ok=$?
             if [ $ok -eq 0 ]; then
-                parseData "$local";
+                parseData $local;
             fi ;;
         3) 
             echo -e "\t\nExiting The Program"; 

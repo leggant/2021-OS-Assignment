@@ -138,3 +138,133 @@ id: ‘bstroustroup’: no such user
 id: ‘kthompson’: no such user
 id: ‘jgosling’: no such user
 id: ‘tberners-lee’: no such user
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> An Error Occured During Confirmation. Please try Again
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> 
+Exiting The Program....
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+
+>>>> 
+Exiting The Program....
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+id: ‘edijkstra’: no such user
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+id: ‘edijkstra’: no such user
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+id: ‘edijkstra’: no such user
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+Making Group >> yogi
+Making Group >> dogs
+id: ‘edijkstra’: no such user
+>>> Checking The Default Local User File
+
+### test.csv is a readable CSV file that contains parsable content. ###
+
+>>> test.csv is ok to parse user data from
+Making Group >> yogi
+Making Group >> dogs
+id: ‘edijkstra’: no such user
