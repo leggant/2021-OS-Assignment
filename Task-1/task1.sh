@@ -20,9 +20,10 @@ newPath=""
 
 checkAndParseLocalCSV() {
     echo -e "\nChecking Default Local User File \n";
-    echo -e ">>> Checking The Default Local User File">>$log;
+    echo -e ">>> Checking The Default Local User File">>"$log";
     checkFile $local
-    if [ $? -eq 0 ]; then
+    ok=$?
+    if [ $ok -eq 0 ]; then
         echo -e ">>> $local is ok to parse user data from">>$log;
         echo -e ">>> $local is ok to parse user data from";
         ConfirmUserNumber $local;
@@ -31,9 +32,10 @@ checkAndParseLocalCSV() {
         echo -e "Error Parsing User Data From Local File";
         until [[ $x -eq 3 || $ok -eq 0 ]]
         do
-            read -p "Enter A New File Path Here:: " newPath 
-            checkFile $newPath
-            if [ $? -eq 0 ]; then
+            read -pr "Enter A New File Path Here:: " newPath 
+            checkFile "$newPath"
+            ok=$?
+            if [ $ok -eq 0 ]; then
                 local=$newPath;
                 checkAndParseLocalCSV 
             else
@@ -70,7 +72,8 @@ checkFile() {
 checkAndDownloadCSV() {
     echo -e "\n### Checking If Users File Is Already Downloaded ###"
     checkFile $downloaded
-    if [ $? -eq 0 ]; then
+    ok=$?
+    if [ $ok -eq 0 ]; then
         echo -e ">>> $downloaded Is Already On The Local System\n">>$log;
         echo -e "\n### File Is Already Present In The Local File System ###\n";
         ConfirmUserNumber $downloaded;
@@ -86,7 +89,8 @@ checkAndDownloadCSV() {
                 echo -e "### Download Complete ###\n";
                 echo -e "### Checking Downloaded CSV File ###\n";
                 checkFile $downloaded;
-                if [ $? -eq 0 ]; then 
+                ok=$?
+                if [ $ok -eq 0 ]; then 
                     ConfirmUserNumber $downloaded;
                 fi
             else
@@ -132,9 +136,9 @@ downloadDefaultCSV() {
 
 ConfirmUserNumber() {
     x=1;
-    userNum=$(awk '{n+=1} END {print n}' $1);
+    userNum=$(awk '{n+=1} END {print n}' "$1");
     while [[ $x -le 3 ]]; do
-        read -p "This Script Is Now Ready to Create $userNum Users.
+        read -pr "This Script Is Now Ready to Create $userNum Users.
 Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
@@ -160,34 +164,35 @@ Do You Wish to Proceed? " confirm;
 
 parseData() {
     {
-        read
+        read -r
         while IFS=";" read -r email dob group shared
         do
             ## Check if Group(s) Exist
             ## This will call a second function if
             ## the group does not exist
-            checkIfGroupExists $group
+            checkIfGroupExists "$group"
             ## Parsing Users Password From DOB
             echo "Converting $dob to Password: $password"
-            password=$(date -d $dob +'%m%Y')
+            password=$(date -d "$dob" +'%m%Y')
             ## Creating Shared Folder If It Does Not Exist
             echo "Shared Folder: $shared"
             ## Create User Name From Email
             xname=$email
             initial=${xname:0:1}
-            last=$(echo $xname | cut -d"@" -f1 | cut -d"." -f2)
+            last=$(echo "$xname" | cut -d"@" -f1 | cut -d"." -f2)
             name=$initial$last
             echo "Converted $xname to username: $name"
             ## Check If User Name Exists
-            checkIfUserExists $name
-            if [ $? -eq 0 ]; then
+            checkIfUserExists "$name"
+            ok=$?
+            if [ $ok -eq 0 ]; then
                 # create user with all parsed params
-                createUser $name $password 
-            elif [ $? -eq 1 ]; then 
+                createUser "$name" "$password" 
+            elif [ $ok -eq 1 ]; then 
                 continue
             fi
         done
-    } < $1
+    } < "$1"
 }
 
 # ---------------------------------------------------------------------------- #
@@ -198,19 +203,20 @@ checkIfGroupExists() {
     IFS=',' read -r -a groups <<< "$1"
     for group in "${groups[@]}"
     do
-    egrep -iq $group /etc/group;
-        if [ $? -eq 0 ]; then
+        grep -E-iq "$group" /etc/group;
+        ok=$?
+        if [ $ok -eq 0 ]; then
             echo ">>> Group: $group already exists";
         else
             echo ">>> Group: $group does not exist";
-            createNewGroup $group;
+            createNewGroup "$group";
         fi
     done
 }
 
 createNewGroup () {
     echo "Making Group >> $1";
-    sudo groupadd $1
+    sudo groupadd "$1"
 }
 
 # ---------------------------------------------------------------------------- #
@@ -229,9 +235,9 @@ checkIfUserExists() {
 
 createUser() {
     echo "Create New User $1";
-    sudo useradd -d /home/$1 -m -s /bin/bash $1;
+    sudo useradd -d /home/"$1" -m -s /bin/bash "$1";
     # set password
-    sudo passwd -e $2 $1;
+    sudo passwd -e "$2" "$1";
     # Force user to chance password
     # sudo passwd --expire $1
 }
@@ -253,7 +259,7 @@ createSharedFolderLink() {
 
 errorOut() {
     message=$1;
-    echo -e $message;
+    echo -e "$message";
     echo -e "\n>>>> $message">>$log;
     exit 1
 }
@@ -271,17 +277,19 @@ echo -e "\nThis script will auto new user creation on this system. Do you wish t
 x=1
 until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
 do
-    read -p "Enter 1, 2 or 3: " option
+    read -pr "Enter 1, 2 or 3: " option
     case $option in 
         1) 
             checkAndDownloadCSV 
-	        if [ $? -eq 0 ]; then
+            ok=$?
+	        if [ $ok -eq 0 ]; then
 		        parseData $downloaded;
             fi  ;;
         2) 
             checkAndParseLocalCSV 
-            if [ $? -eq 0 ]; then
-                parseData $local;
+            ok=$?
+            if [ $ok -eq 0 ]; then
+                parseData "$local";
             fi ;;
         3) 
             echo -e "\t\nExiting The Program"; 
