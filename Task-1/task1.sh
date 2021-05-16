@@ -19,7 +19,6 @@ newPath=""
 # ---------------------------------------------------------------------------- #
 
 checkAndParseLocalCSV() {
-    echo -e "\n#### Checking Default Local User File \n";
     echo -e "#### Checking The Default Local User File">>$log;
     checkFile $local
     ok=$?
@@ -29,7 +28,6 @@ checkAndParseLocalCSV() {
         ConfirmUserNumber $local;
         return $?
     else 
-        echo -e "\n>>>> Error Parsing User Data From Local File";
         until [[ $x -eq 3 || $ok -eq 0 ]]
         do
             read -p "Enter A New File Path Here:: " newPath 
@@ -37,7 +35,8 @@ checkAndParseLocalCSV() {
             ok=$?
             if [ $ok -eq 0 ]; then
                 local=$newPath;
-                checkAndParseLocalCSV 
+                ConfirmUserNumber $local;
+                return $?
             else
                 x=$(( x+1 ))
                 if [ $x -eq 3 ]; then
@@ -49,6 +48,7 @@ checkAndParseLocalCSV() {
     fi
 }
 
+
 # ---------------------------------------------------------------------------- #
 #             CHECK IF THE FILE IS ON THE SYSTEM AND CAN BE PARSED             #
 # ---------------------------------------------------------------------------- #
@@ -56,7 +56,7 @@ checkAndParseLocalCSV() {
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
         
- 	    echo -e "#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####\n"
+ 	    echo -e "\n#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####\n"
         return 0
     else 
         echo -e "\n>>>> ERROR <<<< $1 does not exist locally or is not a CSV file.\n">>$log
@@ -177,7 +177,11 @@ parseData() {
             password=$(date -d $dob +'%m%Y')
             echo -e "\nConverting $dob to Password: $password"
             ## Creating Shared Folder If It Does Not Exist
-            echo "Shared Folder: $shared"
+            # Remove '/' from shared
+            folder=$(echo "$shared" | awk -F/ '{print $NF}')
+            # check if folder exists
+
+            createSharedFolder $folder
             ## Create User Name From Email
             xname=$email
             initial=${xname:0:1}
@@ -190,6 +194,13 @@ parseData() {
             if [ $ok -eq 0 ]; then
                 # create user with all parsed params
                 createUser $name $password 
+                ok=$?
+                echo $ok
+                #if [ $ok -eq 0 ]; then
+                    # add user to groups
+                #elif [ $ok -eq 1 ]; then
+                    #continue
+                #fi
             elif [ $ok -eq 1 ]; then 
                 continue
             fi
@@ -239,26 +250,32 @@ checkIfUserExists() {
 createUser() {
     echo -e "Create New User $1";
     sudo useradd -d /home/$1 -m -s /bin/bash $1 2>>$log;
-    # set password
-    sudo passwd -e $2 $1 2>>$log;
-    # Force user to chance password
-    # sudo passwd --expire $1
+    passwd -e $2 $1 2>>$log;
+    return $?
+}
+
+checkSharedFolderExists() {
+    
 }
 
 createSharedFolder() {
-    echo "Shared Folder Created"
+    dir=$1
+    #mkdir -p $dir
+    echo "Shared Folder Created $dir"
 }
-
+# For each user with permission to a shared folder, create a link in the users home folder to the shared directory. Link name: 'shared'
 createSharedFolderLink() {
     echo "Link Created"
 }
 
+
+
 # ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
 # ------------------------- THAT HAS SUDO PERMISSIONS ------------------------ #
 
-# createUsersAlias() {
-    # echo "alias off='systemctl poweroff'” >> ~.bashrc
-# }
+createUsersAlias() {
+    echo alias 'off="systemctl poweroff"' >> ~.bash_aliases
+}
 
 errorOut() {
     message=$1;
