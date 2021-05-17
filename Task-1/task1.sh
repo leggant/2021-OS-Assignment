@@ -53,180 +53,177 @@ newPath=""
 # #             CHECK IF THE FILE IS ON THE SYSTEM AND CAN BE PARSED             #
 # # ---------------------------------------------------------------------------- #
 
-# checkFile() {
-#     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
-        
-#  	    echo -e "\n#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####\n"
-#         return 0
-#     else 
-#         echo -e "\n>>>> ERROR <<<< $1 does not exist locally or is not a CSV file.\n">>$log
-#         echo -e "\n>>>> ERROR >>>> $1 does not exist locally or is not a CSV file.\n"
-#         return 1
-#     fi
-# }
+checkFile() {
+    if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
+ 	    echo -e "\n#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####\n"
+        return 0
+    else 
+        echo -e "\n>>>> ERROR <<<< $1 does not exist locally or is not a CSV file.\n">>$log
+        echo -e "\n>>>> ERROR >>>> $1 does not exist locally or is not a CSV file.\n"
+        return 1
+    fi
+}
 
 # # ---------------------------------------------------------------------------- #
 # #           CHECK URL TO CSV FILE AND DOWNLOAD CSV FILE IF URL IS OK           #
 # # ---------------------------------------------------------------------------- #
 
-# checkAndDownloadCSV() {
-#     echo -e "\n#### Checking If Users File Is Already Downloaded ####"
-#     checkFile $downloaded
-#     ok=$?
-#     if [ $ok -eq 0 ]; then
-#         echo -e "\n$downloaded Is Already On The Local System\nCSV Contains Content and Is Parsable">>$log;
-#         echo -e "\n#### $download Is Already Present In The Local File System ####\n#### CSV Contains Content and Is Parsable ####";
-#         ConfirmUserNumber $downloaded;
-#     else 
-#         echo -e "#### Checking User CSV File URL ####";
-#         checkCSV_URI $default 2>>$log;
-#         URLok=$?
-#         if [ $URLok -eq 0 ]; then
-#             echo -e "\n#### CSV File URL Checked and OK ###">>$log;
-#             echo -e "#### Downloading Users CSV File ####\n";
-#             downloadDefaultCSV $default 2>>$log;
-#             if [ $? -eq 1 ]; then
-#                 echo -e "#### Download Complete ####\n";
-#                 echo -e "#### Checking Downloaded CSV File ####\n";
-#                 checkFile $downloaded;
-#                 ok=$?
-#                 if [ $ok -eq 0 ]; then 
-#                     ConfirmUserNumber $downloaded;
-#                 fi
-#             else
-#                 errorOut "\n>>>\n>>>Error During Download. Please Try Again<<<\n<<<";
-#             fi
-#         else 
-#             errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<"
-#         fi
-#     fi
-# }
+checkAndDownloadCSV() {
+    echo -e "\n#### Checking If CSV File Is Already Downloaded ####"
+    checkFile $downloaded
+    ok=$?
+    if [ $ok -eq 0 ]; then
+        echo -e "\n $downloaded Is Already On The Local System\nCSV Contains Content and Is Parsable">>$log;
+        ConfirmUserNumber $downloaded;
+    else 
+        echo -e "#### Checking User CSV File URL ####";
+        checkCSV_URI $default 2>>$log;
+        URLok=$?
+        if [ $URLok -eq 0 ]; then
+            echo -e "\n#### CSV File URL Checked and OK ###">>$log;
+            echo -e "#### Downloading Users CSV File ####\n";
+            downloadDefaultCSV $default 2>>$log;
+            if [ $? -eq 1 ]; then
+                echo -e "#### Download Complete ####\n";
+                echo -e "#### Checking Downloaded CSV File ####\n";
+                checkFile $downloaded;
+                ok=$?
+                if [ $ok -eq 0 ]; then 
+                    ConfirmUserNumber $downloaded;
+                fi
+            else
+                errorOut "\n>>>\n>>>Error During Download. Please Try Again<<<\n<<<";
+            fi
+        else 
+            errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<"
+        fi
+    fi
+}
 
 # # ---------------------------------------------------------------------------- #
 # #               Check Download URI resource, check it starts with              #
 # #                           http:// and ends in .csv                           #
 # # ---------------------------------------------------------------------------- #
 
-# checkCSV_URI() {
-#     if wget --spider $1 2>> $log; then
-#         echo -e "\n#### This file exists and is downloadable. ####";
-#         return 0
-#     else
-#         echo -e "\n>>>>\n>>>>ERROR This File/URL Does Not Exist. <<<<\n<<<<"
-#         return 1
-#     fi
-# }
+checkCSV_URI() {
+    if wget --spider $1 2>> $log; then
+        echo -e "\n#### This file exists and is downloadable. ####";
+        return 0
+    else
+        echo -e "\n>>>>\n>>>>ERROR This File/URL Does Not Exist. <<<<\n<<<<"
+        return 1
+    fi
+}
 
 # # ---------------------------------------------------------------------------- #
 # #              DOWNLOAD THE CSV FILE FROM THE DEFAULT URL RESOURSE             #
 # # ---------------------------------------------------------------------------- #
 
-# downloadDefaultCSV() {
-#     if wget - $default 2>> $log; then
-#         echo -e "\n#### $default CSV File Download Completed.....";
-#         return 0;
-#     else
-#         return 1;
-#     fi
-# }
+downloadDefaultCSV() {
+    if wget - $default 2>> $log; then
+        echo -e "\n#### $default CSV File Download Completed.....";
+        return 0;
+    else
+        return 1;
+    fi
+}
 
 # # ---------------------------------------------------------------------------- #
 # #        CONFIRM THE USER WISHES TO CREATE X NUMBER OF USERS IN THE FILE       #
 # # ---------------------------------------------------------------------------- #
 
-# ConfirmUserNumber() {
-#     x=1;
-#     userNum=$(awk '{n+=1} END {print n}' $1);
-#     Num="$(( $userNum-1 ))"
-#     echo -e "# ---------------------------------------------------------------------------- #"
-#     echo -e "#------------This Script Is Now Ready to Create $Num Users.----------------#"
-#     echo -e "# ---------------------------------------------------------------------------- #"
-#     while [[ $x -le 3 ]]; do
-#         read -p "Do You Wish to Proceed? " confirm;
-#         case $confirm in
-#             Y | Yes | y | yes)
-#                 echo -e "\nProceeding....";
-#                 return 0;
-#             ;;
-#             N | No | n | no)
-#                 errorOut "\nExiting The Program....";
-#             ;;
-#             *)
-#                 echo -e "\nPlease enter yes or no...\n";
-#                 if [ $x -eq 3 ]; then
-#                     errorOut "An Error Occured During Confirmation. Please try Again";
-#                 fi
-#             ;;
-#         esac
-#         x=$(( x+1 ))
-#     done
-# }
+ConfirmUserNumber() {
+    x=1;
+    userNum=$(awk '{n+=1} END {print n}' $1);
+    Num="$(( $userNum-1 ))"
+    echo -e "# ---------------------------------------------------------------------------- #"
+    echo -e "#------------This Script Is Now Ready to Create $Num Users.----------------#"
+    echo -e "# ---------------------------------------------------------------------------- #\n"
+    while [[ $x -le 3 ]]; do
+        read -p "Do You Wish to Proceed? " confirm;
+        case $confirm in
+            Y | Yes | y | yes)
+                echo -e "\nProceeding....\n";
+                return 0;
+            ;;
+            N | No | n | no)
+                errorOut "\nExiting The Program....";
+            ;;
+            *)
+                echo -e "\nPlease enter yes or no...\n";
+                if [ $x -eq 3 ]; then
+                    errorOut "An Error Occured During Confirmation. Please try Again";
+                fi
+            ;;
+        esac
+        x=$(( x+1 ))
+    done
+}
 
 # # ----------------- If Successful, THen Check & Parse CSV file ---------------- #
 # # ---------------------------- Parse User CSV File ---------------------------- #
 
-# parseData() {
-#     {
-#         read -r
-#         while IFS=";" read -r email dob group shared
-#         do
-#             ## Check if Group(s) Exist
-#             ## This will call a second function if
-#             ## the group does not exist
-#             checkIfGroupExists $group
-#             ## Parsing Users Password From DOB
-#             password=$(date -d $dob +'%m%Y')
-#             echo -e "\nConverting $dob to Password: $password"
-#             ## Creating Shared Folder If It Does Not Exist
-#             # Remove '/' from shared
-#             folder=$(echo "$shared" | awk -F/ '{print $NF}')
-#             # check if folder exists
-
-#             createSharedFolder $folder
-#             ## Create User Name From Email
-#             xname=$email
-#             initial=${xname:0:1}
-#             last=$(echo "$xname" | cut -d"@" -f1 | cut -d"." -f2)
-#             name=$initial$last
-#             echo "Converted $xname to username: $name"
-#             ## Check If User Name Exists
-#             checkIfUserExists $name
-#             ok=$?
-#             if [ $ok -eq 0 ]; then
-#                 # create user with all parsed params
-#                 createUser $name $password 
-#                 ok=$?
-#                 echo $ok
-#                 #if [ $ok -eq 0 ]; then
-#                     # add user to groups
-#                 #elif [ $ok -eq 1 ]; then
-#                     #continue
-#                 #fi
-#             elif [ $ok -eq 1 ]; then 
-#                 continue
-#             fi
-#         done
-#     } < $1
-# }
+parseData() {
+    {
+        read -r
+        while IFS=";" read -r email dob group shared
+        do
+            ## Check if Group(s) Exist
+            ## This will call a second function if
+            ## the group does not exist
+            checkIfGroupExists $group
+            ## Parsing Users Password From DOB
+            password=$(date -d $dob +'%m%Y')
+            echo -e "\nConverting $dob to Password: $password"
+            ## Creating Shared Folder If It Does Not Exist
+            # Remove '/' from shared
+            folder=$(echo "$shared" | awk -F/ '{print $NF}')
+            # check if folder exists
+            createSharedFolder $folder
+            ## Create User Name From Email
+            xname=$email
+            initial=${xname:0:1}
+            last=$(echo "$xname" | cut -d"@" -f1 | cut -d"." -f2)
+            name=$initial$last
+            echo "Converted $xname to username: $name"
+            ## Check If User Name Exists
+            checkIfUserExists $name
+            ok=$?
+            if [ $ok -eq 0 ]; then
+                # create user with all parsed params
+                createUser $name $password 
+                ok=$?
+                echo $ok
+                #if [ $ok -eq 0 ]; then
+                    # add user to groups
+                #elif [ $ok -eq 1 ]; then
+                    #continue
+                #fi
+            elif [ $ok -eq 1 ]; then 
+                continue
+            fi
+        done
+    } < $1
+}
 
 # # ---------------------------------------------------------------------------- #
 # #              CHECK IF A GROUP EXISTS, CREATE THIS IF IT DOES NOT             #
 # # ---------------------------------------------------------------------------- #
 
-# checkIfGroupExists() {
-#     IFS=',' read -r -a groups <<< $1
-#     for group in "${groups[@]}"
-#     do
-#         egrep -iq $group /etc/group;
-#         ok=$?
-#         if [ $ok -eq 0 ]; then
-#             echo -e "\n>>> Group: $group already exists";
-#         else
-#             echo -e "\n>>> Group: $group does not exist";
-#             createNewGroup $group;
-#         fi
-#     done
-# }
+checkIfGroupExists() {
+    IFS=',' read -r -a groups <<< $1
+    for group in "${groups[@]}"
+    do
+        egrep -iq $group /etc/group;
+        ok=$?
+        if [ $ok -eq 0 ]; then
+            echo -e ">>> Group: $group already exists";
+        else
+            echo -e ">>> Group: $group does not exist\n";
+            createNewGroup $group;
+        fi
+    done
+}
 
 # createNewGroup () {
 #     echo -e "Making Group >> $1";
@@ -278,12 +275,12 @@ newPath=""
 #     echo alias 'off="systemctl poweroff"' >> ~.bash_aliases
 # }
 
-# errorOut() {
-#     message=$1;
-#     echo -e "$message";
-#     echo -e "\n>>>> $message">>$log;
-#     exit 1
-# }
+errorOut() {
+    message=$1;
+    echo -e "$message";
+    echo -e "\n>>>> $message">>$log;
+    exit 1
+}
 
 # ---------------------------------------------------------------------------- #
 #                        Start of Program Output To User                       #
@@ -326,3 +323,4 @@ runMenu() {
 }
 
 runMenu
+
