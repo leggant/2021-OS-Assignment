@@ -26,7 +26,6 @@ checkAndParseLocalCSV() {
         echo -e "#### $local Is Ok To Parse User Data From">>$log;
         echo -e "#### $local Is Ok To Parse User Data From\n";
         ConfirmUserNumber $local;
-        return $?
     else 
         until [[ $x -eq 3 || $ok -eq 0 ]]
         do
@@ -137,15 +136,15 @@ downloadDefaultCSV() {
 ConfirmUserNumber() {
     x=1;
     userNum=$(awk '{n+=1} END {print n}' $1);
+    Num="$(( $userNum-1 ))"
     echo -e "# ---------------------------------------------------------------------------- #"
-    echo -e "#------------This Script Is Now Ready to Create $userNum Users.----------------#"
+    echo -e "#------------This Script Is Now Ready to Create $Num Users.----------------#"
     echo -e "# ---------------------------------------------------------------------------- #"
     while [[ $x -le 3 ]]; do
         read -p "Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
                 echo -e "\nProceeding...."
-                return 0
             ;;
             N | No | n | no)
                 errorOut "\nExiting The Program....";
@@ -255,7 +254,7 @@ createUser() {
 }
 
 checkSharedFolderExists() {
-    
+    echo "Checking Shared Directory"
 }
 
 createSharedFolder() {

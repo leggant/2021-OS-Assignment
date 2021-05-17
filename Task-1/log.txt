@@ -2830,3 +2830,78 @@ Options:
   -x, --maxdays MAX_DAYS        set maximum number of days before password
                                 change to MAX_DAYS
 
+#### Checking The Default Local User File
+#### test.csv Is Ok To Parse User Data From
+#### Checking The Default Local User File
+#### test.csv Is Ok To Parse User Data From
+#### Checking The Default Local User File
+#### test.csv Is Ok To Parse User Data From
+#### Checking The Default Local User File
+#### test.csv Is Ok To Parse User Data From
+
+>>>> 
+Exiting The Program....
+#### Checking The Default Local User File
+#### test.csv Is Ok To Parse User Data From
+
+>>>> 
+Exiting The Program....
+#### Checking The Default Local User File
+#### test.csv Is Ok To Parse User Data From
+
+>>>> 
+Exiting The Program....
+#### Checking The Default Local User File
+#### test.csv Is Ok To Parse User Data From
+
+>>>> 
+Exiting The Program....
+#### Checking The Default Local User File
+#### test.csv Is Ok To Parse User Data From
+#### Checking The Default Local User File
+#### test.csv Is Ok To Parse User Data From
+#### Checking The Default Local User File
+#### test.csv Is Ok To Parse User Data From
+
+>>>> ERROR <<<< users.csv does not exist locally or is not a CSV file.
+
+Spider mode enabled. Check if remote file exists.
+--2021-05-17 00:07:45--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
+Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
+Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 519 [text/csv]
+Remote file exists.
+
+
+#### CSV File URL Checked and OK ###
+--2021-05-17 00:07:46--  http://-/
+Resolving - (-)... failed: Temporary failure in name resolution.
+wget: unable to resolve host address ‘-’
+--2021-05-17 00:07:46--  http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv
+Resolving kate.ict.op.ac.nz (kate.ict.op.ac.nz)... 202.49.5.60
+Connecting to kate.ict.op.ac.nz (kate.ict.op.ac.nz)|202.49.5.60|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 519 [text/csv]
+Saving to: ‘users.csv’
+
+     0K                                                       100% 45.1M=0s
+
+2021-05-17 00:07:47 (45.1 MB/s) - ‘users.csv’ saved [519/519]
+
+FINISHED --2021-05-17 00:07:47--
+Total wall clock time: 0.4s
+Downloaded: 1 files, 519 in 0s (45.1 MB/s)
+
+>>>> 
+Exiting The Program....
+
+users.csv Is Already On The Local System
+CSV Contains Content and Is Parsable
+
+>>>> 
+Exiting The Program....
+#### Checking The Default Local User File
+#### test.csv Is Ok To Parse User Data From
+
+>>>> An Error Occured During Confirmation. Please try Again
