@@ -26,6 +26,8 @@ checkAndParseLocalCSV() {
         echo -e "#### $local Is Ok To Parse User Data From">>$log;
         echo -e "#### $local Is Ok To Parse User Data From\n";
         ConfirmUserNumber $local;
+        ok=$?;
+        echo $ok;
     else 
         until [[ $x -eq 3 || $ok -eq 0 ]]
         do
@@ -35,7 +37,6 @@ checkAndParseLocalCSV() {
             if [ $ok -eq 0 ]; then
                 local=$newPath;
                 ConfirmUserNumber $local;
-                return $?
             else
                 x=$(( x+1 ))
                 if [ $x -eq 3 ]; then
@@ -144,7 +145,8 @@ ConfirmUserNumber() {
         read -p "Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
-                echo -e "\nProceeding...."
+                echo -e "\nProceeding....";
+                return 0;
             ;;
             N | No | n | no)
                 errorOut "\nExiting The Program....";
