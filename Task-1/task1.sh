@@ -42,6 +42,10 @@ checkAndParseLocalCSV() {
             if [ $ok -eq 0 ]; then
                 local=$newPath;
                 ConfirmUserNumber $local;
+                ok=$?;
+                if [ $ok -eq 0 ]; then
+                    parseData $local;
+                fi
             else
                 x=$(( x+1 ))
                 if [ $x -eq 3 ]; then
@@ -143,7 +147,7 @@ ConfirmUserNumber() {
     userNum=$(awk '{n+=1} END {print n}' $1);
     Num="$(( $userNum-1 ))"
     echo -e "# ---------------------------------------------------------------------------- #"
-    echo -e "#-------------This Script Is Now Ready to Create $Num Users.-------------------#"
+    echo -e "# ------------This Script Is Now Ready to Create $Num Users.------------------ #"
     echo -e "# ---------------------------------------------------------------------------- #"
     while [[ $x -le 3 ]]; do
         read -p "Do You Wish to Proceed? " confirm;
