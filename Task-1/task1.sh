@@ -28,11 +28,7 @@ checkAndParseLocalCSV() {
         ConfirmUserNumber $local;
         ok=$?;
         if [ $ok -eq 0 ]; then
-            echo "$ok - OK"; 
             parseData $local;
-        else
-            echo -e "\n>>>> Input Error Please Try Again";
-            startMenu;
         fi
     else 
         until [[ $x -eq 3 || $ok -eq 0 ]]
@@ -43,6 +39,9 @@ checkAndParseLocalCSV() {
             if [ $ok -eq 0 ]; then
                 local=$newPath;
                 ConfirmUserNumber $local;
+                if [ $ok -eq 0 ]; then
+                    parseData $local;
+                fi
             else
                 x=$(( x+1 ))
                 if [ $x -eq 3 ]; then
