@@ -6,7 +6,7 @@
 
 default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv";
 downloaded="users.csv";
-local="test.csv";
+local="./test.csv";
 log="log.txt";
 newPath="";
 
@@ -313,10 +313,10 @@ startMenu() {
                 fi  ;;
             2) 
                 checkAndParseLocalCSV 
-                ok=$?
-                if [ $ok -eq 0 ]; then
-                    parseData $local;
-                fi ;;
+                # ok=$?
+                # if [ $ok -eq 0 ]; then
+                #     parseData $local;
+                # fi ;;
             3) 
                 echo -e "\t\nExiting The Program"; 
                 exit 1 ;;
