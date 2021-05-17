@@ -5,9 +5,9 @@
 # ---------------------------------------------------------------------------- #
 
 default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv";
-downloaded="users.csv";
-local="./test.csv";
-log="log.txt";
+downloaded='users.csv';
+local='test.csv'
+log='log.txt';
 newPath="";
 
 # ---------------------------------------------------------------------------- #
@@ -28,11 +28,7 @@ checkAndParseLocalCSV() {
         ConfirmUserNumber $local;
         ok=$?;
         if [ $ok -eq 0 ]; then
-            echo "$ok - OK"; 
             parseData $local;
-        else
-            echo -e "\n>>>> Input Error Please Try Again";
-            startMenu;
         fi
     else 
         until [[ $x -eq 3 || $ok -eq 0 ]]
@@ -43,6 +39,9 @@ checkAndParseLocalCSV() {
             if [ $ok -eq 0 ]; then
                 local=$newPath;
                 ConfirmUserNumber $local;
+                if [ $ok -eq 0 ]; then
+                    parseData $local;
+                fi
             else
                 x=$(( x+1 ))
                 if [ $x -eq 3 ]; then
@@ -59,7 +58,7 @@ checkAndParseLocalCSV() {
 # ---------------------------------------------------------------------------- #
 
 checkFile() {
-    if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
+    if [[ -f $1 && -r $1 && -s $1 && ${1:-4} == ".csv" ]]; then
  	    echo -e "\n#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####\n";
         return 0;
     else 
@@ -194,19 +193,12 @@ parseData() {
             last=$(echo "$xname" | cut -d"@" -f1 | cut -d"." -f2)
             name=$initial$last
             echo "Converted $xname to username: $name";
-            ## Check If User Name Exists
             checkIfUserExists $name;
             ok=$?;
             if [ $ok -eq 0 ]; then
-                # create user with all parsed params
                 createUser $name $password;
                 ok=$?;
                 echo $ok;
-                #if [ $ok -eq 0 ]; then
-                    # add user to groups
-                #elif [ $ok -eq 1 ]; then
-                    #continue
-                #fi
             elif [ $ok -eq 1 ]; then 
                 continue;
             fi 
@@ -316,7 +308,7 @@ startMenu() {
                 # ok=$?
                 # if [ $ok -eq 0 ]; then
                 #     parseData $local;
-                # fi ;;
+                ;;
             3) 
                 echo -e "\t\nExiting The Program"; 
                 exit 1 ;;
