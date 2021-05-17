@@ -69,11 +69,10 @@ checkFile() {
 # # ---------------------------------------------------------------------------- #
 
 checkAndDownloadCSV() {
-    echo -e "\n#### Checking If CSV File Is Already Downloaded ####"
+    echo -e "\n#### Checking If CSV File Is Already Downloaded ####">>$log;
     checkFile $downloaded
     ok=$?
     if [ $ok -eq 0 ]; then
-        echo -e "\n $downloaded Is Already On The Local System\nCSV Contains Content and Is Parsable">>$log;
         ConfirmUserNumber $downloaded;
     else 
         echo -e "#### Checking User CSV File URL ####";
@@ -235,32 +234,36 @@ checkIfGroupExists() {
 #         CHECK IF A USER CURRENTLY EXISTS, CREATE USER IF THEY DO NOT         #
 # ---------------------------------------------------------------------------- #
 
-# checkIfUserExists() {
-#     if id -un $1 2>>$log; then
-#         echo "$1 already exists"
-#         return 1;
-#     else
-#         echo "user does not exist"
-#         return 0;
-#     fi
-# }
+checkIfUserExists() {
+    if id -un $1 2>>$log; then
+        echo "$1 already exists"
+        return 1;
+    else
+        echo "user: $1 does not exist"
+        return 0;
+    fi
+}
 
-# createUser() {
-#     echo -e "Create New User $1";
-#     sudo useradd -d /home/$1 -m -s /bin/bash $1 2>>$log;
-#     passwd -e $2 $1 2>>$log;
-#     return $?
+createUser() {
+    echo -e "Create New User $1";
+    sudo useradd -d /home/$1 -m -s /bin/bash $1;
+    #passwd -e $2 $1;
+    # return $?
+}
+
+# setPassword() {
+#     passwd -e 
 # }
 
 # checkSharedFolderExists() {
 #     echo "Checking Shared Directory"
 # }
 
-# createSharedFolder() {
-#     dir=$1
-#     #mkdir -p $dir
-#     echo "Shared Folder Created $dir"
-# }
+createSharedFolder() {
+    dir=$1
+    #mkdir -p $dir
+    echo "Shared Folder Created $dir"
+}
 # # For each user with permission to a shared folder, create a link in the users home folder to the shared directory. Link name: 'shared'
 # createSharedFolderLink() {
 #     echo "Link Created"
@@ -281,6 +284,14 @@ errorOut() {
     echo -e "\n>>>> $message">>$log;
     exit 1
 }
+
+# UseDownloadedData() {
+#     checkAndDownloadCSV 
+#     ok=$?
+#     if [ $ok -eq 0 ]; then
+#         parseData $downloaded;
+#     fi
+# }
 
 # ---------------------------------------------------------------------------- #
 #                        Start of Program Output To User                       #
@@ -323,4 +334,3 @@ runMenu() {
 }
 
 runMenu
-
