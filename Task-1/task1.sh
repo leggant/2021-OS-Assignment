@@ -26,12 +26,13 @@ checkAndParseLocalCSV() {
         echo -e "#### Parsing User Data From $local">>$log;
         echo -e "#### Parsing User Data From $local\n";
         ConfirmUserNumber $local;
-        # user asked to continue creating x users
         ok=$?;
         if [ $ok -eq 0 ]; then
-            return 0;
-        elif [ $ok -eq 1 ]; then
-            return 1;
+            echo "$ok - OK"; 
+            parseData $local;
+        else
+            echo -e "\n>>>> Input Error Please Try Again";
+            startMenu;
         fi
     else 
         until [[ $x -eq 3 || $ok -eq 0 ]]
@@ -42,12 +43,6 @@ checkAndParseLocalCSV() {
             if [ $ok -eq 0 ]; then
                 local=$newPath;
                 ConfirmUserNumber $local;
-                ok=$?;
-                if [ $ok -eq 0 ]; then
-                    return 0;
-                elif [ $ok -eq 1 ]; then
-                    return 1;
-                fi
             else
                 x=$(( x+1 ))
                 if [ $x -eq 3 ]; then
@@ -175,6 +170,8 @@ ConfirmUserNumber() {
 # ---------------------------- Parse User CSV File ---------------------------- #
 
 parseData() {
+    data=$1;
+    echo $data;
     {
         read -r
         while IFS=";" read -r email dob group shared
@@ -335,40 +332,3 @@ startMenu() {
 }
 
 startMenu
-
-
-# echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
-# 1) Download and Use the Default CSV File 
-# 2) Use a Locally Stored CSV File
-# 3) Exit The Program
-# "
-
-# x=1
-# until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
-# do
-#     read -p "Enter 1, 2 or 3: " option
-#     case $option in 
-#         1) 
-#             checkAndDownloadCSV 
-#             ok=$?
-# 	        if [ $ok -eq 0 ]; then
-# 		        parseData $downloaded;
-#             fi  ;;
-#         2) 
-#             checkAndParseLocalCSV 
-#             ok=$?
-#             if [ $ok -eq 0 ]; then
-#                 parseData $local;
-#             fi ;;
-#         3) 
-#             echo -e "\t\nExiting The Program"; 
-#             exit 1 ;;
-#         *) 
-#             echo -e "\f\t>> Error, Please try again <<\n" ;;
-#     esac 
-#     x=$(( x+1 ))
-#     if [ $x -eq 4 ]; then
-#         echo -e "Input Error Please Try Again Later"
-#         exit 1
-#     fi
-# done
