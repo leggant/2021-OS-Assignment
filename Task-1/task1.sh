@@ -4,11 +4,11 @@
 #                         GLOBAL VARIABLE DECLARATIONS                         #
 # ---------------------------------------------------------------------------- #
 
-default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv";
-downloaded='users.csv';
-local='test.csv'
-log='log.txt';
-newPath="";
+default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
+downloaded="users.csv"
+local="test.csv"
+log="log.txt"
+newPath=""
 
 # ---------------------------------------------------------------------------- #
 #                         SCRIPT FUNCTION DECLARATIONS                         #
@@ -23,13 +23,11 @@ checkAndParseLocalCSV() {
     checkFile $local
     ok=$?
     if [ $ok -eq 0 ]; then
-        echo -e "#### Parsing User Data From $local">>$log;
-        echo -e "#### Parsing User Data From $local\n";
+        echo -e "#### $local Is Ok To Parse User Data From">>$log;
+        echo -e "#### $local Is Ok To Parse User Data From\n";
         ConfirmUserNumber $local;
         ok=$?;
-        if [ $ok -eq 0 ]; then
-            parseData $local;
-        fi
+        echo $ok;
     else 
         until [[ $x -eq 3 || $ok -eq 0 ]]
         do
@@ -39,7 +37,6 @@ checkAndParseLocalCSV() {
             if [ $ok -eq 0 ]; then
                 local=$newPath;
                 ConfirmUserNumber $local;
-                return $?
             else
                 x=$(( x+1 ))
                 if [ $x -eq 3 ]; then
@@ -83,7 +80,7 @@ checkAndDownloadCSV() {
     else 
         echo -e "#### Checking User CSV File URL ####";
         checkCSV_URI $default 2>>$log;
-        URLok=$?;
+        URLok=$?
         if [ $URLok -eq 0 ]; then
             echo -e "\n#### CSV File URL Checked and OK ###">>$log;
             echo -e "#### Downloading Users CSV File ####\n";
@@ -92,7 +89,7 @@ checkAndDownloadCSV() {
                 echo -e "#### Download Complete ####\n";
                 echo -e "#### Checking Downloaded CSV File ####\n";
                 checkFile $downloaded;
-                ok=$?;
+                ok=$?
                 if [ $ok -eq 0 ]; then 
                     ConfirmUserNumber $downloaded;
                 fi
@@ -100,7 +97,7 @@ checkAndDownloadCSV() {
                 errorOut "\n>>>\n>>>Error During Download. Please Try Again<<<\n<<<";
             fi
         else 
-            errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<";
+            errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<"
         fi
     fi
 }
@@ -148,7 +145,8 @@ ConfirmUserNumber() {
         read -p "Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
-                echo -e "\nProceeding...."
+                echo -e "\nProceeding....";
+                return 0;
             ;;
             N | No | n | no)
                 errorOut "\nExiting The Program....";
@@ -168,8 +166,6 @@ ConfirmUserNumber() {
 # ---------------------------- Parse User CSV File ---------------------------- #
 
 parseData() {
-    data=$1;
-    echo $data;
     {
         read -r
         while IFS=";" read -r email dob group shared
@@ -192,16 +188,23 @@ parseData() {
             initial=${xname:0:1}
             last=$(echo "$xname" | cut -d"@" -f1 | cut -d"." -f2)
             name=$initial$last
-            echo "Converted $xname to username: $name";
-            checkIfUserExists $name;
-            ok=$?;
+            echo "Converted $xname to username: $name"
+            ## Check If User Name Exists
+            checkIfUserExists $name
+            ok=$?
             if [ $ok -eq 0 ]; then
-                createUser $name $password;
-                ok=$?;
-                echo $ok;
+                # create user with all parsed params
+                createUser $name $password 
+                ok=$?
+                echo $ok
+                #if [ $ok -eq 0 ]; then
+                    # add user to groups
+                #elif [ $ok -eq 1 ]; then
+                    #continue
+                #fi
             elif [ $ok -eq 1 ]; then 
-                continue;
-            fi 
+                continue
+            fi
         done
     } < $1
 }
@@ -240,7 +243,7 @@ checkIfUserExists() {
         echo "$1 already exists"
         return 1;
     else
-        echo "user does not exist";
+        echo "user does not exist"
         return 0;
     fi
 }
