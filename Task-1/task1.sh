@@ -26,14 +26,19 @@ checkAndParseLocalCSV() {
         echo -e "#### $local Is Ok To Parse User Data From">>$log;
         echo -e "#### $local Is Ok To Parse User Data From\n";
         ConfirmUserNumber $local;
+        # user asked to continue creating x users
         ok=$?;
-        echo $ok;
+        if [ $ok -eq 0 ]; then
+            parseData $local;
+        elif [ $ok -eq 1 ]; then
+            startMenu
+        fi
     else 
         until [[ $x -eq 3 || $ok -eq 0 ]]
         do
             read -p "Enter A New File Path Here:: " newPath 
-            checkFile "$newPath"
-            ok=$?
+            checkFile "$newPath";
+            ok=$?;
             if [ $ok -eq 0 ]; then
                 local=$newPath;
                 ConfirmUserNumber $local;
@@ -41,13 +46,12 @@ checkAndParseLocalCSV() {
                 x=$(( x+1 ))
                 if [ $x -eq 3 ]; then
                     echo -e "\n>>>> Input Error Please Try Again Later";
-                    exit 1
+                    exit 1;
                 fi
             fi
         done
     fi
 }
-
 
 # ---------------------------------------------------------------------------- #
 #             CHECK IF THE FILE IS ON THE SYSTEM AND CAN BE PARSED             #
@@ -139,7 +143,7 @@ ConfirmUserNumber() {
     userNum=$(awk '{n+=1} END {print n}' $1);
     Num="$(( $userNum-1 ))"
     echo -e "# ---------------------------------------------------------------------------- #"
-    echo -e "#------------This Script Is Now Ready to Create $Num Users.----------------#"
+    echo -e "#-------------This Script Is Now Ready to Create $Num Users.-------------------#"
     echo -e "# ---------------------------------------------------------------------------- #"
     while [[ $x -le 3 ]]; do
         read -p "Do You Wish to Proceed? " confirm;
@@ -264,12 +268,11 @@ createSharedFolder() {
     #mkdir -p $dir
     echo "Shared Folder Created $dir"
 }
+
 # For each user with permission to a shared folder, create a link in the users home folder to the shared directory. Link name: 'shared'
 createSharedFolderLink() {
     echo "Link Created"
 }
-
-
 
 # ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
 # ------------------------- THAT HAS SUDO PERMISSIONS ------------------------ #
@@ -289,38 +292,78 @@ errorOut() {
 #                        Start of Program Output To User                       #
 # ---------------------------------------------------------------------------- #
 
-echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
-1) Download and Use the Default CSV File 
-2) Use a Locally Stored CSV File
-3) Exit The Program
-"
+# echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
+# 1) Download and Use the Default CSV File 
+# 2) Use a Locally Stored CSV File
+# 3) Exit The Program
+# "
 
-x=1
-until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
-do
-    read -p "Enter 1, 2 or 3: " option
-    case $option in 
-        1) 
-            checkAndDownloadCSV 
-            ok=$?
-	        if [ $ok -eq 0 ]; then
-		        parseData $downloaded;
-            fi  ;;
-        2) 
-            checkAndParseLocalCSV 
-            ok=$?
-            if [ $ok -eq 0 ]; then
-                parseData $local;
-            fi ;;
-        3) 
-            echo -e "\t\nExiting The Program"; 
-            exit 1 ;;
-        *) 
-            echo -e "\f\t>> Error, Please try again <<\n" ;;
-    esac 
-    x=$(( x+1 ))
-    if [ $x -eq 4 ]; then
-        echo -e "Input Error Please Try Again Later"
-        exit 1
-    fi
-done
+# x=1
+# until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
+# do
+#     read -p "Enter 1, 2 or 3: " option
+#     case $option in 
+#         1) 
+#             checkAndDownloadCSV 
+#             ok=$?
+# 	        if [ $ok -eq 0 ]; then
+# 		        parseData $downloaded;
+#             fi  ;;
+#         2) 
+#             checkAndParseLocalCSV 
+#             ok=$?
+#             if [ $ok -eq 0 ]; then
+#                 parseData $local;
+#             fi ;;
+#         3) 
+#             echo -e "\t\nExiting The Program"; 
+#             exit 1 ;;
+#         *) 
+#             echo -e "\f\t>> Error, Please try again <<\n" ;;
+#     esac 
+#     x=$(( x+1 ))
+#     if [ $x -eq 4 ]; then
+#         echo -e "Input Error Please Try Again Later"
+#         exit 1
+#     fi
+# done
+
+startMenu() {
+    echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
+    1) Download and Use the Default CSV File 
+    2) Use a Locally Stored CSV File
+    3) Exit The Program
+    "
+
+    x=1
+    until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
+    do
+        read -p "Enter 1, 2 or 3: " option
+        case $option in 
+            1) 
+                checkAndDownloadCSV 
+                ok=$?
+                if [ $ok -eq 0 ]; then
+                    parseData $downloaded;
+                fi  ;;
+            2) 
+                checkAndParseLocalCSV 
+                ok=$?
+                if [ $ok -eq 0 ]; then
+                    parseData $local;
+                fi ;;
+            3) 
+                echo -e "\t\nExiting The Program"; 
+                exit 1 ;;
+            *) 
+                echo -e "\f\t>> Error, Please try again <<\n" ;;
+        esac 
+        x=$(( x+1 ))
+        if [ $x -eq 4 ]; then
+            echo -e "Input Error Please Try Again Later"
+            exit 1
+        fi
+    done
+}
+
+startMenu
