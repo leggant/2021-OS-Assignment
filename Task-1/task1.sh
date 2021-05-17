@@ -5,9 +5,9 @@
 # ---------------------------------------------------------------------------- #
 
 default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv";
-downloaded="users.csv";
-local="./test.csv";
-log="log.txt";
+downloaded='users.csv';
+local='test.csv'
+log='log.txt';
 newPath="";
 
 # ---------------------------------------------------------------------------- #
