@@ -316,7 +316,7 @@ startMenu() {
                 # ok=$?
                 # if [ $ok -eq 0 ]; then
                 #     parseData $local;
-                # fi ;;
+                ;;
             3) 
                 echo -e "\t\nExiting The Program"; 
                 exit 1 ;;
