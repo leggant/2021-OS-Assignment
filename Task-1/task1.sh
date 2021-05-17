@@ -288,39 +288,41 @@ errorOut() {
 # ---------------------------------------------------------------------------- #
 #                        Start of Program Output To User                       #
 # ---------------------------------------------------------------------------- #
+runMenu() {
+    echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
+    1) Download and Use the Default CSV File 
+    2) Use a Locally Stored CSV File
+    3) Exit The Program
+    "
+    x=1
+    until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
+    do
+        read -p "Enter 1, 2 or 3: " option
+        case $option in 
+            1) 
+                checkAndDownloadCSV 
+                ok=$?
+                if [ $ok -eq 0 ]; then
+                    parseData $downloaded;
+                fi  ;;
+            2) 
+                checkAndParseLocalCSV 
+                ok=$?
+                if [ $ok -eq 0 ]; then
+                    parseData $local;
+                fi ;;
+            3) 
+                echo -e "\t\nExiting The Program"; 
+                exit 1 ;;
+            *) 
+                echo -e "\f\t>> Error, Please try again <<\n" ;;
+        esac 
+        x=$(( x+1 ))
+        if [ $x -eq 4 ]; then
+            echo -e "Input Error Please Try Again Later"
+            exit 1
+        fi
+    done
+}
 
-echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
-1) Download and Use the Default CSV File 
-2) Use a Locally Stored CSV File
-3) Exit The Program
-"
-
-x=1
-until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
-do
-    read -p "Enter 1, 2 or 3: " option
-    case $option in 
-        1) 
-            checkAndDownloadCSV 
-            ok=$?
-	        if [ $ok -eq 0 ]; then
-		        parseData $downloaded;
-            fi  ;;
-        2) 
-            checkAndParseLocalCSV 
-            ok=$?
-            if [ $ok -eq 0 ]; then
-                parseData $local;
-            fi ;;
-        3) 
-            echo -e "\t\nExiting The Program"; 
-            exit 1 ;;
-        *) 
-            echo -e "\f\t>> Error, Please try again <<\n" ;;
-    esac 
-    x=$(( x+1 ))
-    if [ $x -eq 4 ]; then
-        echo -e "Input Error Please Try Again Later"
-        exit 1
-    fi
-done
+runMenu
