@@ -18,40 +18,40 @@ newPath=""
 #          CHECK THE LOCALLY STORED FILE IS BOTH PRESENT AND PARSABLE          #
 # ---------------------------------------------------------------------------- #
 
-# checkAndParseLocalCSV() {
-#     echo -e "#### Checking The Default Local User File">>$log;
-#     checkFile $local
-#     ok=$?
-#     if [ $ok -eq 0 ]; then
-#         echo -e "#### $local Is Ok To Parse User Data From">>$log;
-#         echo -e "#### $local Is Ok To Parse User Data From\n";
-#         ConfirmUserNumber $local;
-#         ok=$?;
-#         echo $ok;
-#     else 
-#         until [[ $x -eq 3 || $ok -eq 0 ]]
-#         do
-#             read -p "Enter A New File Path Here:: " newPath 
-#             checkFile "$newPath"
-#             ok=$?
-#             if [ $ok -eq 0 ]; then
-#                 local=$newPath;
-#                 ConfirmUserNumber $local;
-#             else
-#                 x=$(( x+1 ))
-#                 if [ $x -eq 3 ]; then
-#                     echo -e "\n>>>> Input Error Please Try Again Later";
-#                     exit 1
-#                 fi
-#             fi
-#         done
-#     fi
-# }
+checkAndParseLocalCSV() {
+    echo -e "#### Checking The Default Local User File">>$log;
+    checkFile $local
+    ok=$?
+    if [ $ok -eq 0 ]; then
+        echo -e "#### $local Is Ok To Parse User Data From">>$log;
+        echo -e "#### $local Is Ok To Parse User Data From\n";
+        ConfirmUserNumber $local;
+        ok=$?;
+        echo $ok;
+    else 
+        until [[ $x -eq 3 || $ok -eq 0 ]]
+        do
+            read -p "Enter A New File Path Here:: " newPath 
+            checkFile "$newPath"
+            ok=$?
+            if [ $ok -eq 0 ]; then
+                local=$newPath;
+                ConfirmUserNumber $local;
+            else
+                x=$(( x+1 ))
+                if [ $x -eq 3 ]; then
+                    echo -e "\n>>>> Input Error Please Try Again Later";
+                    exit 1
+                fi
+            fi
+        done
+    fi
+}
 
 
-# # ---------------------------------------------------------------------------- #
-# #             CHECK IF THE FILE IS ON THE SYSTEM AND CAN BE PARSED             #
-# # ---------------------------------------------------------------------------- #
+# ---------------------------------------------------------------------------- #
+#             CHECK IF THE FILE IS ON THE SYSTEM AND CAN BE PARSED             #
+# ---------------------------------------------------------------------------- #
 
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
@@ -332,5 +332,4 @@ runMenu() {
         fi
     done
 }
-
 runMenu
