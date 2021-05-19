@@ -201,7 +201,6 @@ parseData() {
                 # create user with all parsed params
                 createUser $name $password 
                 ok=$?
-                echo $ok
                 if [ $ok -eq 0 ]; then
                     add user to groups
                 fi
@@ -209,7 +208,7 @@ parseData() {
                 continue
             fi
         done
-    } <<< $1
+    } < $1
 }
 
 # ---------------------------------------------------------------------------- #
