@@ -6,7 +6,7 @@
 
 default="http://kate.ict.op.ac.nz/~faisalh/IN617linux/users.csv"
 downloaded="users.csv"
-local="test.csv"
+localfile="test.csv"
 log="log.txt"
 newPath=""
 
@@ -20,14 +20,18 @@ newPath=""
 
 checkAndParseLocalCSV() {
     echo -e "#### Checking The Default Local User File">>$log;
-    checkFile $local
+    checkFile $localfile
     ok=$?
     if [ $ok -eq 0 ]; then
-        echo -e "#### $local Is Ok To Parse User Data From">>$log;
-        echo -e "#### $local Is Ok To Parse User Data From\n";
-        ConfirmUserNumber $local;
-        ok=$?;
-        echo $ok;
+        echo -e "#### $localfile Is Ok To Parse User Data From">>$log
+        echo -e "#### $localfile Is Ok To Parse User Data From\n"
+        ConfirmUserNumber $localfile
+        ok=$?
+        if [ $ok -eq 0 ]; then
+            parseData $localfile
+        else 
+            return 1
+        fi
     else 
         until [[ $x -eq 3 || $ok -eq 0 ]]
         do
@@ -35,8 +39,8 @@ checkAndParseLocalCSV() {
             checkFile "$newPath"
             ok=$?
             if [ $ok -eq 0 ]; then
-                local=$newPath;
-                ConfirmUserNumber $local;
+                localfile=$newPath;
+                ConfirmUserNumber $localfile;
             else
                 x=$(( x+1 ))
                 if [ $x -eq 3 ]; then
@@ -145,8 +149,8 @@ ConfirmUserNumber() {
         read -p "Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
-                echo -e "\nProceeding....";
-                return 0;
+                #echo -e "\nProceeding....";
+                return 0
             ;;
             N | No | n | no)
                 errorOut "\nExiting The Program....";
@@ -171,7 +175,7 @@ parseData() {
         while IFS=";" read -r email dob group shared
         do
             ## Check if Group(s) Exist
-            ## This will call a second function if
+            ## This function will call a second function if
             ## the group does not exist
             checkIfGroupExists $group
             ## Parsing Users Password From DOB
@@ -181,6 +185,7 @@ parseData() {
             # Remove '/' from shared
             folder=$(echo "$shared" | awk -F/ '{print $NF}')
             # check if folder exists
+            checkSharedFolderExists $folder
 
             createSharedFolder $folder
             ## Create User Name From Email
@@ -197,16 +202,14 @@ parseData() {
                 createUser $name $password 
                 ok=$?
                 echo $ok
-                #if [ $ok -eq 0 ]; then
-                    # add user to groups
-                #elif [ $ok -eq 1 ]; then
-                    #continue
-                #fi
+                if [ $ok -eq 0 ]; then
+                    add user to groups
+                fi
             elif [ $ok -eq 1 ]; then 
                 continue
             fi
         done
-    } < $1
+    } <<< $1
 }
 
 # ---------------------------------------------------------------------------- #
@@ -230,7 +233,7 @@ checkIfGroupExists() {
 
 createNewGroup () {
     echo -e "Making Group >> $1";
-    echo "Making Group >> $1" >> $log;
+    echo "Making Group >> $1">>$log;
     sudo groupadd $1
 }
 
@@ -256,7 +259,7 @@ createUser() {
 }
 
 checkSharedFolderExists() {
-    echo "Checking Shared Directory"
+    echo "$1 Checking Shared Directory"
 }
 
 createSharedFolder() {
@@ -268,8 +271,6 @@ createSharedFolder() {
 createSharedFolderLink() {
     echo "Link Created"
 }
-
-
 
 # ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
 # ------------------------- THAT HAS SUDO PERMISSIONS ------------------------ #
@@ -309,8 +310,8 @@ do
         2) 
             checkAndParseLocalCSV 
             ok=$?
-            if [ $ok -eq 0 ]; then
-                parseData $local;
+            if [ $ok -eq 1 ]; then
+                errorOut "An Error Occured Parsing the Local User Data CSV; Please Try Again";
             fi ;;
         3) 
             echo -e "\t\nExiting The Program"; 
