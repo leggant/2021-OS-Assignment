@@ -210,11 +210,8 @@ parseData() {
             if [ $ok -eq 0 ]; then
                 # create user with all parsed params
                 createUser $name $password 
-                ok=$?
-                if [ $ok -eq 0 ]; then
-                    add user to groups
-                fi
             fi
+		#sudo usermod -a -G $group $name
             # Assign user to shared folders
         done
     } < $1
@@ -274,12 +271,19 @@ createUserPassword() {
 }
 
 checkSharedFolderExists() {
-    echo "$1 Checking Shared Directory"
+if [ -n "$1" ]; then
+	echo "$1 exists"
+else
+	echo "$1 not exists"
+fi    
+echo "$1 Checking Shared Directory"
 }
 
 createSharedFolder() {
     dir=$1
-    #mkdir -p $dir
+    user=$2
+    sudo mkdir -p /home/$user/$dir
+    sudo chmod 770 /home/$user/$dir
     echo "Shared Folder Created $dir"
 }
 # For each user with permission to a shared folder, create a link in the users home folder to the shared directory. Link name: 'shared'
@@ -320,7 +324,8 @@ mainMenu() {
                 checkAndDownloadCSV 
                 ok=$?
                 if [ $ok -eq 0 ]; then
-                    parseData $downloaded;
+                    
+		parseData $downloaded;
                 fi  ;;
             2) 
                 checkAndParseLocalCSV 
