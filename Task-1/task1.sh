@@ -189,15 +189,8 @@ parseData() {
         read -r
         while IFS=";" read -r email dob group shared
         do
-            checkIfGroupExists $group
             password=$(date -d $dob +'%m%Y')
             echo -e "\nConverting $dob to Password: $password"
-            ## Creating Shared Folder If It Does Not Exist
-            # Remove '/' from shared
-            folder=$(echo "$shared" | awk -F/ '{print $NF}')
-            # check if folder exists
-            checkSharedFolderExists $folder
-            createSharedFolder $folder
             ## Create User Name From Email
             xname=$email
             initial=${xname:0:1}
@@ -207,12 +200,22 @@ parseData() {
             ## Check If User Name Exists
             checkIfUserExists $name
             ok=$?
+            # user does not exist, create user with all parsed params
             if [ $ok -eq 0 ]; then
-                # create user with all parsed params
                 createUser $name $password 
             fi
-		#sudo usermod -a -G $group $name
+            # check if group exists will also call a create group function if this group does not exist
+            checkIfGroupExists $group
+            addUserToGroups $group $name
+            ## Creating Shared Folder If It Does Not Exist
+            # Remove '/' from shared
+            folder=$(echo "$shared" | awk -F/ '{print $NF}')
+            # check if folder exists, create if it does not - this function will do both
+            checkSharedFolderExists $folder $name
+            #create 
+            createSharedFolderLink $folder $name
             # Assign user to shared folders
+            # create user alias
         done
     } < $1
 }
@@ -229,17 +232,22 @@ checkIfGroupExists() {
         ok=$?
         if [ $ok -eq 0 ]; then
             echo -e "\n>>> Group: $group already exists";
+            echo -e "\n>>> Group: $group already exists">>$log;
         else
             echo -e "\n>>> Group: $group does not exist";
+            echo -e "\n>>> Group: $group does not exist; Creating $group">>$log;
             createNewGroup $group;
         fi
     done
 }
 
 createNewGroup () {
-    echo -e "Making Group >> $1";
-    echo "Making Group >> $1">>$log;
     sudo groupadd $1
+    return $?
+}
+
+addUserToGroups() {
+    sudo usermod -a -G $1 $2;
 }
 
 # ---------------------------------------------------------------------------- #
@@ -247,26 +255,31 @@ createNewGroup () {
 # ---------------------------------------------------------------------------- #
 
 checkIfUserExists() {
-    if id -un $1 2>>$log; then
+    if id -un $1; then
         echo "$1 already exists"
         return 1;
     else
-        echo "user does not exist"
+        echo "$1 does not exist"
         return 0;
     fi
 }
 
 createUser() {
-    echo -e "Create New User $1";
-    sudo useradd -d /home/$1 -m -s /bin/bash $1 2>>$log;
+    user=$1
+    password=$2
+    echo -e "Create New User $user";
+    sudo useradd -d /home/$user -m -s /bin/bash $user;
     ok=$?
     if [ $ok -eq 0 ]; then
-        createUserPassword $1 $2
+        createUserPassword $user $password
+        return $?
     fi
 }
 
 createUserPassword() {
-    sudo passwd -e $2 $1;
+    user=$1
+    password=$2
+    sudo passwd -e $password $user;
     return $?
 }
 
@@ -274,21 +287,19 @@ checkSharedFolderExists() {
 if [ -n "$1" ]; then
 	echo "$1 exists"
 else
-	echo "$1 not exists"
+	createSharedFolder $1
 fi    
-echo "$1 Checking Shared Directory"
 }
 
 createSharedFolder() {
     dir=$1
-    user=$2
-    sudo mkdir -p /home/$user/$dir
-    sudo chmod 770 /home/$user/$dir
-    echo "Shared Folder Created $dir"
+    sudo mkdir -p /home/$dir
+    sudo chmod 770 /home/$dir
+    sudo chown : root /home/$dir
 }
 # For each user with permission to a shared folder, create a link in the users home folder to the shared directory. Link name: 'shared'
 createSharedFolderLink() {
-    echo "Link Created"
+    ln -s $1 /home/$2/sharedfolder
 }
 
 # ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
@@ -314,7 +325,6 @@ mainMenu() {
     2) Use a Locally Stored CSV File
     3) Exit The Program
     "
-
     x=1
     until [[ $x -eq 4 || $option -ge 1 && $option -le 3 ]]
     do
@@ -324,8 +334,7 @@ mainMenu() {
                 checkAndDownloadCSV 
                 ok=$?
                 if [ $ok -eq 0 ]; then
-                    
-		parseData $downloaded;
+		            parseData $downloaded;
                 fi  ;;
             2) 
                 checkAndParseLocalCSV 
