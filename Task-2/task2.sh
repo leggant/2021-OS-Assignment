@@ -1,9 +1,5 @@
 #!/bin/bash
 
-
-
-
-
 StartScript() {
 echo -e "\n#####################################\n###### Directory Backup Script ######\n#####################################\n"
 echo -e "This Script Will Compress a Directory of Your Choosing and Backup This File To A Remote Server\n"
@@ -28,8 +24,6 @@ if [ $counter -eq 3 ]; then
     exit 1
 fi
 done
-
-
 }
 StartScript
 ok=$?

@@ -306,7 +306,7 @@ createSharedFolderLink() {
 # ------------------------- THAT HAS SUDO PERMISSIONS ------------------------ #
 
 createUsersAlias() {
-    echo alias 'off="systemctl poweroff"' >> ~.bash_aliases
+    echo alias 'off="systemctl poweroff"' >> /home/$1/.bash_aliases
 }
 
 errorOut() {
