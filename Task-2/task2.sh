@@ -4,6 +4,7 @@ currentPath=$(pwd)
 currentFileName=$(echo "${currentPath##*/}")
 userInputDirectory=""
 outputFileName="default"
+log="log.txt"
 # Destination Ip 
 # file name
 # destination folder
@@ -17,18 +18,22 @@ exitapp() {
 }
 askUserForDirectory() {
     read -p "Enter the full path to the directory you would like to compress and transfer or press enter if you wish to use the current path: " path
+    ok=1
     if [ ${#path} -eq 0 ]; then
         userInputDirectory=$currentPath;
         checkDirectoryExists $userInputDirectory;
-        tar -czvf filename.tar.gz $currentPath
+        ok=$?
     else 
         userInputDirectory=$path
         checkDirectoryExists $userInputDirectory;
-        tar -czvf $outputFileName.tar.gz $userInputDirectory
+        ok=$?
+    fi
+    if [ $ok -eq 0 ]; then
+        tar -czvf $outputFileName.tar.gz $userInputDirectory 2>>$log;
     fi
 }
 
-
+#scp -P 22 default.tar.gz #username@ipaddress : inputfiledirectoryonremote
 
 checkDirectoryExists() {
    [[ -d $1 ]] && echo "$1 directory exists!" && userInputDirectory=$1 && return 0;
