@@ -32,8 +32,13 @@ askUserForDirectory() {
         tar -czvf $outputFileName.tar.gz $userInputDirectory 2>>$log;
     fi
 }
-
+sendToRemote() {
 #scp -P 22 default.tar.gz #username@ipaddress : inputfiledirectoryonremote
+}
+
+checkRemoteOnline() {
+    echo "check remote ip wget?"
+}
 
 checkDirectoryExists() {
    [[ -d $1 ]] && echo "$1 directory exists!" && userInputDirectory=$1 && return 0;
@@ -75,23 +80,3 @@ if [ $ok -eq 0 ]; then
 elif [ $ok -eq 1 ]; then
     echo "exit program"
 fi
-
-
-
-# for(( ; ; ))
-# do
-
-#   # Input a filename
-#   echo "Enter a file name"
-#   read file
-
-#   # Check the file exists or not
-#   if [ ! -f $file ]
-#   then
-
-#     echo "Filename does not exist"
-#     exit 0
-#   else
-#     echo "File exists"
-#   fi
-# done
