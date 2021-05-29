@@ -16,7 +16,7 @@ newPath=""
 
 log() {
     MESSAGE=$1
-    echo -e "\n$MESSAGE"
+    echo -e "$MESSAGE"
     echo -e "\n$MESSAGE">>$log
 }
 
@@ -299,6 +299,9 @@ createUserPassword() {
 #                     SHARED FOLDER CONFIGURATION FUNCTIONS                    #
 # ---------------------------------------------------------------------------- #
 
+sharedFolderConfig() {
+    
+}
 
 # ---------------------- CHECK IF A SHARED FOLDER EXISTS --------------------- #
 
