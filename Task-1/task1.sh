@@ -280,7 +280,7 @@ createUser() {
     user=$1
     password=$2
     log "Create New User $user";
-    sudo useradd -d /home/$user -m -s /bin/bash $user;
+    sudo useradd -m $user;
     ok=$?
     if [ $ok -eq 0 ]; then
         createUserPassword $user $password
@@ -298,10 +298,6 @@ createUserPassword() {
 # ---------------------------------------------------------------------------- #
 #                     SHARED FOLDER CONFIGURATION FUNCTIONS                    #
 # ---------------------------------------------------------------------------- #
-
-sharedFolderConfig() {
-    
-}
 
 # ---------------------- CHECK IF A SHARED FOLDER EXISTS --------------------- #
 
