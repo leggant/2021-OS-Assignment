@@ -53,6 +53,7 @@ checkAndParseLocalCSV() {
         do
             read -p "Enter A New File Path Here:: " newPath 
             checkFile "$newPath"
+            sleep 4
             ok=$?
             if [ $ok -eq 0 ]; then
                 localfile=$newPath;
@@ -90,6 +91,7 @@ checkFile() {
 checkAndDownloadCSV() {
     echo -e "\n# --------------- Checking If Users File Is Already Downloaded --------------- #"
     checkFile $downloaded
+    sleep 4
     ok=$?
     if [ $ok -eq 0 ]; then
         #ask user if they want to download fresh data
@@ -97,16 +99,19 @@ checkAndDownloadCSV() {
         ConfirmUserNumber $downloaded;
     else 
         echo -e "# ---------- No Local Version Of File Found >> Checking Download URL --------- #";
+        sleep 4
         checkCSV_URI $default 2>>$log;
         URLok=$?
         if [ $URLok -eq 0 ]; then
             log "# ------------------- Remote Host/CSV File URL Checked + Ok ------------------ #";
             log "# ---------------- Downloading User Data CSV From Remote Host ---------------- #";
+            sleep 3
             downloadDefaultCSV $default;
             if [ $? -eq 1 ]; then
                 log "# -------------------------- File Download Complete -------------------------- #\n";
                 log "# ----------------- Checking Downloaded CSV File is Parsable ----------------- #\n";
                 checkFile $downloaded;
+                sleep 4
                 ok=$?
                 if [ $ok -eq 0 ]; then 
                     ConfirmUserNumber $downloaded;
