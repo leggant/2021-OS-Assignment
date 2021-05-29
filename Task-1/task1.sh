@@ -206,20 +206,14 @@ parseData() {
             if [ $ok -eq 0 ]; then
                 createUser $user $password 
             fi
+            # Remove '/' from shared
+            folder=$(echo "$shared" | awk -F/ '{print $NF}')
             # check if group exists 
             #create group if it does not
             # add user to groups 
-            groupConfig $groups $user
             ## Creating Shared Folder If It Does Not Exist
-            # Remove '/' from shared
-            folder=$(echo "$shared" | awk -F/ '{print $NF}')
             # check if folder exists, create if it does not - this function will do both
-            sharedFolderConfig $folder $user
-            checkSharedFolderExists $folder $user
-            #create 
-            createSharedFolderLink $folder $user
-            # Assign user to shared folders
-            # create user alias
+            userGroupConfig $groups $user $folder
         done
     } < $1
 }
@@ -228,8 +222,9 @@ parseData() {
 #              CHECK IF A GROUP EXISTS, CREATE THIS IF IT DOES NOT             #
 # ---------------------------------------------------------------------------- #
 
-groupConfig() {
-    name=$2
+userGroupConfig() {
+    user=$2
+    folder=$3
     IFS=',' read -r -a groups <<< $1
     for group in "${groups[@]}"
     do
@@ -238,12 +233,24 @@ groupConfig() {
         if [ $ok -eq 0 ]; then
             echo -e "\n>>> Group: $group already exists";
             echo -e "\n>>> Group: $group already exists">>$log;
-            addUserToGroups $group $name
+            addUserToGroups $group $user
+            sharedFolderConfig $folder $user
+            checkSharedFolderExists $folder $user
+            #create 
+            createSharedFolderLink $folder $user
+            # Assign user to shared folders
+            # create user alias
         else
             echo -e "\n>>> Group: $group does not exist; Creating $group";
             echo -e "\n>>> Group: $group does not exist; Creating $group">>$log;
             createNewGroup $group;
-            addUserToGroups $group $name
+            addUserToGroups $group $user
+            sharedFolderConfig $folder $user
+            checkSharedFolderExists $folder $user
+            #create 
+            createSharedFolderLink $folder $user
+            # Assign user to shared folders
+            # create user alias
         fi
     done
 }
@@ -307,7 +314,7 @@ createSharedFolder() {
     USER=$2
     sudo mkdir -p $FOLDER
     sudo chmod 2770 $FOLDER
-    sudo chown : root $FOLDER
+    sudo chown $USER : root $FOLDER
 }
 
 # ---------------------------------------------------------------------------- #
