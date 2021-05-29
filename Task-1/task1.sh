@@ -67,16 +67,17 @@ checkAndParseLocalCSV() {
     fi
 }
 
-
 # ---------------------------------------------------------------------------- #
 #             CHECK IF THE FILE IS ON THE SYSTEM AND CAN BE PARSED             #
 # ---------------------------------------------------------------------------- #
 
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
+        echo ""
  	    log "#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####\n"
         return 0
     else 
+        echo "";
         log ">>>> ERROR <<<< $1 does not exist locally or is not a CSV file.\n";
         return 1
     fi
@@ -165,6 +166,7 @@ ConfirmUserNumber() {
     x=1;
     userNum=$(awk '{n+=1} END {print n}' $1);
     Num="$(( $userNum-1 ))"
+    clear
     echo -e "# ---------------------------------------------------------------------------- #"
     echo -e "#                 The Script Is Now Ready To Create $Num Users                 #"
     echo -e "# ---------------------------------------------------------------------------- #\n"
@@ -343,6 +345,7 @@ createUsersAlias() {
 # ---------------------------------------------------------------------------- #
 
 mainMenu() {
+    clear
     echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
     1) Download and Use the Default CSV File 
     2) Use a Locally Stored CSV File
