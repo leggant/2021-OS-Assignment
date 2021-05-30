@@ -382,7 +382,7 @@ createSharedFolderLink() {
 # ---------------------------------------------------------------------------- #
 
 createShutDownAlias() {
-    echo alias 'off="systemctl poweroff"' >> /home/$1/.bash_aliases
+    sudo echo alias 'off="systemctl poweroff"' >> /home/$1/.bash_aliases
 }
 
 # ---------------------------------------------------------------------------- #
