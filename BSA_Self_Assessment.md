@@ -6,6 +6,13 @@
 
 # Task 1
 
+### Completed
+
+## Uresolved Issues
+- Unable to provide fallback options for users that do not have a group, or do not have a shared folder provided
+
+## Features
+
 |  Activity  | Points | Completed | Attempted |
 | :--: | :--: | :--: | :--: |
 | Reading local file / URL |      |  |      |

@@ -454,11 +454,11 @@ mainMenu() {
                 log ">>> Exiting The Program"; 
                 exit 1 ;;
             *) 
-                log ">>> Error, Please try again <<<" ;;
+                echo -e ">>> Error, Please try again <<<\n" ;;
         esac 
         x=$(( x+1 ))
         if [ $x -eq 4 ]; then
-            log ">>> Input Error Please Try Again Later"
+            echo ">>> Input Error Please Try Again Later"
             exit 1
         fi
     done
