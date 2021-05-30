@@ -18,7 +18,7 @@ log() {
     MESSAGE=$1
     echo -e "\n$MESSAGE"
     echo -e "\n$MESSAGE">>$log
-    sleep 2
+    sleep 1
 }
 
 delay() {
@@ -383,7 +383,12 @@ createSharedFolderLink() {
 # ---------------------------------------------------------------------------- #
 
 createShutDownAlias() {
-    sudo echo alias 'off="systemctl poweroff"' >> /home/$1/.bash_aliases
+    user=$1
+    file=/home/$user/.bash_aliases
+    touch $file;
+    sudo chown $user: $file;
+    sudo chmod 700 $file;
+    sudo echo alias 'off="systemctl poweroff"' >>/home/$user/.bash_aliases
 }
 
 # ---------------------------------------------------------------------------- #
@@ -391,10 +396,11 @@ createShutDownAlias() {
 # ---------------------------------------------------------------------------- #
 
 endScript() {
-echo -e "# ---------------------------------------------------------------------------- #"
-echo -e "# ----------THIS SCRIPT HAS SUCCESSFULLY CREATED USERS ON THE SYSTEM---------- #"
-echo -e "# ---------------------------------------------------------------------------- #"
-delay
+    delay
+    clear
+    echo -e "# ---------------------------------------------------------------------------- #"
+    echo -e "# ----------THIS SCRIPT HAS SUCCESSFULLY CREATED USERS ON THE SYSTEM---------- #"
+    echo -e "# ---------------------------------------------------------------------------- #"
 exit 1
 }
 
