@@ -319,8 +319,8 @@ createUserPassword() {
     user=$1
     password=$2
     echo "$user:$password" -m | sudo chpasswd
-    sudo passwd -eq $user>>$log;;
-    sudo chage -l $user>>$log
+    sudo passwd -eq $user>>$log;
+    sudo chage -l $user>>$log;
     return $?
 }
 
