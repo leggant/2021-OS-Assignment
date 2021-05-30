@@ -386,7 +386,9 @@ createShutDownAlias() {
     file=/home/$user/.bash_aliases
     sudo touch $file
     sudo chmod 777 $file;
-    sudo echo alias 'off="systemctl poweroff"'>>/home/$user/.bash_aliases
+    sudo echo alias 'off="systemctl poweroff"'>/home/$user/.bash_aliases
+    sudo chown $user:$user $file
+    sudo chmod 644 $file
 }
 
 # ---------------------------------------------------------------------------- #
