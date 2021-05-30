@@ -43,7 +43,6 @@ errorOut() {
 checkAndParseLocalCSV() {
     echo -e "#### Checking The Default Local User File">>$log;
     checkFile $localfile
-    delay
     ok=$?
     if [ $ok -eq 0 ]; then
         delay
@@ -94,7 +93,7 @@ checkFile() {
 # ---------------------------------------------------------------------------- #
 
 checkAndDownloadCSV() {
-    log "# --------------- Checking If Users File Is Already Downloaded --------------- #"
+    log "# ----------------Checking If Users File Is Already Downloaded---------------- #"
     checkFile $downloaded
     ok=$?
     delay
@@ -150,7 +149,7 @@ checkAndDownloadCSV() {
         fi #end if 2
     # End elif 1
     else # else if statement 1
-        errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<"
+        errorOut ">>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File<<<"
     fi #end of function if 1
 }
 
@@ -203,7 +202,7 @@ ConfirmUserNumber() {
                 errorOut "\nExiting The Program....";
             ;;
             *)
-                echo -e "\nPlease enter yes or no...\n";
+                echo -e "\n\nPlease enter yes or no...\n";
                 if [ $x -eq 3 ]; then
                     errorOut "An Error Occured During Confirmation. Please try Again";
                 fi
@@ -223,13 +222,13 @@ parseData() {
         while IFS=";" read -r email dob groups shared
         do
             password=$(date -d $dob +'%m%Y')
-            log "Converting $dob to Password: $password";
+            log ">>> Converting $dob to Password: $password";
             ## Create User Name From Email
             xname=$email
             initial=${xname:0:1}
             last=$(echo "$xname" | cut -d"@" -f1 | cut -d"." -f2)
             user=$initial$last
-            log "Converted $xname to username: $user";
+            log ">>> Converted $xname to username: $user";
             ## Check If User Name Exists
             checkIfUserExists $user
             ok=$?
@@ -295,10 +294,10 @@ addUserToGroup() {
 
 checkIfUserExists() {
     if id -un $1; then
-        log "$1 already exists"
+        log ">>> $1 already exists"
         return 1;
     else
-        log "$1 does not exist"
+        log ">>> $1 does not exist"
         return 0;
     fi
 }
@@ -306,11 +305,11 @@ checkIfUserExists() {
 createUser() {
     user=$1
     password=$2
-    log "Create New User: $user";
+    log ">>> Create New User: $user";
     sudo useradd -m -d /home/$user -s /bin/bash $user;
     ok=$?
     if [ $ok -eq 0 ]; then
-        log "Setting Temporary Password: $password. $user Must Change This At Next Login"
+        log ">>> Setting Temporary Password: $password. $user Must Change This At Next Login"
         createUserPassword $user $password
         return $?
     fi
@@ -348,10 +347,10 @@ sharedFolderConfig() {
 checkSharedFolderExists() {
     FOLDER=$1
     if [ -d $FOLDER ]; then
-        log "Shared Folder: $FOLDER Already Exists";
+        log ">>> Shared Folder: $FOLDER Already Exists";
         return 1;
     else
-        log "Creating New Shared Folder: $FOLDER";
+        log ">>> Creating New Shared Folder: $FOLDER";
         return 0;
     fi 
 }
@@ -371,7 +370,7 @@ setPermissions() {
     sudo chgrp -R $GROUP $FOLDER>>$log;
     sudo chmod 2770 $FOLDER>>$log;
     sudo chown -R root:$GROUP $FOLDER>>$log;
-    log "Permissions for $USER Access To $FOLDER Successfully Assigned."
+    log ">>> Permissions for $USER Access To $FOLDER Successfully Assigned."
 }
 
 # ---------------------------------------------------------------------------- #
@@ -384,8 +383,9 @@ createSharedFolderLink() {
     FOLDER=$1
     USER=$2
     if [[ -L /home/$USER/shared ]]; then
-        log "Shared Folder for $USER Already Exists"
+        log ">>> Shared Folder Link for $USER Already Exists"
     else 
+        log ">>> Creating Shared Folder Link for $USER"
         sudo ln -s $FOLDER /home/$USER/shared
     fi
 }
@@ -448,17 +448,17 @@ mainMenu() {
                 checkAndParseLocalCSV 
                 ok=$?
                 if [ $ok -eq 1 ]; then
-                    errorOut "An Error Occured Parsing the Local User Data CSV; Please Try Again";
+                    errorOut ">>> An Error Occured Parsing the Local User Data CSV; Please Try Again <<<";
                 fi ;;
             3) 
-                log "Exiting The Program"; 
+                log ">>> Exiting The Program"; 
                 exit 1 ;;
             *) 
-                echo -e "\f\t>> Error, Please try again <<\n" ;;
+                log ">>> Error, Please try again <<<" ;;
         esac 
         x=$(( x+1 ))
         if [ $x -eq 4 ]; then
-            log "Input Error Please Try Again Later"
+            log ">>> Input Error Please Try Again Later"
             exit 1
         fi
     done
