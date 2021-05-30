@@ -371,7 +371,9 @@ setPermissions() {
     FOLDER=$1;
     USER=$2;
     GROUP=$3;
-    sudo chgrp -R $GROUP $FOLDER>>$log;
+    if [ ! -z "$FOLDER" ]; then
+        sudo chgrp -R $GROUP $FOLDER>>$log;
+    fi
     sudo chmod 2770 $FOLDER>>$log;
     sudo chown -R root:$GROUP $FOLDER>>$log;
     log "Permissions for $USER Access To $FOLDER Successfully Assigned."
