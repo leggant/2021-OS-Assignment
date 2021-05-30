@@ -382,10 +382,10 @@ createSharedFolderLink() {
 
 createShutDownAlias() {
     user=$1
-    file=/home/$user/~.bash_aliases
+    file=/home/$user/.bash_aliases
     sudo touch $file
     sudo chmod 770 $file;
-    sudo echo alias 'off="systemctl poweroff"'>>/home/$user/~.bash_aliases
+    sudo echo alias 'off="systemctl poweroff"'>>/home/$user/.bash_aliases
 }
 
 # ---------------------------------------------------------------------------- #
