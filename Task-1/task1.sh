@@ -46,7 +46,6 @@ checkAndParseLocalCSV() {
     delay
     ok=$?
     if [ $ok -eq 0 ]; then
-        log "#### $localfile Is Ok To Parse User Data From"
         delay
         ConfirmUserNumber $localfile
         ok=$?
@@ -287,9 +286,7 @@ createNewGroup () {
 }
 
 addUserToGroup() {
-    if [ ! -z "$1" ]; then
-        sudo usermod -a -G $1 $2;
-    fi
+    sudo usermod -a -G $1 $2;
 }
 
 # ---------------------------------------------------------------------------- #
