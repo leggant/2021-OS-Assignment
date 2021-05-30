@@ -78,12 +78,10 @@ checkAndParseLocalCSV() {
 
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
-        echo ""
  	    log "#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####\n"
         delay
         return 0
     else 
-        echo "";
         log ">>>> ERROR <<<< $1 does not exist locally or is not a CSV file.\n";
         return 1
     fi
@@ -96,7 +94,7 @@ checkFile() {
 checkAndDownloadCSV() {
     echo -e "\n# --------------- Checking If Users File Is Already Downloaded --------------- #"
     checkFile $downloaded
-    delay
+    sleep 2
     ok=$?
     if [ $ok -eq 0 ]; then
         #ask user if they want to download fresh data
@@ -226,11 +224,6 @@ parseData() {
             fi
             # Remove '/' from shared
             folder=$(echo "$shared" | awk -F/ '{print $NF}')
-            # check if group exists 
-            #create group if it does not
-            # add user to groups 
-            ## Creating Shared Folder If It Does Not Exist
-            # check if folder exists, create if it does not - this function will do both
             userGroupConfig $groups $user $folder
         done
     } < $1
@@ -385,10 +378,10 @@ createSharedFolderLink() {
 createShutDownAlias() {
     user=$1
     file=/home/$user/.bash_aliases
-    touch $file;
+    sudo touch $file;
+    sudo echo alias 'off="systemctl poweroff"' >>/home/$user/.bash_aliases
     sudo chown $user: $file;
     sudo chmod 700 $file;
-    sudo echo alias 'off="systemctl poweroff"' >>/home/$user/.bash_aliases
 }
 
 # ---------------------------------------------------------------------------- #
@@ -396,11 +389,12 @@ createShutDownAlias() {
 # ---------------------------------------------------------------------------- #
 
 endScript() {
-    delay
     clear
     echo -e "# ---------------------------------------------------------------------------- #"
     echo -e "# ----------THIS SCRIPT HAS SUCCESSFULLY CREATED USERS ON THE SYSTEM---------- #"
     echo -e "# ---------------------------------------------------------------------------- #"
+    delay
+    clear
 exit 1
 }
 
