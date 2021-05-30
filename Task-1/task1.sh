@@ -42,6 +42,7 @@ errorOut() {
 
 checkAndParseLocalCSV() {
     echo -e "#### Checking The Default Local User File">>$log;
+    delay
     checkFile $localfile
     ok=$?
     if [ $ok -eq 0 ]; then
@@ -78,7 +79,6 @@ checkAndParseLocalCSV() {
 # ---------------------------------------------------------------------------- #
 
 checkFile() {
-    delay
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
  	    log "#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####"
         delay
@@ -192,7 +192,7 @@ ConfirmUserNumber() {
     Num="$(( $userNum-1 ))"
     clear
     echo -e "# ---------------------------------------------------------------------------- #"
-    echo -e "# ----------------The Script Is Now Ready To Create $Num Users---------------- #"
+    echo -e "# -----------------The Script Is Now Ready To Create $Num Users------------------ #"
     echo -e "# ---------------------------------------------------------------------------- #\n"
     while [[ $x -le 3 ]]; do
         read -p "#### Do You Wish to Proceed? " confirm;
@@ -276,6 +276,7 @@ userGroupConfig() {
         createSharedFolderLink $folder $user
         log ">>> Creating Permanent Shut Down Alias For User: $user"
         createShutDownAlias $user
+        delay
     done
     return 0;
 }
