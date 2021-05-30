@@ -297,7 +297,7 @@ createUser() {
     user=$1
     password=$2
     log "Create New User: $user";
-    sudo useradd -m $user;
+    sudo useradd -m -s /bin/bash $user;
     ok=$?
     if [ $ok -eq 0 ]; then
         log "Setting Temporary Password: $password. $user Must Change This At Next Login"
