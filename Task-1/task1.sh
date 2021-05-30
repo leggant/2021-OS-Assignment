@@ -110,18 +110,27 @@ checkAndDownloadCSV() {
         delay
         checkCSV_URI $default 2>>$log;
         URLok=$?
-        echo "$URLok"
-        sleep 5
-    fi
-    #     if [ $URLok -eq 0 ]; then
-    #         log "# ------------------- Remote Host/CSV File URL Checked + Ok ------------------ #";
-    #         log "# ---------------- Downloading User Data CSV From Remote Host ---------------- #";
-    #         delay
-    #         downloadDefaultCSV $default;
-    #         if [ $? -eq 1 ]; then
-    #             log "# -------------------------- File Download Complete -------------------------- #";
-    #             log "# ----------------- Checking Downloaded CSV File is Parsable ----------------- #";
-    #             checkFile $downloaded;
+        #start if 2
+        if [ $URLok -eq 0 ]; then
+            log "# ------------------- Remote Host/CSV File URL Checked + Ok ------------------ #";
+            log "# ---------------- Downloading User Data CSV From Remote Host ---------------- #";
+            delay
+            downloadDefaultCSV $default;
+            ok=$?
+            # start if 3
+            if [ $ok -eq 0 ]; then
+                log "# -------------------------- File Download Complete -------------------------- #";
+                log "# ----------------- Checking Downloaded CSV File is Parsable ----------------- #";
+                checkFile $downloaded;
+ 
+            fi # end if 3
+        fi #end if 2
+    # End elif 1
+    else # else if statement 1
+        errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<"
+    fi #end of function if 1
+
+
     #             delay
     #             ok=$?
     #             if [ $ok -eq 0 ]; then 
@@ -143,10 +152,7 @@ checkAndDownloadCSV() {
     #             errorOut "\n# --------------------- AN ERROR OCCURED DURING DOWNLOAD --------------------- #\n
     #             # ------------------------------ Try Again Later ----------------------------- #";
     #         fi
-    #     else 
-    #         errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<"
-    #     fi
-    # fi
+
 }
 
 # ---------------------------------------------------------------------------- #
@@ -155,7 +161,7 @@ checkAndDownloadCSV() {
 # ---------------------------------------------------------------------------- #
 
 checkCSV_URI() {
-    if wget --spider $1 2>> $log; then
+    if wget --spider $1 2>>$log; then
         return 0
     else
         return 1
@@ -167,7 +173,9 @@ checkCSV_URI() {
 # ---------------------------------------------------------------------------- #
 
 downloadDefaultCSV() {
-    if wget $default 2>>$log; then
+    echo $1
+    if wget $1 2>>$log; then
+        wget $1
         return 0;
     else
         return 1;
