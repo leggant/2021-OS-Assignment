@@ -170,7 +170,7 @@ checkCSV_URI() {
 downloadDefaultCSV() {
     echo $1
     if wget $1 2>>$log; then
-        wget $1
+        wget $1 2>>$log;
         return 0;
     else
         return 1;
@@ -197,9 +197,7 @@ ConfirmUserNumber() {
                 return 0
             ;;
             N | No | n | no)
-                clear
-                mainMenu
-                #errorOut "\nExiting The Program....";
+                errorOut "\nExiting The Program....";
             ;;
             *)
                 echo -e "\nPlease enter yes or no...\n";
@@ -359,7 +357,7 @@ checkSharedFolderExists() {
 createSharedFolder() {
     FOLDER=$1
     USER=$2
-    sudo mkdir -p $FOLDER
+    sudo mkdir -p $FOLDER 2>>$log
 }
 
 # ---------------- ASSIGN PERMISSIONS FOR SHARED FOLDER ACCESS --------------- #
@@ -367,10 +365,10 @@ setPermissions() {
     FOLDER=$1;
     USER=$2;
     GROUP=$3;
-    sudo chgrp -R $GROUP $FOLDER
-    sudo chmod 2770 $FOLDER
-    sudo chown -R $USER:$GROUP $FOLDER
-    log "Permissions for $USER Access To $FOLDER Successfully Assigned."
+    sudo chgrp -R $GROUP $FOLDER 2>>$log;
+    sudo chmod 2770 $FOLDER 2>>$log;
+    sudo chown -R root:$GROUP $FOLDER 2>>$log;
+    log "Permissions for $USER Access To $FOLDER Successfully Assigned.";
 }
 
 # ---------------------------------------------------------------------------- #
@@ -385,7 +383,7 @@ createSharedFolderLink() {
     if [[ -L /home/$USER/shared ]]; then
         log "Shared Folder for $USER Already Exists"
     else 
-        sudo ln -s $FOLDER /home/$USER/shared
+        sudo ln -s $FOLDER /home/$USER/shared 2>>$log;
     fi
 }
 
