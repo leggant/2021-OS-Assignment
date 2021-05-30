@@ -385,7 +385,7 @@ createShutDownAlias() {
     user=$1
     file=/home/$user/.bash_aliases
     sudo touch $file
-    sudo chmod 770 $file;
+    sudo chmod 777 $file;
     sudo echo alias 'off="systemctl poweroff"'>>/home/$user/.bash_aliases
 }
 
@@ -400,8 +400,8 @@ endScript() {
     echo -e "# ---------------------------------------------------------------------------- #"
     delay
     clear
-    sudo cat /etc/groups>>$log
-    sudo cat /etc/shadow>>$log
+    sudo cat /etc/group>>$log
+    sudo cat /etc/passwd>>$log
 exit 1
 }
 
