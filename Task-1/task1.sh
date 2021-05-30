@@ -21,7 +21,7 @@ log() {
 }
 
 delay() {
-    sleep 4
+    sleep 3
 }
 
 # ---------------------------------------------------------------------------- #
@@ -233,6 +233,10 @@ parseData() {
             userGroupConfig $groups $user $folder
         done
     } < $1
+    # ---------------------------------------------------------------------------- #
+    #          AT THE END OF THE SCRIPT RUN CALL FUNCTION TO LEAVE PROGRAM         #
+    # ---------------------------------------------------------------------------- #
+    endScript
 }
 
 # ---------------------------------------------------------------------------- #
@@ -249,19 +253,20 @@ userGroupConfig() {
         ok=$?
         if [ $ok -eq 0 ]; then
             log ">>> Group: $group already exists";
-            addUserToGroups $group $user
-            sharedFolderConfig $folder $user
-            checkSharedFolderExists $folder $user
-            createSharedFolderLink $folder $user
         else
             log ">>> Group: $group does not exist; Creating $group";
             createNewGroup $group;
-            addUserToGroups $group $user
-            sharedFolderConfig $folder $user
-            checkSharedFolderExists $folder $user
-            createSharedFolderLink $folder $user
         fi
+        log ">>> Adding User: $user to Group: $group";
+        addUserToGroup $group $user
+        log ">>> Configuring $user Access To Shared $folder via $group"
+        sharedFolderConfig $folder $user $group
+        log ">>> Creating Soft Link To Shared $folder For User: $user"
+        createSharedFolderLink $folder $user
+        log ">>> Creating Permanent Shut Down Alias For User: $user"
+        createShutDownAlias $user
     done
+    return 0;
 }
 
 createNewGroup () {
@@ -269,8 +274,8 @@ createNewGroup () {
     return $?
 }
 
-addUserToGroups() {
-    sudo usermod -a -G "$1" "$2";
+addUserToGroup() {
+    sudo usermod -a -G $1 $2;
 }
 
 # ---------------------------------------------------------------------------- #
@@ -290,10 +295,11 @@ checkIfUserExists() {
 createUser() {
     user=$1
     password=$2
-    log "Create New User $user";
+    log "Create New User: $user";
     sudo useradd -m $user;
     ok=$?
     if [ $ok -eq 0 ]; then
+        log "Setting Temporary Password: $password. $user Must Change This At Next Login"
         createUserPassword $user $password
         return $?
     fi
@@ -310,21 +316,43 @@ createUserPassword() {
 #                     SHARED FOLDER CONFIGURATION FUNCTIONS                    #
 # ---------------------------------------------------------------------------- #
 
+sharedFolderConfig() {
+    FOLDER="/home/$1"
+    user=$2
+    group=$3
+    checkSharedFolderExists $FOLDER $user
+    ok=$?
+    if [ $ok -eq 0 ]; then
+        createSharedFolder $FOLDER $user;
+        setPermissions $FOLDER $user $group;
+    elif [ $ok -eq 1 ]; then
+        setPermissions $FOLDER $user $group;
+    fi
+}
+
 # ---------------------- CHECK IF A SHARED FOLDER EXISTS --------------------- #
 
 checkSharedFolderExists() {
-    FOLDER="/home/$1"
-    USER=$2
-    test -d $FOLDER && echo "$FOLDER Already Exists"  ||  createSharedFolder $FOLDER $USER;  
+    FOLDER=$1
+    test -d $FOLDER && log "Shared Folder: $FOLDER Already Exists"; return 1;  ||  log "Creating New Shared Folder: $FOLDER"; return 0;  
 }
 
 # ----------------- CREATE SHARED FOLDER IF IT DOES NOT EXIST ---------------- #
 createSharedFolder() {
-    FOLDER="$1"
+    FOLDER=$1
     USER=$2
     sudo mkdir -p $FOLDER
+}
+
+# ---------------- ASSIGN PERMISSIONS FOR SHARED FOLDER ACCESS --------------- #
+setPermissions() {
+    FOLDER=$1;
+    USER=$2;
+    GROUP=$3;
+    sudo chgrp -R $GROUP $FOLDER
     sudo chmod 2770 $FOLDER
-    sudo chown $USER : root $FOLDER
+    sudo chown -R $USER:$GROUP $FOLDER
+    log "Permissions for $USER Access To $FOLDER Successfully Assigned."
 }
 
 # ---------------------------------------------------------------------------- #
@@ -334,10 +362,12 @@ createSharedFolder() {
 # ---------------------------------------------------------------------------- #
 
 createSharedFolderLink() {
-    if [[ -L /home/$2/shared ]]; then
-        log "Shared Folder for $2 Already Exists"
+    FOLDER=$1
+    USER=$2
+    if [[ -L /home/$USER/shared ]]; then
+        log "Shared Folder for $USER Already Exists"
     else 
-        sudo ln -s $1 /home/$2/shared
+        sudo ln -s $FOLDER /home/$USER/shared
     fi
 }
 
@@ -345,7 +375,7 @@ createSharedFolderLink() {
 #             CREATE ALIAS FOR EACH USER THAT HAS SUDO PERMISSIONS             #
 # ---------------------------------------------------------------------------- #
 
-createUsersAlias() {
+createShutDownAlias() {
     echo alias 'off="systemctl poweroff"' >> /home/$1/.bash_aliases
 }
 
@@ -357,6 +387,8 @@ endScript() {
 echo -e "# ---------------------------------------------------------------------------- #"
 echo -e "# ----------THIS SCRIPT HAS SUCCESSFULLY CREATED USERS ON THE SYSTEM---------- #"
 echo -e "# ---------------------------------------------------------------------------- #"
+delay
+exit 1
 }
 
 # ---------------------------------------------------------------------------- #
