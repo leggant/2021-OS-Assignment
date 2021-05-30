@@ -174,7 +174,7 @@ checkCSV_URI() {
 downloadDefaultCSV() {
     echo $1
     if wget $1 2>>$log; then
-        wget $1
+        wget $1 2>>$log;
         return 0;
     else
         return 1;
@@ -197,7 +197,6 @@ ConfirmUserNumber() {
         read -p "#### Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
-                clear
                 return 0
             ;;
             N | No | n | no)
@@ -320,7 +319,7 @@ createUserPassword() {
     user=$1
     password=$2
     echo "$user:$password" -m | sudo chpasswd
-    sudo passwd -eq $user;
+    sudo passwd -eq $user>>$log;;
     sudo chage -l $user>>$log
     return $?
 }
@@ -360,7 +359,7 @@ checkSharedFolderExists() {
 createSharedFolder() {
     FOLDER=$1
     USER=$2
-    sudo mkdir -p $FOLDER
+    sudo mkdir -p $FOLDER>>$log
 }
 
 # ---------------- ASSIGN PERMISSIONS FOR SHARED FOLDER ACCESS --------------- #
@@ -368,9 +367,9 @@ setPermissions() {
     FOLDER=$1;
     USER=$2;
     GROUP=$3;
-    sudo chgrp -R $GROUP $FOLDER
-    sudo chmod 2770 $FOLDER
-    sudo chown -R root:$GROUP $FOLDER
+    sudo chgrp -R $GROUP $FOLDER>>$log;
+    sudo chmod 2770 $FOLDER>>$log;
+    sudo chown -R root:$GROUP $FOLDER>>$log;
     log "Permissions for $USER Access To $FOLDER Successfully Assigned."
 }
 
@@ -437,14 +436,12 @@ mainMenu() {
         read -p "Enter 1, 2 or 3: " option
         case $option in 
             1) 
-                clear
                 checkAndDownloadCSV 
                 ok=$?
                 if [ $ok -eq 0 ]; then
 		            parseData $downloaded;
                 fi  ;;
             2) 
-                clear
                 checkAndParseLocalCSV 
                 ok=$?
                 if [ $ok -eq 1 ]; then
