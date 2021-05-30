@@ -177,7 +177,7 @@ ConfirmUserNumber() {
     Num="$(( $userNum-1 ))"
     clear
     echo -e "# ---------------------------------------------------------------------------- #"
-    echo -e "#                 The Script Is Now Ready To Create $Num Users                 #"
+    echo -e "# ----------------The Script Is Now Ready To Create $Num Users---------------- #"
     echo -e "# ---------------------------------------------------------------------------- #\n"
     while [[ $x -le 3 ]]; do
         read -p "#### Do You Wish to Proceed? " confirm;
@@ -305,8 +305,8 @@ createUser() {
 createUserPassword() {
     user=$1
     password=$2
+    sudo passwd --expire $user;
     sudo passwd $password $user;
-    sudo passwd -e $user;
     sudo chage -l $user>>$log
     return $?
 }
