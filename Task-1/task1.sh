@@ -78,6 +78,7 @@ checkAndParseLocalCSV() {
 # ---------------------------------------------------------------------------- #
 
 checkFile() {
+    delay
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
  	    log "#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####"
         delay
@@ -331,18 +332,16 @@ createUserPassword() {
 # ---------------------------------------------------------------------------- #
 
 sharedFolderConfig() {
-    if [ ! -z "$1" ]; then
-        FOLDER="/home/$1"
-        user=$2
-        group=$3
-        checkSharedFolderExists $FOLDER
-        ok=$?
-        if [ $ok -eq 0 ]; then
-            createSharedFolder $FOLDER $user;
-            setPermissions $FOLDER $user $group;
-        elif [ $ok -eq 1 ]; then
-            setPermissions $FOLDER $user $group;
-        fi
+    FOLDER="/home/$1"
+    user=$2
+    group=$3
+    checkSharedFolderExists $FOLDER
+    ok=$?
+    if [ $ok -eq 0 ]; then
+        createSharedFolder $FOLDER $user;
+        setPermissions $FOLDER $user $group;
+    elif [ $ok -eq 1 ]; then
+        setPermissions $FOLDER $user $group;
     fi
 }
 
@@ -371,9 +370,7 @@ setPermissions() {
     FOLDER=$1;
     USER=$2;
     GROUP=$3;
-    if [ ! -z "$FOLDER" ]; then
-        sudo chgrp -R $GROUP $FOLDER>>$log;
-    fi
+    sudo chgrp -R $GROUP $FOLDER>>$log;
     sudo chmod 2770 $FOLDER>>$log;
     sudo chown -R root:$GROUP $FOLDER>>$log;
     log "Permissions for $USER Access To $FOLDER Successfully Assigned."
