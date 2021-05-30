@@ -46,6 +46,7 @@ checkAndParseLocalCSV() {
     ok=$?
     if [ $ok -eq 0 ]; then
         log "#### $localfile Is Ok To Parse User Data From"
+        delay
         ConfirmUserNumber $localfile
         ok=$?
         if [ $ok -eq 0 ]; then
@@ -94,7 +95,7 @@ checkFile() {
 checkAndDownloadCSV() {
     echo -e "\n# --------------- Checking If Users File Is Already Downloaded --------------- #"
     checkFile $downloaded
-    sleep 2
+    delay
     ok=$?
     if [ $ok -eq 0 ]; then
         #ask user if they want to download fresh data
@@ -225,6 +226,7 @@ parseData() {
             # Remove '/' from shared
             folder=$(echo "$shared" | awk -F/ '{print $NF}')
             userGroupConfig $groups $user $folder
+            clear
         done
     } < $1
     # ---------------------------------------------------------------------------- #
@@ -377,11 +379,10 @@ createSharedFolderLink() {
 
 createShutDownAlias() {
     user=$1
-    file=/home/$user/.bash_aliases
-    sudo touch $file;
-    sudo echo alias 'off="systemctl poweroff"' >>/home/$user/.bash_aliases
-    sudo chown $user: $file;
-    sudo chmod 700 $file;
+    file=/home/$user/~.bash_aliases
+    sudo touch $file
+    sudo chmod 770 $file;
+    sudo echo alias 'off="systemctl poweroff"'>>/home/$user/~.bash_aliases
 }
 
 # ---------------------------------------------------------------------------- #
