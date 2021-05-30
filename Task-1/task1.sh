@@ -97,21 +97,25 @@ checkAndDownloadCSV() {
     log "# --------------- Checking If Users File Is Already Downloaded --------------- #"
     checkFile $downloaded
     ok=$?
-    echo "$ok"
-    sleep 5
+    delay
     if [ $ok -eq 0 ]; then
         #ask user if they want to download fresh data
         log "#### $download Is Already Present In The Local File System ####\n#### CSV Contains Content and Is Parsable ####";
-        sleep 5
-        #ConfirmUserNumber $downloaded;
+        ConfirmUserNumber $downloaded;
+        ok=$?
+        if [ $ok -eq 0 ]; then
+            parseData $downloaded
+        elif [ $ok -eq 1 ]; then 
+            # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
+            log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
+            mainMenu
+        fi # end if 5
     elif [ $ok -eq 1 ]; then
         log "# ---------- No Local Version Of File Found >> Checking Download URL --------- #";
-        sleep 5
         delay
         checkCSV_URI $default 2>>$log;
         URLok=$?
-        #start if 2
-        if [ $URLok -eq 0 ]; then
+        if [ $URLok -eq 0 ]; then # Start if 2
             log "# ------------------- Remote Host/CSV File URL Checked + Ok ------------------ #";
             log "# ---------------- Downloading User Data CSV From Remote Host ---------------- #";
             delay
@@ -170,7 +174,7 @@ checkCSV_URI() {
 downloadDefaultCSV() {
     echo $1
     if wget $1 2>>$log; then
-        wget $1 2>>$log;
+        wget $1
         return 0;
     else
         return 1;
@@ -304,7 +308,6 @@ createUser() {
     password=$2
     log "Create New User: $user";
     sudo useradd -m -d /home/$user -s /bin/bash $user;
-
     ok=$?
     if [ $ok -eq 0 ]; then
         log "Setting Temporary Password: $password. $user Must Change This At Next Login"
@@ -357,7 +360,7 @@ checkSharedFolderExists() {
 createSharedFolder() {
     FOLDER=$1
     USER=$2
-    sudo mkdir -p $FOLDER 2>>$log
+    sudo mkdir -p $FOLDER
 }
 
 # ---------------- ASSIGN PERMISSIONS FOR SHARED FOLDER ACCESS --------------- #
@@ -365,10 +368,10 @@ setPermissions() {
     FOLDER=$1;
     USER=$2;
     GROUP=$3;
-    sudo chgrp -R $GROUP $FOLDER 2>>$log;
-    sudo chmod 2770 $FOLDER 2>>$log;
-    sudo chown -R root:$GROUP $FOLDER 2>>$log;
-    log "Permissions for $USER Access To $FOLDER Successfully Assigned.";
+    sudo chgrp -R $GROUP $FOLDER
+    sudo chmod 2770 $FOLDER
+    sudo chown -R root:$GROUP $FOLDER
+    log "Permissions for $USER Access To $FOLDER Successfully Assigned."
 }
 
 # ---------------------------------------------------------------------------- #
@@ -383,7 +386,7 @@ createSharedFolderLink() {
     if [[ -L /home/$USER/shared ]]; then
         log "Shared Folder for $USER Already Exists"
     else 
-        sudo ln -s $FOLDER /home/$USER/shared 2>>$log;
+        sudo ln -s $FOLDER /home/$USER/shared
     fi
 }
 
