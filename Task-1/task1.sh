@@ -42,8 +42,8 @@ errorOut() {
 
 checkAndParseLocalCSV() {
     echo -e "#### Checking The Default Local User File">>$log;
-    delay
     checkFile $localfile
+    delay
     ok=$?
     if [ $ok -eq 0 ]; then
         log "#### $localfile Is Ok To Parse User Data From"
@@ -241,6 +241,7 @@ parseData() {
             # Remove '/' from shared
             folder=$(echo "$shared" | awk -F/ '{print $NF}')
             userGroupConfig $groups $user $folder
+            delay
             clear
         done
     } < $1
@@ -276,7 +277,6 @@ userGroupConfig() {
         createSharedFolderLink $folder $user
         log ">>> Creating Permanent Shut Down Alias For User: $user"
         createShutDownAlias $user
-        delay
     done
     return 0;
 }
