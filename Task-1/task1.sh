@@ -118,41 +118,36 @@ checkAndDownloadCSV() {
             downloadDefaultCSV $default;
             ok=$?
             # start if 3
-            if [ $ok -eq 0 ]; then
+            if [ $ok -eq 0 ]; then # Start if 3
                 log "# -------------------------- File Download Complete -------------------------- #";
                 log "# ----------------- Checking Downloaded CSV File is Parsable ----------------- #";
                 checkFile $downloaded;
- 
+                ok=$?;
+                if [ $ok -eq 0 ];then # start if 4
+                    ConfirmUserNumber $downloaded;
+                    ok=$?
+                    if [ $ok -eq 0 ]; then # start if 5
+                        parseData $downloaded
+                    elif [ $ok -eq 1 ]; then #elif if 5
+                        # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
+                        log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
+                        mainMenu
+                    fi # end if 5
+                else
+                     # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
+                    log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
+                    mainMenu
+                fi #End if 4
+            else
+                # --------------------- AN ERROR OCCURED DURING DOWNLOAD --------------------- #
+                errorOut "\n# --------------------- AN ERROR OCCURED DURING DOWNLOAD --------------------- #\n
+                # ------------------------------ Try Again Later ----------------------------- #";
             fi # end if 3
         fi #end if 2
     # End elif 1
     else # else if statement 1
         errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<"
     fi #end of function if 1
-
-
-    #             delay
-    #             ok=$?
-    #             if [ $ok -eq 0 ]; then 
-    #                 ConfirmUserNumber $downloaded;
-    #                 if [ $? -eq 0 ]; then
-    #                     parseData $downloaded
-    #                 else
-    #                     # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
-    #                     log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
-    #                     mainMenu
-    #                 fi
-    #             else
-    #                     # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
-    #                     log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
-    #                     mainMenu
-    #             fi
-    #         else
-    #             # --------------------- AN ERROR OCCURED DURING DOWNLOAD --------------------- #
-    #             errorOut "\n# --------------------- AN ERROR OCCURED DURING DOWNLOAD --------------------- #\n
-    #             # ------------------------------ Try Again Later ----------------------------- #";
-    #         fi
-
 }
 
 # ---------------------------------------------------------------------------- #
@@ -202,7 +197,9 @@ ConfirmUserNumber() {
                 return 0
             ;;
             N | No | n | no)
-                errorOut "\nExiting The Program....";
+                clear
+                mainMenu
+                #errorOut "\nExiting The Program....";
             ;;
             *)
                 echo -e "\nPlease enter yes or no...\n";
