@@ -16,8 +16,9 @@ newPath=""
 
 log() {
     MESSAGE=$1
-    echo -e "$MESSAGE"
+    echo -e "\n$MESSAGE"
     echo -e "\n$MESSAGE">>$log
+    sleep 2
 }
 
 delay() {
