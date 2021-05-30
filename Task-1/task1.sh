@@ -239,6 +239,12 @@ parseData() {
             fi
             # Remove '/' from shared
             folder=$(echo "$shared" | awk -F/ '{print $NF}')
+            if [ $folder = "" ]; then
+                folder="default"
+            fi
+            if [ $groups = ""]; then
+                groups="default"
+            fi
             userGroupConfig $groups $user $folder
             clear
         done
@@ -436,12 +442,14 @@ mainMenu() {
         read -p "Enter 1, 2 or 3: " option
         case $option in 
             1) 
+                clear
                 checkAndDownloadCSV 
                 ok=$?
                 if [ $ok -eq 0 ]; then
 		            parseData $downloaded;
                 fi  ;;
             2) 
+                clear
                 checkAndParseLocalCSV 
                 ok=$?
                 if [ $ok -eq 1 ]; then
