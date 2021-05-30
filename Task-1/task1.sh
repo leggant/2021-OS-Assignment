@@ -84,6 +84,7 @@ checkFile() {
         return 0
     else 
         log ">>>> ERROR <<<< $1 does not exist locally or is not a CSV file.";
+        delay
         return 1
     fi
 }
@@ -95,51 +96,57 @@ checkFile() {
 checkAndDownloadCSV() {
     log "# --------------- Checking If Users File Is Already Downloaded --------------- #"
     checkFile $downloaded
-    delay
     ok=$?
+    echo "$ok"
+    sleep 5
     if [ $ok -eq 0 ]; then
         #ask user if they want to download fresh data
         log "#### $download Is Already Present In The Local File System ####\n#### CSV Contains Content and Is Parsable ####";
-        ConfirmUserNumber $downloaded;
-    else 
+        sleep 5
+        #ConfirmUserNumber $downloaded;
+    elif [ $ok -eq 1 ]; then
         log "# ---------- No Local Version Of File Found >> Checking Download URL --------- #";
+        sleep 5
         delay
         checkCSV_URI $default 2>>$log;
         URLok=$?
-        if [ $URLok -eq 0 ]; then
-            log "# ------------------- Remote Host/CSV File URL Checked + Ok ------------------ #";
-            log "# ---------------- Downloading User Data CSV From Remote Host ---------------- #";
-            delay
-            downloadDefaultCSV $default;
-            if [ $? -eq 1 ]; then
-                log "# -------------------------- File Download Complete -------------------------- #";
-                log "# ----------------- Checking Downloaded CSV File is Parsable ----------------- #";
-                checkFile $downloaded;
-                delay
-                ok=$?
-                if [ $ok -eq 0 ]; then 
-                    ConfirmUserNumber $downloaded;
-                    if [ $? -eq 0 ]; then
-                        parseData $downloaded
-                    else
-                        # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
-                        log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
-                        mainMenu
-                    fi
-                else
-                        # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
-                        log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
-                        mainMenu
-                fi
-            else
-                # --------------------- AN ERROR OCCURED DURING DOWNLOAD --------------------- #
-                errorOut "\n# --------------------- AN ERROR OCCURED DURING DOWNLOAD --------------------- #\n
-                # ------------------------------ Try Again Later ----------------------------- #";
-            fi
-        else 
-            errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<"
-        fi
+        echo "$URLok"
+        sleep 5
     fi
+    #     if [ $URLok -eq 0 ]; then
+    #         log "# ------------------- Remote Host/CSV File URL Checked + Ok ------------------ #";
+    #         log "# ---------------- Downloading User Data CSV From Remote Host ---------------- #";
+    #         delay
+    #         downloadDefaultCSV $default;
+    #         if [ $? -eq 1 ]; then
+    #             log "# -------------------------- File Download Complete -------------------------- #";
+    #             log "# ----------------- Checking Downloaded CSV File is Parsable ----------------- #";
+    #             checkFile $downloaded;
+    #             delay
+    #             ok=$?
+    #             if [ $ok -eq 0 ]; then 
+    #                 ConfirmUserNumber $downloaded;
+    #                 if [ $? -eq 0 ]; then
+    #                     parseData $downloaded
+    #                 else
+    #                     # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
+    #                     log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
+    #                     mainMenu
+    #                 fi
+    #             else
+    #                     # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
+    #                     log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
+    #                     mainMenu
+    #             fi
+    #         else
+    #             # --------------------- AN ERROR OCCURED DURING DOWNLOAD --------------------- #
+    #             errorOut "\n# --------------------- AN ERROR OCCURED DURING DOWNLOAD --------------------- #\n
+    #             # ------------------------------ Try Again Later ----------------------------- #";
+    #         fi
+    #     else 
+    #         errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<"
+    #     fi
+    # fi
 }
 
 # ---------------------------------------------------------------------------- #
