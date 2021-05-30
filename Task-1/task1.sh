@@ -334,7 +334,7 @@ sharedFolderConfig() {
 
 checkSharedFolderExists() {
     FOLDER=$1
-    test -d $FOLDER && log "Shared Folder: $FOLDER Already Exists"; return 1;  ||  log "Creating New Shared Folder: $FOLDER"; return 0;  
+    test -d $FOLDER && log "Shared Folder: $FOLDER Already Exists" return 1  ||  log "Creating New Shared Folder: $FOLDER" return 0;  
 }
 
 # ----------------- CREATE SHARED FOLDER IF IT DOES NOT EXIST ---------------- #
