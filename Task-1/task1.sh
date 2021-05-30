@@ -239,12 +239,6 @@ parseData() {
             fi
             # Remove '/' from shared
             folder=$(echo "$shared" | awk -F/ '{print $NF}')
-            if [ $folder = "" ]; then
-                folder="default"
-            fi
-            if [ $groups = ""]; then
-                groups="default"
-            fi
             userGroupConfig $groups $user $folder
             clear
         done
@@ -291,7 +285,9 @@ createNewGroup () {
 }
 
 addUserToGroup() {
-    sudo usermod -a -G $1 $2;
+    if [ ! -z "$1" ]; then
+        sudo usermod -a -G $1 $2;
+    fi
 }
 
 # ---------------------------------------------------------------------------- #
@@ -335,16 +331,18 @@ createUserPassword() {
 # ---------------------------------------------------------------------------- #
 
 sharedFolderConfig() {
-    FOLDER="/home/$1"
-    user=$2
-    group=$3
-    checkSharedFolderExists $FOLDER $user
-    ok=$?
-    if [ $ok -eq 0 ]; then
-        createSharedFolder $FOLDER $user;
-        setPermissions $FOLDER $user $group;
-    elif [ $ok -eq 1 ]; then
-        setPermissions $FOLDER $user $group;
+    if [ ! -z "$1" ]; then
+        FOLDER="/home/$1"
+        user=$2
+        group=$3
+        checkSharedFolderExists $FOLDER
+        ok=$?
+        if [ $ok -eq 0 ]; then
+            createSharedFolder $FOLDER $user;
+            setPermissions $FOLDER $user $group;
+        elif [ $ok -eq 1 ]; then
+            setPermissions $FOLDER $user $group;
+        fi
     fi
 }
 
