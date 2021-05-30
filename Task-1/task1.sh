@@ -305,7 +305,7 @@ createUserPassword() {
     user=$1
     password=$2
     sudo passwd $password $user;
-    sudo usermod -e date $user
+    sudo passwd -e $user;
     sudo chage -l $user>>$log
     return $?
 }
