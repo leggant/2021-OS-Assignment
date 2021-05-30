@@ -293,7 +293,8 @@ createUser() {
     user=$1
     password=$2
     log "Create New User: $user";
-    sudo useradd -m -s /bin/bash $user;
+    sudo useradd -m -d /home/$user -s /bin/bash $user;
+
     ok=$?
     if [ $ok -eq 0 ]; then
         log "Setting Temporary Password: $password. $user Must Change This At Next Login"
@@ -305,8 +306,8 @@ createUser() {
 createUserPassword() {
     user=$1
     password=$2
-    sudo passwd --expire $user;
-    sudo passwd $password $user;
+    echo "$user:$password" -m | sudo chpasswd
+    sudo passwd -eq $user;
     sudo chage -l $user>>$log
     return $?
 }
