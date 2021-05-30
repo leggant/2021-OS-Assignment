@@ -79,11 +79,11 @@ checkAndParseLocalCSV() {
 
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
- 	    log "#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####\n"
+ 	    log "#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####"
         delay
         return 0
     else 
-        log ">>>> ERROR <<<< $1 does not exist locally or is not a CSV file.\n";
+        log ">>>> ERROR <<<< $1 does not exist locally or is not a CSV file.";
         return 1
     fi
 }
@@ -93,7 +93,7 @@ checkFile() {
 # ---------------------------------------------------------------------------- #
 
 checkAndDownloadCSV() {
-    echo -e "\n# --------------- Checking If Users File Is Already Downloaded --------------- #"
+    log "# --------------- Checking If Users File Is Already Downloaded --------------- #"
     checkFile $downloaded
     delay
     ok=$?
@@ -102,7 +102,7 @@ checkAndDownloadCSV() {
         log "#### $download Is Already Present In The Local File System ####\n#### CSV Contains Content and Is Parsable ####";
         ConfirmUserNumber $downloaded;
     else 
-        echo -e "# ---------- No Local Version Of File Found >> Checking Download URL --------- #";
+        log "# ---------- No Local Version Of File Found >> Checking Download URL --------- #";
         delay
         checkCSV_URI $default 2>>$log;
         URLok=$?
@@ -112,7 +112,7 @@ checkAndDownloadCSV() {
             delay
             downloadDefaultCSV $default;
             if [ $? -eq 1 ]; then
-                log "# -------------------------- File Download Complete -------------------------- #\n";
+                log "# -------------------------- File Download Complete -------------------------- #";
                 log "# ----------------- Checking Downloaded CSV File is Parsable ----------------- #";
                 checkFile $downloaded;
                 delay
@@ -183,6 +183,7 @@ ConfirmUserNumber() {
         read -p "#### Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
+                clear
                 return 0
             ;;
             N | No | n | no)
@@ -209,13 +210,13 @@ parseData() {
         while IFS=";" read -r email dob groups shared
         do
             password=$(date -d $dob +'%m%Y')
-            log "\nConverting $dob to Password: $password";
+            log "Converting $dob to Password: $password";
             ## Create User Name From Email
             xname=$email
             initial=${xname:0:1}
             last=$(echo "$xname" | cut -d"@" -f1 | cut -d"." -f2)
             user=$initial$last
-            log "\nConverted $xname to username: $user";
+            log "Converted $xname to username: $user";
             ## Check If User Name Exists
             checkIfUserExists $user
             ok=$?
@@ -418,26 +419,28 @@ mainMenu() {
         read -p "Enter 1, 2 or 3: " option
         case $option in 
             1) 
+                clear
                 checkAndDownloadCSV 
                 ok=$?
                 if [ $ok -eq 0 ]; then
 		            parseData $downloaded;
                 fi  ;;
             2) 
+                clear
                 checkAndParseLocalCSV 
                 ok=$?
                 if [ $ok -eq 1 ]; then
                     errorOut "An Error Occured Parsing the Local User Data CSV; Please Try Again";
                 fi ;;
             3) 
-                echo -e "\t\nExiting The Program"; 
+                log "Exiting The Program"; 
                 exit 1 ;;
             *) 
                 echo -e "\f\t>> Error, Please try again <<\n" ;;
         esac 
         x=$(( x+1 ))
         if [ $x -eq 4 ]; then
-            echo -e "Input Error Please Try Again Later"
+            log "Input Error Please Try Again Later"
             exit 1
         fi
     done
