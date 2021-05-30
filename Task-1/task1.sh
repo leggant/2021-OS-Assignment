@@ -304,7 +304,9 @@ createUser() {
 createUserPassword() {
     user=$1
     password=$2
-    sudo passwd -e $password $user;
+    sudo passwd $password $user;
+    sudo usermod -e date $user
+    sudo chage -l $user>>$log
     return $?
 }
 
