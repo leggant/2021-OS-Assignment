@@ -42,10 +42,11 @@ errorOut() {
 
 checkAndParseLocalCSV() {
     echo -e "#### Checking The Default Local User File">>$log;
+    delay
     checkFile $localfile
+    clear
     ok=$?
     if [ $ok -eq 0 ]; then
-        delay
         ConfirmUserNumber $localfile
         ok=$?
         if [ $ok -eq 0 ]; then
@@ -94,7 +95,9 @@ checkFile() {
 
 checkAndDownloadCSV() {
     log "# ----------------Checking If Users File Is Already Downloaded---------------- #"
+    delay
     checkFile $downloaded
+    clear
     ok=$?
     delay
     if [ $ok -eq 0 ]; then
@@ -196,14 +199,17 @@ ConfirmUserNumber() {
         read -p "#### Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
+                echo "User Selected Yes To Create $Num Users">>$log;
                 return 0
             ;;
             N | No | n | no)
+                echo "User Selected No To Creating $Num New Users">>$log
                 errorOut "\nExiting The Program....";
             ;;
             *)
                 echo -e "\n\nPlease enter yes or no...\n";
                 if [ $x -eq 3 ]; then
+                    echo "User Attempted To Enter A Response 3 Times and Failed">>$log;
                     errorOut "An Error Occured During Confirmation. Please try Again";
                 fi
             ;;
@@ -238,8 +244,8 @@ parseData() {
             fi
             # Remove '/' from shared
             folder=$(echo "$shared" | awk -F/ '{print $NF}')
-            userGroupConfig $groups $user $folder
-            delay
+            userGroupConfig $groups $user $folder;
+            echo "$user Successfully Created">>$log;
             clear
         done
     } < $1

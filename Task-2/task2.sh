@@ -57,18 +57,28 @@ exitapp() {
 askUserForDirectory() {
     read -p "Enter the full path to the directory you would like to compress and transfer or press enter if you wish to use the current path: " path
     ok=1
-    if [ ${#path} -eq 0 ]; then
-        userInputDirectory=$currentPath;
-        checkDirectoryExists $userInputDirectory;
-        ok=$?
-    else 
-        userInputDirectory=$path
-        checkDirectoryExists $userInputDirectory;
-        ok=$?
-    fi
-    if [ $ok -eq 0 ]; then
-        tar -czvf $outputFileName.tar.gz $userInputDirectory 2>>$log;
-    fi
+    counter=1;
+    until [ $counter -eq 3 ]
+    do
+        if [ ${#path} -eq 0 ]; then
+            userInputDirectory=$currentPath;
+            checkDirectoryExists $userInputDirectory;
+            ok=$?
+        else 
+            userInputDirectory=$path
+            checkDirectoryExists $userInputDirectory;
+            ok=$?
+        fi
+        if [ $ok -eq 0 ]; then
+            tar -czvf $outputFileName.tar.gz $userInputDirectory 2>>$log;
+        fi
+        ((counter++))
+        if [ $counter -eq 3 ]; then
+            echo "$counter attempts failed"
+            echo "Please Try Again Later"
+            exit 1
+        fi
+    done
 }
 sendToRemote() {
     scp -P 22 default.tar.gz #username@ipaddress : inputfiledirectoryonremote
@@ -85,7 +95,6 @@ checkDirectoryExists() {
 getUserInput() {
     askUserForDirectory
     echo -e "Current file is $currentFileName\nCurrent Dir is $currentPath"
-    echo $?
 }
 StartScript() {
     echo -e "\n#####################################\n###### Directory Backup Script ######\n#####################################\n"
