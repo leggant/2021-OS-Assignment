@@ -39,7 +39,7 @@ pause() {
 #      GET INPUT FROM USERS TO SELECT A FILE, OUTPUT FILE AND REMOTE HOST      #
 # ---------------------------------------------------------------------------- #
 
-# Destination Ip 
+# Destination Ip
 getDestinationIP() {
     read -p "Enter the destination username and IP address: " ip
     inputIP=$ip;
@@ -83,7 +83,7 @@ askUserForDirectory() {
         userInputDirectory=$currentPath;
         checkDirectoryExists $userInputDirectory;
         ok=$?
-    else 
+    else
         userInputDirectory=$path
         checkDirectoryExists $userInputDirectory;
         ok=$?
@@ -101,40 +101,45 @@ checkRemoteOnline() {
 }
 
 checkDirectoryExists() {
-   [[ -d $1 ]] && echo "$1 directory exists!" && userInputDirectory=$1 && return 0;
-   [[ ! -d $1 ]] && echo "$1 directory not exists!" && return 1; 
+    [[ -d $1 ]] && echo "$1 directory exists!" && userInputDirectory=$1 && return 0;
+    [[ ! -d $1 ]] && echo "$1 directory not exists!" && return 1;
 }
+
 getUserInput() {
-    echo -e "\n#####################################\n###### Directory Backup Script ######\n#####################################\n"
-    echo -e "This Script Will Compress a Directory of Your Choosing and Backup This File To A Remote Server\n"
-    read -p "Do You Wish To Continue? " answer
+    counter=1;
+    error=0;
+    until [[ $counter -eq 3 || $error -eq 1 ]]
+    do
+        askUserForDirectory
+        echo -e "Current file is $currentFileName\nCurrent Dir is $currentPath"
+
+        echo "Sorry I Dont Understand, Please Enter Yes Or No"
+        read -p "Do You Wish To Continue? " answer
+        if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
+            clear
+            return 0
+            elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
+            exitapp "Now Exiting the Program......";
+            elif [ $counter -eq 3 ]; then
+            logError "$counter attempts failed. Please Try Again Later"
+        fi
+        ((counter++))
+    done
+}
+
+checkInput() {
     if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
         clear
         return 0
-    elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
-        exitapp "Now Exiting the Program......"
-    else
-        counter=1;
-        until [ $counter -eq 3 ]
-        do
-            echo "Sorry I Dont Understand, Please Enter Yes Or No"
-            read -p "Do You Wish To Continue? " answer
-            if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
-                clear
-                return 0
-            elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
-                exitapp "Now Exiting the Program......";
-            elif [ $counter -eq 3 ]; then
-                logError "$counter attempts failed. Please Try Again Later"
-            fi
-            ((counter++))
-        done
+        elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
+        exitapp "Now Exiting the Program......";
+        elif [ $counter -eq 3 ]; then
+        logError "$counter attempts failed. Please Try Again Later"
     fi
-    #askUserForDirectory
-    #echo -e "Current file is $currentFileName\nCurrent Dir is $currentPath"
 }
 
 StartScript() {
+    clear
     echo "#------------------------------------------------------------------------------#"
     echo "#-----------------------AUTOMATED DIRECTORY BACKUP SCRIPT----------------------#"
     echo "#------------------------------------------------------------------------------#"
@@ -146,7 +151,7 @@ StartScript() {
         if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
             clear
             return 0
-        elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
+            elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
             exitapp "Now Exiting the Program......"
         else
             echo -e "\n>>>> Start Script Input Error Occured">>$log;
@@ -176,18 +181,18 @@ if [ $runscript -eq 0 ]; then
                 y | Y | Yes | yes | YES)
                     counter=3
                     StartScript
-                    ;;
+                ;;
                 n | N | NO | no | 0)
                     exitapp
-                    ;;
+                ;;
                 *)
                     ((counter++))
                     log "Sorry I Did No Understand, Please Enter Yes or No"
-                    ;;
+                ;;
             esac
         done
     else
-        exitapp 
+        exitapp
     fi
     exitapp
 fi
