@@ -14,17 +14,39 @@ newPath=""
 #                         SCRIPT FUNCTION DECLARATIONS                         #
 # ---------------------------------------------------------------------------- #
 
+log() {
+    MESSAGE=$1
+    echo -e "\n$MESSAGE"
+    echo -e "\n$MESSAGE">>$log
+    sleep 1
+}
+
+delay() {
+    sleep 3
+}
+
+# ---------------------------------------------------------------------------- #
+#                                ERROR HANDLING                                #
+# ---------------------------------------------------------------------------- #
+
+errorOut() {
+    MESSAGE=$1;
+    echo -e "\n$MESSAGE";
+    echo -e "\n$MESSAGE">>$log;
+    exit 1
+}
+
 # ---------------------------------------------------------------------------- #
 #          CHECK THE LOCALLY STORED FILE IS BOTH PRESENT AND PARSABLE          #
 # ---------------------------------------------------------------------------- #
 
 checkAndParseLocalCSV() {
     echo -e "#### Checking The Default Local User File">>$log;
+    delay
     checkFile $localfile
+    clear
     ok=$?
     if [ $ok -eq 0 ]; then
-        echo -e "#### $localfile Is Ok To Parse User Data From">>$log
-        echo -e "#### $localfile Is Ok To Parse User Data From\n"
         ConfirmUserNumber $localfile
         ok=$?
         if [ $ok -eq 0 ]; then
@@ -44,14 +66,12 @@ checkAndParseLocalCSV() {
             else
                 x=$(( x+1 ))
                 if [ $x -eq 3 ]; then
-                    echo -e "\n>>>> Input Error Please Try Again Later";
-                    exit 1
+                    errorOut "\n>>>> Input Error Please Try Again Later";
                 fi
             fi
         done
     fi
 }
-
 
 # ---------------------------------------------------------------------------- #
 #             CHECK IF THE FILE IS ON THE SYSTEM AND CAN BE PARSED             #
@@ -59,12 +79,12 @@ checkAndParseLocalCSV() {
 
 checkFile() {
     if [[ -f $1 && -r $1 && -s $1 && ${1: -4} == ".csv" ]]; then
-        
- 	    echo -e "\n#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####\n"
+ 	    log "#### $1 is a readable CSV file that contains parsable content. ####\n\n#### Parsing $1 ####"
+        delay
         return 0
     else 
-        echo -e "\n>>>> ERROR <<<< $1 does not exist locally or is not a CSV file.\n">>$log
-        echo -e "\n>>>> ERROR >>>> $1 does not exist locally or is not a CSV file.\n"
+        log ">>>> ERROR <<<< $1 does not exist locally or is not a CSV file.";
+        delay
         return 1
     fi
 }
@@ -74,56 +94,66 @@ checkFile() {
 # ---------------------------------------------------------------------------- #
 
 checkAndDownloadCSV() {
-    echo -e "\n# --------------- Checking If Users File Is Already Downloaded --------------- #"
+    log "# ----------------Checking If Users File Is Already Downloaded---------------- #"
+    delay
     checkFile $downloaded
+    clear
     ok=$?
+    delay
     if [ $ok -eq 0 ]; then
         #ask user if they want to download fresh data
-        echo -e "\n$downloaded Is Already On The Local System\nCSV Contains Content and Is Parsable">>$log;
-        echo -e "\n#### $download Is Already Present In The Local File System ####\n#### CSV Contains Content and Is Parsable ####";
+        log "#### $download Is Already Present In The Local File System ####\n#### CSV Contains Content and Is Parsable ####";
         ConfirmUserNumber $downloaded;
-    else 
-        echo -e "# ---------- No Local Version Of File Found >> Checking Download URL --------- #";
+        ok=$?
+        if [ $ok -eq 0 ]; then
+            parseData $downloaded
+        elif [ $ok -eq 1 ]; then 
+            # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
+            log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
+            mainMenu
+        fi # end if 5
+    elif [ $ok -eq 1 ]; then
+        log "# ---------- No Local Version Of File Found >> Checking Download URL --------- #";
+        delay
         checkCSV_URI $default 2>>$log;
         URLok=$?
-        if [ $URLok -eq 0 ]; then
-            echo -e "\n# ------------------- Remote Host/CSV File URL Checked + Ok ------------------ #">>$log;
-            echo -e "\n# ---------------- Downloading User Data CSV From Remote Host ---------------- #">>$log;
-            echo -e "\n# ------------------- Remote Host/CSV File URL Checked + Ok ------------------ #";
-            echo -e "\n# ---------------- Downloading User Data CSV From Remote Host ---------------- #";
-            downloadDefaultCSV $default 2>>$log;
-            if [ $? -eq 1 ]; then
-                echo -e "# -------------------------- File Download Complete -------------------------- #\n">>$log;
-                echo -e "# -------------------------- File Download Complete -------------------------- #\n";
-                echo -e "# ----------------- Checking Downloaded CSV File is Parsable ----------------- #\n">>$log;
-                echo -e "# ----------------- Checking Downloaded CSV File is Parsable ----------------- #\n";
+        if [ $URLok -eq 0 ]; then # Start if 2
+            log "# ------------------- Remote Host/CSV File URL Checked + Ok ------------------ #";
+            log "# ---------------- Downloading User Data CSV From Remote Host ---------------- #";
+            delay
+            downloadDefaultCSV $default;
+            ok=$?
+            # start if 3
+            if [ $ok -eq 0 ]; then # Start if 3
+                log "# -------------------------- File Download Complete -------------------------- #";
+                log "# ----------------- Checking Downloaded CSV File is Parsable ----------------- #";
                 checkFile $downloaded;
-                ok=$?
-                if [ $ok -eq 0 ]; then 
+                ok=$?;
+                if [ $ok -eq 0 ];then # start if 4
                     ConfirmUserNumber $downloaded;
-                    if [ $? -eq 0 ]; then
+                    ok=$?
+                    if [ $ok -eq 0 ]; then # start if 5
                         parseData $downloaded
-                    else
+                    elif [ $ok -eq 1 ]; then #elif if 5
                         # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
-                        echo -e "\n# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #\n"
-                        echo -e "\n# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #\n">>$log
+                        log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
                         mainMenu
-                    fi
+                    fi # end if 5
                 else
-                        # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
-                        echo -e "\n# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #\n"
-                        echo -e "\n# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #\n">>$log
-                        mainMenu
-                fi
+                     # ------------- >>>> An Error Occured, Returning To The Main Menu ------------ #
+                    log "# ------------- >>>> An Error Occured||Returning To The Main Menu ------------ #";
+                    mainMenu
+                fi #End if 4
             else
                 # --------------------- AN ERROR OCCURED DURING DOWNLOAD --------------------- #
                 errorOut "\n# --------------------- AN ERROR OCCURED DURING DOWNLOAD --------------------- #\n
                 # ------------------------------ Try Again Later ----------------------------- #";
-            fi
-        else 
-            errorOut "\n>>>\n>>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File\n<<<"
-        fi
-    fi
+            fi # end if 3
+        fi #end if 2
+    # End elif 1
+    else # else if statement 1
+        errorOut ">>>There is A Issue With The Resource URL Preventing File Download\n>>>Please Try Again Using a Local File<<<"
+    fi #end of function if 1
 }
 
 # ---------------------------------------------------------------------------- #
@@ -132,7 +162,7 @@ checkAndDownloadCSV() {
 # ---------------------------------------------------------------------------- #
 
 checkCSV_URI() {
-    if wget --spider $1 2>> $log; then
+    if wget --spider $1 2>>$log; then
         return 0
     else
         return 1
@@ -144,7 +174,9 @@ checkCSV_URI() {
 # ---------------------------------------------------------------------------- #
 
 downloadDefaultCSV() {
-    if wget - $default 2>>$log; then
+    echo $1
+    if wget $1 2>>$log; then
+        wget $1 2>>$log;
         return 0;
     else
         return 1;
@@ -154,25 +186,30 @@ downloadDefaultCSV() {
 # ---------------------------------------------------------------------------- #
 #        CONFIRM THE USER WISHES TO CREATE X NUMBER OF USERS IN THE FILE       #
 # ---------------------------------------------------------------------------- #
+
 ConfirmUserNumber() {
     x=1;
     userNum=$(awk '{n+=1} END {print n}' $1);
     Num="$(( $userNum-1 ))"
+    clear
     echo -e "# ---------------------------------------------------------------------------- #"
-    echo -e "#                 The Script Is Now Ready To Create $Num Users                 #"
+    echo -e "# -----------------The Script Is Now Ready To Create $Num Users------------------ #"
     echo -e "# ---------------------------------------------------------------------------- #\n"
     while [[ $x -le 3 ]]; do
         read -p "#### Do You Wish to Proceed? " confirm;
         case $confirm in
             Y | Yes | y | yes)
+                echo "User Selected Yes To Create $Num Users">>$log;
                 return 0
             ;;
             N | No | n | no)
+                echo "User Selected No To Creating $Num New Users">>$log
                 errorOut "\nExiting The Program....";
             ;;
             *)
-                echo -e "\nPlease enter yes or no...\n";
+                echo -e "\n\nPlease enter yes or no...\n";
                 if [ $x -eq 3 ]; then
+                    echo "User Attempted To Enter A Response 3 Times and Failed">>$log;
                     errorOut "An Error Occured During Confirmation. Please try Again";
                 fi
             ;;
@@ -180,65 +217,72 @@ ConfirmUserNumber() {
         x=$(( x+1 ))
     done
 }
-
-# ----------------- If Successful, THen Check & Parse CSV file ---------------- #
-# ---------------------------- Parse User CSV File ---------------------------- #
+# ---------------------------------------------------------------------------- #
+#                  If Successful, THen Check & Parse CSV file                  #
+#                              Parse User CSV File                             #
+# ---------------------------------------------------------------------------- #
 
 parseData() {
     {
         read -r
-        while IFS=";" read -r email dob group shared
+        while IFS=";" read -r email dob groups shared
         do
             password=$(date -d $dob +'%m%Y')
-            echo -e "\nConverting $dob to Password: $password"
+            log ">>> Converting $dob to Password: $password";
             ## Create User Name From Email
             xname=$email
             initial=${xname:0:1}
             last=$(echo "$xname" | cut -d"@" -f1 | cut -d"." -f2)
-            name=$initial$last
-            echo -e "\nConverted $xname to username: $name"
+            user=$initial$last
+            log ">>> Converted $xname to username: $user";
             ## Check If User Name Exists
-            checkIfUserExists $name
+            checkIfUserExists $user
             ok=$?
             # user does not exist, create user with all parsed params
             if [ $ok -eq 0 ]; then
-                createUser $name $password 
+                createUser $user $password 
             fi
-            # check if group exists will also call a create group function if this group does not exist
-            checkIfGroupExists $group
-            addUserToGroups $group $name
-            ## Creating Shared Folder If It Does Not Exist
             # Remove '/' from shared
             folder=$(echo "$shared" | awk -F/ '{print $NF}')
-            # check if folder exists, create if it does not - this function will do both
-            checkSharedFolderExists $folder $name
-            #create 
-            createSharedFolderLink $folder $name
-            # Assign user to shared folders
-            # create user alias
+            userGroupConfig $groups $user $folder;
+            echo "$user Successfully Created">>$log;
+            clear
         done
     } < $1
+    # ---------------------------------------------------------------------------- #
+    #          AT THE END OF THE SCRIPT RUN CALL FUNCTION TO LEAVE PROGRAM         #
+    # ---------------------------------------------------------------------------- #
+    endScript
 }
 
 # ---------------------------------------------------------------------------- #
 #              CHECK IF A GROUP EXISTS, CREATE THIS IF IT DOES NOT             #
 # ---------------------------------------------------------------------------- #
 
-checkIfGroupExists() {
+userGroupConfig() {
+    user=$2
+    folder=$3
     IFS=',' read -r -a groups <<< $1
     for group in "${groups[@]}"
     do
         egrep -iq $group /etc/group;
         ok=$?
         if [ $ok -eq 0 ]; then
-            echo -e "\n>>> Group: $group already exists";
-            echo -e "\n>>> Group: $group already exists">>$log;
+            log ">>> Group: $group already exists";
         else
-            echo -e "\n>>> Group: $group does not exist";
-            echo -e "\n>>> Group: $group does not exist; Creating $group">>$log;
+            log ">>> Group: $group does not exist; Creating $group";
             createNewGroup $group;
         fi
+        log ">>> Adding User: $user to Group: $group";
+        addUserToGroup $group $user
+        log ">>> Configuring $user Access To Shared $folder via $group"
+        sharedFolderConfig $folder $user $group
+        log ">>> Creating Soft Link To Shared $folder For User: $user"
+        createSharedFolderLink $folder $user
+        log ">>> Creating Permanent Shut Down Alias For User: $user"
+        createShutDownAlias $user
     done
+    return 0;
 }
 
 createNewGroup () {
@@ -246,7 +290,7 @@ createNewGroup () {
     return $?
 }
 
-addUserToGroups() {
+addUserToGroup() {
     sudo usermod -a -G $1 $2;
 }
 
@@ -256,10 +300,10 @@ addUserToGroups() {
 
 checkIfUserExists() {
     if id -un $1; then
-        echo "$1 already exists"
+        log ">>> $1 already exists"
         return 1;
     else
-        echo "$1 does not exist"
+        log ">>> $1 does not exist"
         return 0;
     fi
 }
@@ -267,10 +311,11 @@ checkIfUserExists() {
 createUser() {
     user=$1
     password=$2
-    echo -e "Create New User $user";
-    sudo useradd -d /home/$user -m -s /bin/bash $user;
+    log ">>> Create New User: $user";
+    sudo useradd -m -d /home/$user -s /bin/bash $user;
     ok=$?
     if [ $ok -eq 0 ]; then
+        log ">>> Setting Temporary Password: $password. $user Must Change This At Next Login"
         createUserPassword $user $password
         return $?
     fi
@@ -279,47 +324,114 @@ createUser() {
 createUserPassword() {
     user=$1
     password=$2
-    sudo passwd -e $password $user;
+    echo "$user:$password" -m | sudo chpasswd
+    sudo passwd -eq $user>>$log;
+    sudo chage -l $user>>$log;
     return $?
 }
 
+# ---------------------------------------------------------------------------- #
+#                     SHARED FOLDER CONFIGURATION FUNCTIONS                    #
+# ---------------------------------------------------------------------------- #
+
+sharedFolderConfig() {
+    FOLDER="/home/$1"
+    user=$2
+    group=$3
+    checkSharedFolderExists $FOLDER
+    ok=$?
+    if [ $ok -eq 0 ]; then
+        createSharedFolder $FOLDER $user;
+        setPermissions $FOLDER $user $group;
+    elif [ $ok -eq 1 ]; then
+        setPermissions $FOLDER $user $group;
+    fi
+}
+
+# ---------------------- CHECK IF A SHARED FOLDER EXISTS --------------------- #
+
 checkSharedFolderExists() {
-if [ -n "$1" ]; then
-	echo "$1 exists"
-else
-	createSharedFolder $1
-fi    
+    FOLDER=$1
+    if [ -d $FOLDER ]; then
+        log ">>> Shared Folder: $FOLDER Already Exists";
+        return 1;
+    else
+        log ">>> Creating New Shared Folder: $FOLDER";
+        return 0;
+    fi 
 }
 
+# ----------------- CREATE SHARED FOLDER IF IT DOES NOT EXIST ---------------- #
 createSharedFolder() {
-    dir=$1
-    sudo mkdir -p /home/$dir
-    sudo chmod 770 /home/$dir
-    sudo chown : root /home/$dir
+    FOLDER=$1
+    USER=$2
+    sudo mkdir -p $FOLDER>>$log
 }
-# For each user with permission to a shared folder, create a link in the users home folder to the shared directory. Link name: 'shared'
+
+# ---------------- ASSIGN PERMISSIONS FOR SHARED FOLDER ACCESS --------------- #
+setPermissions() {
+    FOLDER=$1;
+    USER=$2;
+    GROUP=$3;
+    sudo chgrp -R $GROUP $FOLDER>>$log;
+    sudo chmod 2770 $FOLDER>>$log;
+    sudo chown -R root:$GROUP $FOLDER>>$log;
+    log ">>> Permissions for $USER Access To $FOLDER Successfully Assigned."
+}
+
+# ---------------------------------------------------------------------------- #
+#               For each user with permission to a shared folder,              #
+#             create a link in the users home folder to the shared             #
+#                        directory. Link name: 'shared'                        #
+# ---------------------------------------------------------------------------- #
+
 createSharedFolderLink() {
-    ln -s $1 /home/$2/sharedfolder
+    FOLDER=$1
+    USER=$2
+    if [[ -L /home/$USER/shared ]]; then
+        log ">>> Shared Folder Link for $USER Already Exists"
+    else 
+        log ">>> Creating Shared Folder Link for $USER"
+        sudo ln -s $FOLDER /home/$USER/shared
+    fi
 }
 
-# ------------------------ CREATE ALIAS FOR EACH USER ------------------------ #
-# ------------------------- THAT HAS SUDO PERMISSIONS ------------------------ #
+# ---------------------------------------------------------------------------- #
+#             CREATE ALIAS FOR EACH USER THAT HAS SUDO PERMISSIONS             #
+# ---------------------------------------------------------------------------- #
 
-createUsersAlias() {
-    echo alias 'off="systemctl poweroff"' >> ~.bash_aliases
+createShutDownAlias() {
+    user=$1
+    file=/home/$user/.bash_aliases
+    sudo touch $file
+    sudo chmod 777 $file;
+    sudo echo alias 'off="systemctl poweroff"'>/home/$user/.bash_aliases
+    sudo chown $user:$user $file
+    sudo chmod 644 $file
 }
 
-errorOut() {
-    message=$1;
-    echo -e "$message";
-    echo -e "\n>>>> $message">>$log;
-    exit 1
+# ---------------------------------------------------------------------------- #
+#                                  END PROGRAM                                 #
+# ---------------------------------------------------------------------------- #
+
+endScript() {
+    clear
+    echo -e "# ---------------------------------------------------------------------------- #"
+    echo -e "# ----------THIS SCRIPT HAS SUCCESSFULLY CREATED USERS ON THE SYSTEM---------- #"
+    echo -e "# ---------------------------------------------------------------------------- #"
+    delay
+    clear
+    sudo cat /etc/group>>$log
+    sudo cat /etc/passwd>>$log
+exit 1
 }
 
 # ---------------------------------------------------------------------------- #
 #                        Start of Program Output To User                       #
 # ---------------------------------------------------------------------------- #
+
 mainMenu() {
+    clear
     echo -e "\nThis script will auto new user creation on this system. Do you wish to: \n
     1) Download and Use the Default CSV File 
     2) Use a Locally Stored CSV File
@@ -331,26 +443,28 @@ mainMenu() {
         read -p "Enter 1, 2 or 3: " option
         case $option in 
             1) 
+                clear
                 checkAndDownloadCSV 
                 ok=$?
                 if [ $ok -eq 0 ]; then
 		            parseData $downloaded;
                 fi  ;;
             2) 
+                clear
                 checkAndParseLocalCSV 
                 ok=$?
                 if [ $ok -eq 1 ]; then
-                    errorOut "An Error Occured Parsing the Local User Data CSV; Please Try Again";
+                    errorOut ">>> An Error Occured Parsing the Local User Data CSV; Please Try Again <<<";
                 fi ;;
             3) 
-                echo -e "\t\nExiting The Program"; 
+                log ">>> Exiting The Program"; 
                 exit 1 ;;
             *) 
-                echo -e "\f\t>> Error, Please try again <<\n" ;;
+                echo -e ">>> Error, Please try again <<<\n" ;;
         esac 
         x=$(( x+1 ))
         if [ $x -eq 4 ]; then
-            echo -e "Input Error Please Try Again Later"
+            echo ">>> Input Error Please Try Again Later"
             exit 1
         fi
     done
