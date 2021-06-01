@@ -43,16 +43,37 @@ pause() {
 
 # Destination Ip
 getDestinationIP() {
-    read -p "Enter the destination username and IP address: " ip
-    inputIP=$ip;
-    echo $inputIP;
+    error=0
+    read -p "Enter the destination IP address: " ip;
+    checkInput $ip;
+    error=$?;
+    read -p "Enter the destination Host Username" host;
+    checkInput $host;
+    error=$?;
+    # [[ $error -eq 0 ]] 
+    # && logUser "The Destination Host Details Entered Are: $host@$ip" 
+    # && read -p "Confirm These Details Are Correct: " confirm
+    # || logError "";
+    # case $confirm in
+    #     y | Y | Yes | yes | YES)
+    #         inputIP="$host@$ip";
+    #         return 0;
+    #     ;;
+    #     n | N | NO | no)
+    #         logUser "Re-enter the destination data."
+    #         return 1;
+    #     ;;
+    #     *)
+    #         logError "User Input Error"
+    #         return 1;
+    #     ;;
+    # esac
 }
 
 # file name
 getZipFileName() {
-    read -p "Enter the Output Filename Here, or Press Enter To Use 'Default.tar.gz:: '" output
-    echo "Confirm this"
-    [[ ${#output} -ne 0 ]] && outputFileName=$output && echo $outputFileName && pause && return 0;
+    read -p "Enter the Output Filename Here, or Press Enter To Use 'Default.tar.gz':: " output
+    [[ ${#output} -ne 0 ]] && outputFileName=$output && return 0;
 }
 
 # destination folder
@@ -72,10 +93,10 @@ getPortNumber() {
 # zip the file
 createZip() {
     #Delete previous file if it exists to prevent a duplicate file getting created.
-    if [ -f $outputFileName ]; then
-        rm $outputFileName.tar.gz;
+    if [ -f "$outputFileName.tar.gz" ]; then
+        rm "$outputFileName.tar.gz";
     fi 
-    tar -czvf $outputFileName.tar.gz $userInputDirectory 2>>$log;
+    tar -czvf "$outputFileName.tar.gz" $userInputDirectory 2>>$log;
 }
 
 askUserForDirectory() {
@@ -87,7 +108,7 @@ askUserForDirectory() {
         checkDirectoryExists $userInputDirectory;
         ok=$?;
         return $ok;
-    elif [[ ${#path} -ne 0 ]]; then
+    elif [[ ! ${#path} -eq 0 ]]; then
         userInputDirectory=$path
         checkDirectoryExists $userInputDirectory;
         ok=$?;
@@ -95,7 +116,6 @@ askUserForDirectory() {
     fi
 }
 sendToRemoteHost() {
-    sleep 5
     echo "Sending $outputFileName to......."
     #scp -P 22 default.tar.gz #username@ipaddress : inputfiledirectoryonremote
 }
@@ -104,6 +124,20 @@ checkRemoteOnline() {
     echo "check remote ip wget?"
 }
 
+checkInput() {
+    if [ $1 = "" ]; then
+        return 1;
+    else
+        return 0;
+    fi
+}
+
+# confirmSelection() {
+#     logUser ">>> You Have Entered:: $1"
+#     read -p "Proceed With This Value Or Enter A New Value? " checked 
+#     [[ ${#path} -eq 0 ]] && return 0 || return 1;
+# }
+
 checkDirectoryExists() {
     [[ -d $1 ]] && logUser "$1 directory exists!" && userInputDirectory=$1 && return 0;
     [[ ! -d $1 ]] && logError "Error>>> $1 directory Does Not Exist!." && return 1;
@@ -111,13 +145,19 @@ checkDirectoryExists() {
 
 getUserInput() {
     counter=1;
-    error=0;
+    ok=0;
     until [[ $counter -eq 3 ]]
     do
         askUserForDirectory
-        error=$?;
-        [[ $error -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && askUserForDirectory;
-        [[ $error -eq 0 ]] && getZipFileName;
+        ok=$?;
+        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && askUserForDirectory;
+        [[ $ok -eq 0 ]] && getZipFileName;
+        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && getZipFileName;
+        logUser "Output File Name: $outputFileName"
+        getDestinationIP
+        ok=$?;
+
+        pause
         # echo "Sorry I Dont Understand, Please Enter Yes Or No"
         # read -p "Do You Wish To Continue? " answer
         # if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
@@ -129,7 +169,7 @@ getUserInput() {
         #     logError "$counter attempts failed. Please Try Again Later"
         [[ $error -eq 0 ]] && logUser "Input Details Successfully Entered" && counter=3 && return 0  || logError "There Was A Error With Your Input Data. Please Try Again";
         ((counter++))
-        [[ $counter -eq 3 ]] && logError "Input Error Has Occured $counter Times." && pause && exitapp "# -------------------------- NOW EXITING THE PROGRAM ------------------------- #";
+        [[ $counter -eq 3 ]] && logError "Input Error Has Occured $counter Times." && exitapp "# -------------------------- NOW EXITING THE PROGRAM ------------------------- #";
     done
 }
 
@@ -183,7 +223,7 @@ if [ $runscript -eq 0 ]; then
                 ;;
                 *)
                     ((counter++))
-                    log "Sorry I Did Not Understand, Please Enter Yes or No"
+                    logUser "Sorry I Did Not Understand, Please Enter Yes or No"
                 ;;
             esac
         done
