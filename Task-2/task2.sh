@@ -20,20 +20,21 @@ logUser() {
 
 logError() {
     message=$1;
-    echo -e "\n>>>>ERROR<<<< $message";
-    echo -e "\n>>>>ERROR<<<< $message">>$log;
+    echo -e "\n$message";
+    echo -e "\n$message">>$log;
 }
-
 exitapp() {
-    clear
-    logUser "Exiting the Program....."
+    echo -e "\n\n# ---------------------------------------------------------------------------- #"
+    echo $1
+    echo -e "# ---------------------------------------------------------------------------- #\n\n"
     pause
+    echo "Exiting the Program.....">>$log;
     clear
     exit 1
 }
 
 pause() {
-    sleep 3;
+    sleep 4;
 }
 
 # ---------------------------------------------------------------------------- #
@@ -49,7 +50,9 @@ getDestinationIP() {
 
 # file name
 getZipFileName() {
-    echo "Zip File Name?"
+    read -p "Enter the Output Filename Here, or Press Enter To Use 'Default.tar.gz:: '" output
+    echo "Confirm this"
+    [[ ${#output} -ne 0 ]] && outputFileName=$output && echo $outputFileName && pause && return 0;
 }
 
 # destination folder
@@ -68,37 +71,33 @@ getPortNumber() {
 
 # zip the file
 createZip() {
+    #Delete previous file if it exists to prevent a duplicate file getting created.
+    if [ -f $outputFileName ]; then
+        rm $outputFileName.tar.gz;
+    fi 
     tar -czvf $outputFileName.tar.gz $userInputDirectory 2>>$log;
 }
 
-# send to remote
-sendToRemoteHost() {
-    echo "Send Zip To Remote"
-}
-
-
 askUserForDirectory() {
-    read -p "Enter the full path to the directory you would like to compress and transfer or press enter if you wish to use the current path: " path
+    echo -e "\nEnter the full path to the directory you would like to compress and transfer"
+    read -p "or press enter if you wish to use the current path: " path
     ok=1
-    if [ ${#path} -eq 0 ]; then
+    if [[ ${#path} -eq 0 ]]; then
         userInputDirectory=$currentPath;
         checkDirectoryExists $userInputDirectory;
-        ok=$?
-    else
+        ok=$?;
+        return $ok;
+    elif [[ ${#path} -ne 0 ]]; then
         userInputDirectory=$path
         checkDirectoryExists $userInputDirectory;
-        ok=$?
-    fi
-    if [ $ok -eq 0 ]; then
-        #Delete previous file if it exists to prevent a duplicate file getting created.
-        if [ -f $outputFileName ]; then
-            rm $outputFileName.tar.gz;
-        fi 
-        tar -czvf $outputFileName.tar.gz $userInputDirectory 2>>$log;
+        ok=$?;
+        return $ok;    
     fi
 }
-sendToRemote() {
-    scp -P 22 default.tar.gz #username@ipaddress : inputfiledirectoryonremote
+sendToRemoteHost() {
+    sleep 5
+    echo "Sending $outputFileName to......."
+    #scp -P 22 default.tar.gz #username@ipaddress : inputfiledirectoryonremote
 }
 
 checkRemoteOnline() {
@@ -107,39 +106,31 @@ checkRemoteOnline() {
 
 checkDirectoryExists() {
     [[ -d $1 ]] && logUser "$1 directory exists!" && userInputDirectory=$1 && return 0;
-    [[ ! -d $1 ]] && logUser ">>> Error >>> $1 directory Does Not Exist!." && return 1;
+    [[ ! -d $1 ]] && logError "Error>>> $1 directory Does Not Exist!." && return 1;
 }
 
 getUserInput() {
     counter=1;
     error=0;
-    until [[ $counter -eq 3 || $error -eq 1 ]]
+    until [[ $counter -eq 3 ]]
     do
         askUserForDirectory
-        echo -e "Current file is $currentFileName\nCurrent Dir is $currentPath"
-        echo "Sorry I Dont Understand, Please Enter Yes Or No"
-        read -p "Do You Wish To Continue? " answer
-        if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
-            clear
-            return 0
-            elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
-            exitapp "Now Exiting the Program......";
-            elif [ $counter -eq 3 ]; then
-            logError "$counter attempts failed. Please Try Again Later"
-        fi
+        error=$?;
+        [[ $error -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && askUserForDirectory;
+        [[ $error -eq 0 ]] && getZipFileName;
+        # echo "Sorry I Dont Understand, Please Enter Yes Or No"
+        # read -p "Do You Wish To Continue? " answer
+        # if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
+        #     clear
+        #     return 0
+        #     elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
+        #     exitapp "Now Exiting the Program......";
+        #     elif [ $counter -eq 3 ]; then
+        #     logError "$counter attempts failed. Please Try Again Later"
+        [[ $error -eq 0 ]] && logUser "Input Details Successfully Entered" && counter=3 && return 0  || logError "There Was A Error With Your Input Data. Please Try Again";
         ((counter++))
+        [[ $counter -eq 3 ]] && logError "Input Error Has Occured $counter Times." && pause && exitapp "# -------------------------- NOW EXITING THE PROGRAM ------------------------- #";
     done
-}
-
-checkInput() {
-    if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
-        clear
-        return 0
-    elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
-        exitapp "Now Exiting the Program......";
-    elif [ $counter -eq 3 ]; then
-        logError ">>>>$counter attempts failed. Please Try Again Later."
-    fi
 }
 
 StartScript() {
@@ -147,7 +138,7 @@ StartScript() {
     echo "#------------------------------------------------------------------------------#"
     echo "#-----------------------AUTOMATED DIRECTORY BACKUP SCRIPT----------------------#"
     echo "#------------------------------------------------------------------------------#"
-    echo -e "This Script Will Compress a Directory of Your Choosing and Backup This File To A Remote Server\n"
+    echo -e "\n\nThis Script Will Compress a Directory of Your Choosing and Backup This File To A Remote Server\n"
     read -p "Do You Wish To Continue? " answer
     counter=1
     until [ $counter -eq 3 ]
@@ -156,7 +147,7 @@ StartScript() {
             clear
             return 0
             elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
-            exitapp "Now Exiting the Program......"
+            exitapp "# ----------------------- Now Exiting the Program...... ---------------------- #";
         else
             echo -e "\n>>>> Start Script Input Error Occured">>$log;
             logUser "Sorry, I Dont Understand. Please Enter Yes Or No."
@@ -197,7 +188,10 @@ if [ $runscript -eq 0 ]; then
             esac
         done
     else
-        exitapp
+        pause
+        logUser "Ready to Transfer Your File >>>>"
+        sendToRemoteHost
     fi
-    exitapp
+else
+    exitapp "# -------------------------- NOW EXITING THE PROGRAM ------------------------- #"
 fi
