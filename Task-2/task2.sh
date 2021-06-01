@@ -15,19 +15,20 @@ log="log.txt"
 logUser() {
     message=$1;
     echo -e "\n>>>> $message";
-    echo -e "\n>>>> $message";
+    echo -e "\n>>>> $message">>$log;
 }
 
 logError() {
     message=$1;
     echo -e "\n>>>>ERROR<<<< $message";
-    echo -e "\n>>>>ERROR<<<< $message";
+    echo -e "\n>>>>ERROR<<<< $message">>$log;
 }
 
 exitapp() {
     clear
-    echo -e "\n\nExiting the Program....."
+    logUser "Exiting the Program....."
     pause
+    clear
     exit 1
 }
 
@@ -89,6 +90,10 @@ askUserForDirectory() {
         ok=$?
     fi
     if [ $ok -eq 0 ]; then
+        #Delete previous file if it exists to prevent a duplicate file getting created.
+        if [ -f $outputFileName ]; then
+            rm $outputFileName.tar.gz;
+        fi 
         tar -czvf $outputFileName.tar.gz $userInputDirectory 2>>$log;
     fi
 }
@@ -101,8 +106,8 @@ checkRemoteOnline() {
 }
 
 checkDirectoryExists() {
-    [[ -d $1 ]] && echo "$1 directory exists!" && userInputDirectory=$1 && return 0;
-    [[ ! -d $1 ]] && echo "$1 directory not exists!" && return 1;
+    [[ -d $1 ]] && logUser "$1 directory exists!" && userInputDirectory=$1 && return 0;
+    [[ ! -d $1 ]] && logUser ">>> Error >>> $1 directory Does Not Exist!." && return 1;
 }
 
 getUserInput() {
@@ -112,7 +117,6 @@ getUserInput() {
     do
         askUserForDirectory
         echo -e "Current file is $currentFileName\nCurrent Dir is $currentPath"
-
         echo "Sorry I Dont Understand, Please Enter Yes Or No"
         read -p "Do You Wish To Continue? " answer
         if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
@@ -131,10 +135,10 @@ checkInput() {
     if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
         clear
         return 0
-        elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
+    elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
         exitapp "Now Exiting the Program......";
-        elif [ $counter -eq 3 ]; then
-        logError "$counter attempts failed. Please Try Again Later"
+    elif [ $counter -eq 3 ]; then
+        logError ">>>>$counter attempts failed. Please Try Again Later."
     fi
 }
 
@@ -155,13 +159,14 @@ StartScript() {
             exitapp "Now Exiting the Program......"
         else
             echo -e "\n>>>> Start Script Input Error Occured">>$log;
-            echo "Sorry I Dont Understand, Please Enter Yes Or No"
+            logUser "Sorry, I Dont Understand. Please Enter Yes Or No."
             read -p "Do You Wish To Continue? " answer
         fi
         ((counter++))
         if [ $counter -eq 3 ]; then
-            echo "$counter attempts failed"
-            echo "Please Try Again Later"
+            logError "$counter Attempts Failed."
+            logUser "Please Try Again Later."
+            sleep 1
             exit 1
         fi
     done
@@ -187,7 +192,7 @@ if [ $runscript -eq 0 ]; then
                 ;;
                 *)
                     ((counter++))
-                    log "Sorry I Did No Understand, Please Enter Yes or No"
+                    log "Sorry I Did Not Understand, Please Enter Yes or No"
                 ;;
             esac
         done

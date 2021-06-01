@@ -1,1 +1,64 @@
 tar: Removing leading `/' from member names
+tar: Removing leading `/' from member names
+tar: Removing leading `/' from member names
+tar: Removing leading `/' from member names
+
+>>>> 
+
+Exiting the Program.....
+
+>>>> Exiting the Program.....
+
+>>>> Start Script Input Error Occured
+
+>>>> Start Script Input Error Occured
+
+>>>> Start Script Input Error Occured
+
+>>>> Start Script Input Error Occured
+
+>>>> Start Script Input Error Occured
+
+>>>> Start Script Input Error Occured
+
+>>>>ERROR<<<< 3 Attempts Failed
+
+>>>>ERROR<<<< Please Try Again Later
+
+>>>> Start Script Input Error Occured
+
+>>>> Start Script Input Error Occured
+
+>>>>ERROR<<<< 3 Attempts Failed.
+
+>>>> Please Try Again Later.
+
+>>>> >>> Error >>> C:Usersleggtc1downloads directory Does Not Exist!.
+
+>>>> Exiting the Program.....
+
+>>>> c:/Users/leggtc1/Downloads directory exists!
+tar: Removing leading `c:/' from member names
+
+>>>> Exiting the Program.....
+
+>>>> >>> Error >>> [A[A[Bc:/Users/leggtc1/Downloads directory Does Not Exist!.
+
+>>>> >>> Error >>> n directory Does Not Exist!.
+
+>>>> Exiting the Program.....
+
+>>>> Start Script Input Error Occured
+
+>>>> Sorry, I Dont Understand. Please Enter Yes Or No.
+
+>>>> Start Script Input Error Occured
+
+>>>> Sorry, I Dont Understand. Please Enter Yes Or No.
+
+>>>>ERROR<<<< 3 Attempts Failed.
+
+>>>> Please Try Again Later.
+
+>>>> C:/Users/leggtc1/Downloads directory exists!
+tar: Removing leading `C:/' from member names
