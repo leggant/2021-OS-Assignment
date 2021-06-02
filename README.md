@@ -26,28 +26,45 @@
 
 ## Overview
 
-`task1.sh` will automate the creation and permission configuration of new system users. User configurations are parsed from a `.csv` file that is loaded in from one of three sources: *1 - downloaded from remote server, local file provided with the repository*
+`task1.sh` will automate the creation and permission configuration of new system users. User configurations are parsed from a `.csv` file that is loaded in from one of three sources selected by the user at runtime.
 
-*in one of three ways, downloading from a remote server, from a local file that is downloaded with the repository or, if this* This script will automate the creation and administration of new system users. User information is downloaded from GitHub then parsed by into the script from an external .csv file.  assignment to user groups,
+**Script Location:** `./Task-1/task1.sh`   
 
-**Directory**: `./Task-1/task1.sh` 
-
-### **User Input Options:** 
+## User Input Options
 
 
 
-### **Error Handling:**
+## Script Output (Example)
+
+**Example Input User Data Provided In a .csv File:**
+
+```bash
+edsger.dijkstra@tue.nl;1930/05/11;sudo;/sharedUsers
+```
+
+**Example User Configuration:** 
+
+- **User Name**: edijkstra
+- **Temporary User Password:** 051930 *Password must be changed by the user when they log on for the first time*
+- **Secondary Group Assignment:** sudo
+- **Shared Folder Access:** `/home/sharedUsers`
+- **Link To Shared Folder From Users Directory:** `/home/edijkstra/shared`
+
+### Error Handling
 
 
 
-• The email address of the user
-• The birth date of the user (in the format YYYY/MM/DD, for example, 1991/11/17)
-• The secondary groups the user should be added to
-• A shared folder that the user requires full access to (full rwx permissions)
+### Known Bugs
+
+
+
+
 
 # Task 2 - Directory Compression and Transfer
 
-**Purpose:** 
+## Overview
+
+**Script Location:** `./Task-2/task2.sh`
 
 **Directory:**
 
@@ -58,4 +75,14 @@
 **Expected Results:**
 
 
+
+# Known 
+
+
+
+### Task 1
+
+
+
+### Task 2
 
