@@ -43,37 +43,35 @@ pause() {
 
 # Destination Ip
 getDestinationIP() {
-    error=0
-    read -p "Enter the destination IP address: " ip;
-    checkInput $ip;
-    error=$?;
-    read -p "Enter the destination Host Username" host;
-    checkInput $host;
-    error=$?;
-    # [[ $error -eq 0 ]] 
-    # && logUser "The Destination Host Details Entered Are: $host@$ip" 
-    # && read -p "Confirm These Details Are Correct: " confirm
-    # || logError "";
-    # case $confirm in
-    #     y | Y | Yes | yes | YES)
-    #         inputIP="$host@$ip";
-    #         return 0;
-    #     ;;
-    #     n | N | NO | no)
-    #         logUser "Re-enter the destination data."
-    #         return 1;
-    #     ;;
-    #     *)
-    #         logError "User Input Error"
-    #         return 1;
-    #     ;;
-    # esac
+    count=0
+    while [ $count -le 3 ]
+    do
+        read -p "Enter the destination IP address: " ip;
+        error=$?;
+        read -p "Enter the destination Host Username: " host;
+        inputIP="$host@$ip"
+        logUser "You Have Entered The Following Destination IP: $inputIP"
+        read -p "Confirm These Details Are Correct: " confirm
+        case $confirm in
+            y | Y | Yes | yes | YES)
+                return 0;
+            ;;
+            n | N | NO | no )
+                let "count+=1"
+                inputIP=""
+                if [ $count -eq 3 ]; then
+                    logError "Incorrect IP Details Entered $count Times, Please Try Again"
+                    return 1;
+                fi        
+            ;;
+        esac
+    done
 }
 
 # file name
 getZipFileName() {
     read -p "Enter the Output Filename Here, or Press Enter To Use 'Default.tar.gz':: " output
-    [[ ${#output} -ne 0 ]] && outputFileName=$output && return 0;
+    [[ ${#output} -eq 0 ]] && outputFileName=$output && return 0;
 }
 
 # destination folder
@@ -124,19 +122,31 @@ checkRemoteOnline() {
     echo "check remote ip wget?"
 }
 
-checkInput() {
-    if [ $1 = "" ]; then
-        return 1;
-    else
-        return 0;
-    fi
+inputLoop() {
+    question=$?
+    answer=""
+    counter=1
+    until [ $counter -eq 3 ]
+    do
+        if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
+            clear
+            return 0
+            elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
+            exitapp "# ----------------------- Now Exiting the Program...... ---------------------- #";
+        else
+            echo -e "\n>>>> Start Script Input Error Occured">>$log;
+            logUser "Sorry, I Dont Understand. Please Enter Yes Or No."
+            read -p "Do You Wish To Continue? " answer
+        fi
+        ((counter++))
+        if [ $counter -eq 3 ]; then
+            logError "$counter Attempts Failed."
+            logUser "Please Try Again Later."
+            sleep 1
+            exit 1
+        fi
+    done
 }
-
-# confirmSelection() {
-#     logUser ">>> You Have Entered:: $1"
-#     read -p "Proceed With This Value Or Enter A New Value? " checked 
-#     [[ ${#path} -eq 0 ]] && return 0 || return 1;
-# }
 
 checkDirectoryExists() {
     [[ -d $1 ]] && logUser "$1 directory exists!" && userInputDirectory=$1 && return 0;
@@ -144,32 +154,30 @@ checkDirectoryExists() {
 }
 
 getUserInput() {
-    counter=1;
+    counter=0;
     ok=0;
-    until [[ $counter -eq 3 ]]
+    while [ $counter -le 3 ]
     do
         askUserForDirectory
         ok=$?;
-        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && askUserForDirectory;
-        [[ $ok -eq 0 ]] && getZipFileName;
-        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && getZipFileName;
-        logUser "Output File Name: $outputFileName"
-        getDestinationIP
-        ok=$?;
+        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && let "counter+=1" && askUserForDirectory;
+        [[ $ok -eq 0 ]] && getZipFileName && ok=$?;
+        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && let "counter+=1" && getZipFileName;
+        [[ $ok -eq 0 ]] && logUser "Output File Name: $outputFileName";
+        
+        # ZIP file
 
-        pause
-        # echo "Sorry I Dont Understand, Please Enter Yes Or No"
-        # read -p "Do You Wish To Continue? " answer
-        # if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
-        #     clear
-        #     return 0
-        #     elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
-        #     exitapp "Now Exiting the Program......";
-        #     elif [ $counter -eq 3 ]; then
-        #     logError "$counter attempts failed. Please Try Again Later"
-        [[ $error -eq 0 ]] && logUser "Input Details Successfully Entered" && counter=3 && return 0  || logError "There Was A Error With Your Input Data. Please Try Again";
-        ((counter++))
-        [[ $counter -eq 3 ]] && logError "Input Error Has Occured $counter Times." && exitapp "# -------------------------- NOW EXITING THE PROGRAM ------------------------- #";
+        getDestinationIP;
+        ok=$?;
+        # get destination directory
+
+        # get port number for transfer
+
+        # check host is available
+
+        # confirm proceeding
+
+        [[ $ok -eq 0 ]] && exitapp "Program Has Successfully Compressed $outputFileName and Transferred to $inputIP"
     done
 }
 
@@ -211,15 +219,16 @@ if [ $runscript -eq 0 ]; then
         counter=1
         until [ $counter -eq 3 ]
         do
-            log "An Input Error Occured."
-            read "Would You Like To Try Again? " tryagain
+            logError "An Input Error Occured."
+            read -p "Would You Like To Try Again? " tryagain
             case $tryagain in
                 y | Y | Yes | yes | YES)
-                    counter=3
-                    StartScript
+                    clear
+                    getUserInput
                 ;;
                 n | N | NO | no | 0)
-                    exitapp
+                    clear
+                    exitapp "# -------------------------- NOW EXITING THE PROGRAM ------------------------- #"
                 ;;
                 *)
                     ((counter++))
