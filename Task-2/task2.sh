@@ -6,6 +6,7 @@ userInputDirectory=""
 outputFileName="default"
 inputIP=""
 port=22
+destinationPath=""
 log="log.txt"
 
 # ---------------------------------------------------------------------------- #
@@ -34,7 +35,7 @@ exitapp() {
 }
 
 pause() {
-    sleep 4;
+    sleep 2;
 }
 
 # ---------------------------------------------------------------------------- #
@@ -44,7 +45,6 @@ pause() {
 # Destination Ip
 getDestinationIP() {
     count=0
-    
     while [ $count -le 3 ]
     do
         error=0
@@ -62,17 +62,16 @@ getDestinationIP() {
                     return 0;
                 ;;
                 n | N | NO | no )
-                    let "count+=1"
                     inputIP=""
-                    if [ $count -eq 3 ]; then
-                        logError "Incorrect IP Details Entered $count Times, Please Try Again"
-                        return 1;
-                    fi        
+                    return 1;       
                 ;;
             esac
-        else
-            logUser "Input Error, Please Try Again"
         fi
+    if [ $count -eq 3 ]; then
+        logError "Incorrect IP Details Entered $count Times, Please Try Again"
+        return 1
+    fi 
+    let "count+=1"
     done
 }
 
@@ -84,15 +83,57 @@ getZipFileName() {
 
 # destination folder
 getDestinationDirectory() {
-    echo "Get Dest Directory"
+    counter=0
+    while [ $counter -ne 3 ]
+    do
+        [[ $counter -eq 3 ]] && return 1;
+        logUser "Enter the full path to the directory you would like to transfer"
+        read -p "to on the remote host. example: '/home/yourname/documents' :: " path
+        ok=1
+        if [[ ${#path} -eq 0 ]]; then
+            let "counter+=1";
+        elif [[ ! ${#path} -eq 0 ]]; then
+            destinationPath=$path
+            logUser "You Have Entered The Following Destination Directory Path: $destinationPath" 
+            read -p "Confirm These Details Are Correct: " confirm
+            if [[ ${#confirm} -eq 0 ]]; then
+                counter=4
+                return 0;
+            else
+                case $confirm in
+                    y | Y | Yes | yes | YES )
+                        counter=4
+                        return 0;
+                    ;;
+                    n | N | NO | no )
+                        let "counter+=1"
+                        destinationPath=""
+                        if [ $counter -eq 3 ]; then
+                            logError "Incorrect path Entered $counter Times, Please Try Again"
+                            return 1;
+                        fi        
+                    ;;
+                esac
+            fi
+            if [ $counter -eq 3 ]; then 
+                return 1;
+            fi
+        fi
+    done
 }
 
 # port number
 getPortNumber() {
-    echo "The Default Port For SSH is 22."
-    read "Press Enter If You Wish To Use This Port, or Enter A New Port Number Here: " newport
-    if [ ]; then
+    logUser "The Default Port For SSH is 22."
+    read -p "Press Enter If You Wish To Use This Port, or Enter A New Port Number Here: " newport
+    if [[ ${#newport} -eq 0 ]]; then
         port=$newport;
+        return 0;
+    elif [[ $newport = "y" || $newport = "Y" || $newport = "YES" || $newport = "yes" ]]; then
+        port=$newport;
+        return 0;
+    elif [[ $newport = "n" || $newport = "N" || $newport = "NO" || $newport = "no" ]]; then 
+        return 1;
     fi
 }
 
@@ -103,7 +144,6 @@ createZip() {
         rm "$outputFileName.tar.gz";
     fi 
     tar -czvf "$outputFileName.tar.gz" $userInputDirectory 2>>$log;
-    echo $?
     return $?
 }
 
@@ -132,31 +172,6 @@ checkRemoteOnline() {
     echo "check remote ip wget?"
 }
 
-inputLoop() {
-    question=$?
-    answer=""
-    counter=1
-    until [ $counter -eq 3 ]
-    do
-        if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
-            clear
-            return 0
-            elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
-            exitapp "# ----------------------- Now Exiting the Program...... ---------------------- #";
-        else
-            echo -e "\n>>>> Start Script Input Error Occured">>$log;
-            logUser "Sorry, I Dont Understand. Please Enter Yes Or No."
-            read -p "Do You Wish To Continue? " answer
-        fi
-        ((counter++))
-        if [ $counter -eq 3 ]; then
-            logError "$counter Attempts Failed."
-            logUser "Please Try Again Later."
-            sleep 1
-            exit 1
-        fi
-    done
-}
 
 checkDirectoryExists() {
     [[ -d $1 ]] && logUser "$1 directory exists!" && userInputDirectory=$1 && return 0;
@@ -170,27 +185,26 @@ getUserInput() {
     do
         askUserForDirectory
         ok=$?;
-        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && let "counter+=1" && askUserForDirectory;
+        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && askUserForDirectory;
         [[ $ok -eq 0 ]] && getZipFileName && ok=$?;
         pause
-        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && let "counter+=1" && getZipFileName;
+        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && getZipFileName;
         [[ $ok -eq 0 ]] && logUser "Output File Name: $outputFileName" && createZip && ok=$?;
         pause
-        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && let "counter+=1" && createZip;
+        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && createZip;
         [[ $ok -eq 0 ]] && logUser "Zip File Successfully Created." && getDestinationIP && ok=$?;
         pause
-        # ZIP file
-
-        #getDestinationIP;
-        #ok=$?;
-        # get destination directory
+        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && getDestinationIP;
+        [[ $ok -eq 0 ]] && logUser "Destination IP Confirmed: $inputIP" && getDestinationDirectory && ok=$?;
+        pause
+        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && getDestinationDirectory;
+        [[ $ok -eq 0 ]] && logUser "Destination Directory Confirmed: $destinationPath" && getPortNumber && ok=$?;
 
         # get port number for transfer
 
         # check host is available
 
         # confirm proceeding
-
         [[ $ok -eq 0 ]] && exitapp "Program Has Successfully Compressed $outputFileName and Transferred to $inputIP"
     done
 }
