@@ -89,9 +89,36 @@ getDestinationIP() {
 
 # file name
 getZipFileName() {
-    clear
-    read -p "Enter the Output Filename Here, or Press Enter To Use 'Default.tar.gz':: " output
-    [[ ! ${#output} -eq 0 ]] && outputFileName=$output && return 0 || outputFileName="default" && return 0;
+    count=0
+    while [ $count -le 3 ]
+    do
+        read -p "Enter the Output Filename Here, or Press Enter To Use 'Default.tar.gz':: " output
+        if [[ ${#output} -eq 0 ]]; then
+            outputFileName="Default"
+        elif [[ ! ${#output} -eq 0 ]]; then 
+            outputFileName="$output"
+        fi
+        logUser "You Have Entered The Following File Name: $outputFileName" 
+        read -p "Confirm These Details Are Correct: " confirm
+        if [[ ${#confirm} -eq 0 ]]; then
+            count=4;
+            return 0;
+        elif [[ $confirm = "y" || $confirm = "yes" || $confirm = "Y" || $confirm = "YES" ]]; then
+            count=4;
+            return 0;
+        elif [[ $confirm = "n" || $confirm = "no" || $confirm = "N" || $confirm = "NO" ]]; then
+            outputFileName="Default"
+            ((count=count+1))
+        else 
+            ((count=count+1))
+            logError "Please Enter Yes Or No....." 
+        fi
+        if [ $count -eq 3 ]; then
+            logError "Incorrect Input Entered $count Times, Please Try Again"
+            outputFileName="Default"
+            return $1
+        fi
+    done
 }
 
 # destination folder
@@ -174,12 +201,12 @@ getPortNumber() {
 
 # zip the file
 createZip() {
-    # #Delete previous file if it exists to prevent a duplicate file getting created.
-    # if [ -f "$outputFileName.tar.gz" ]; then
-    #     rm "$outputFileName.tar.gz";
-    # fi 
-    tar -czvf $"1.tar.gz" $userInputDirectory 2>>$log;
-    return $?
+    #Delete previous file if it exists to prevent a duplicate file getting created.
+    if [ -f "$outputFileName".tar.gz ]; then
+        rm "$outputFileName".tar.gz;
+    fi 
+    tar -czvf "$outputFileName".tar.gz $userInputDirectory 2>>$log;
+    return 0;
 }
 
 askUserForDirectory() {
@@ -203,9 +230,7 @@ sendToRemoteHost() {
     #scp -P 22 default.tar.gz #username@ipaddress : inputfiledirectoryonremote
 }
 
-checkRemoteOnline() {
-    echo "check remote ip wget?"
-}
+
 
 
 checkDirectoryExists() {
@@ -225,7 +250,7 @@ getUserInput() {
         ok=$?;
         pause
         [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && getZipFileName;
-        [[ $ok -eq 0 ]] && logUser "Output File Name: $outputFileName" && createZip $outputFileName;
+        [[ $ok -eq 0 ]] && logUser "Output File Name: $outputFileName" && createZip;
         ok=$?;
         pause
         [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && createZip;
@@ -241,11 +266,11 @@ getUserInput() {
         ok=$?;
         pause
 
-        # get port number for transfer
-
-        # check host is available
-
         # confirm proceeding
+
+        # Send File
+
+        # Confirm Transfer
         [[ $ok -eq 0 ]] && exitapp "Program Has Successfully Compressed $outputFileName and Transferred to $inputIP"
     done
 }
