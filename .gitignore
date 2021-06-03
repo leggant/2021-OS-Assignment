@@ -1,5 +1,4 @@
 .replit
 Task-1/users.csv
-Task-1/log.txt
-Task-2/log.txt
+*/log.txt
 *.tar.gz

@@ -45,33 +45,28 @@ pause() {
 # Destination Ip
 getDestinationIP() {
     count=0
+    error=0
     while [ $count -le 3 ]
     do
-        error=0
-        read -p "Enter the destination IP address: " ip;
-        [[ ${#ip} -eq 0 ]] && error=1 || error=0;
-        read -p "Enter the destination Host Username: " host;
-        [[ ${#host} -eq 0 ]] && error=1;
-        if [[ $error -eq 0 ]]; then 
-            inputIP="$host:$ip" 
-            logUser "You Have Entered The Following Destination IP: $inputIP" 
-            read -p "Confirm These Details Are Correct: " confirm
-            [[ ${#confirm} -eq 0 ]] && return 0;
-            case $confirm in
-                y | Y | Yes | yes | YES )
+        if [ $count -eq 3 ]; then
+            logError "Incorrect IP Details Entered $count Times, Please Try Again"
+            inputIP=""
+            return 1;
+        else
+            read -p "Enter the destination IP address: " ip;
+            [[ ${#ip} -eq 0 ]] && error=1 || error=0;
+            read -p "Enter the destination Host Username: " host;
+            [[ ${#host} -eq 0 ]] && error=1;
+            if [[ $error -eq 0 ]]; then
+                inputIP="$host:$ip" 
+                logUser "You Have Entered The Following Destination IP: $inputIP" 
+                read -p "Confirm These Details Are Correct: " confirm
+                if [[ ${#confirm} -eq 0 ]]; then
                     return 0;
-                ;;
-                n | N | NO | no )
-                    inputIP=""
-                    return 1;       
-                ;;
-            esac
-        fi
-    if [ $count -eq 3 ]; then
-        logError "Incorrect IP Details Entered $count Times, Please Try Again"
-        return 1
-    fi 
-    let "count+=1"
+                fi
+            fi
+        fi 
+        let "count+=1"
     done
 }
 
@@ -84,56 +79,57 @@ getZipFileName() {
 # destination folder
 getDestinationDirectory() {
     counter=0
-    while [ $counter -ne 3 ]
+    while [ $counter -le 3 ]
     do
-        [[ $counter -eq 3 ]] && return 1;
         logUser "Enter the full path to the directory you would like to transfer"
         read -p "to on the remote host. example: '/home/yourname/documents' :: " path
-        ok=1
         if [[ ${#path} -eq 0 ]]; then
             let "counter+=1";
         elif [[ ! ${#path} -eq 0 ]]; then
             destinationPath=$path
             logUser "You Have Entered The Following Destination Directory Path: $destinationPath" 
             read -p "Confirm These Details Are Correct: " confirm
-            if [[ ${#confirm} -eq 0 ]]; then
-                counter=4
+            [[ ${#confirm} -eq 0 ]] && return 0;
+            if [[ $confirm =~ "yYesYESyesY" ]]; then
                 return 0;
+            elif [[ $confirm =~ "nNoNOnoN" ]]; then
+                let "counter+=1";
             else
-                case $confirm in
-                    y | Y | Yes | yes | YES )
-                        counter=4
-                        return 0;
-                    ;;
-                    n | N | NO | no )
-                        let "counter+=1"
-                        destinationPath=""
-                        if [ $counter -eq 3 ]; then
-                            logError "Incorrect path Entered $counter Times, Please Try Again"
-                            return 1;
-                        fi        
-                    ;;
-                esac
+                logError "Please Press Enter, or Type Yes or No.....";
             fi
-            if [ $counter -eq 3 ]; then 
-                return 1;
-            fi
+        fi
+        if [ $counter -eq 3 ]; then
+            logError "$counter Attempts Have Failed. Please Try Again....";
+            return 1;
         fi
     done
 }
 
-# port number
 getPortNumber() {
     logUser "The Default Port For SSH is 22."
     read -p "Press Enter If You Wish To Use This Port, or Enter A New Port Number Here: " newport
     if [[ ${#newport} -eq 0 ]]; then
+        port=22;
+    else 
         port=$newport;
+    fi
+    logUser "Port Has Been Set to: $port"
+    read -p "Proceed With This Selection? ::" choice
+    if [[ ${#choice} -eq 0 ]]; then
         return 0;
-    elif [[ $newport = "y" || $newport = "Y" || $newport = "YES" || $newport = "yes" ]]; then
-        port=$newport;
-        return 0;
-    elif [[ $newport = "n" || $newport = "N" || $newport = "NO" || $newport = "no" ]]; then 
+    else
+        case $choice in
+        [yYyesYESYes]*)
+            return 0;
+        ;;
+        [nNnoNONo]*)
+            return 1;
+        ;;
+        *)
+        logError "Please Enter Yes or No"
         return 1;
+        ;;
+        esac
     fi
 }
 
@@ -193,7 +189,7 @@ getUserInput() {
         pause
         [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && createZip;
         [[ $ok -eq 0 ]] && logUser "Zip File Successfully Created." && getDestinationIP && ok=$?;
-        pause
+        echo $ok
         [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && getDestinationIP;
         [[ $ok -eq 0 ]] && logUser "Destination IP Confirmed: $inputIP" && getDestinationDirectory && ok=$?;
         pause
