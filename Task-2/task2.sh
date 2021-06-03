@@ -44,34 +44,42 @@ pause() {
 # Destination Ip
 getDestinationIP() {
     count=0
+    
     while [ $count -le 3 ]
     do
+        error=0
         read -p "Enter the destination IP address: " ip;
-        error=$?;
+        [[ ${#ip} -eq 0 ]] && error=1 || error=0;
         read -p "Enter the destination Host Username: " host;
-        inputIP="$host@$ip"
-        logUser "You Have Entered The Following Destination IP: $inputIP"
-        read -p "Confirm These Details Are Correct: " confirm
-        case $confirm in
-            y | Y | Yes | yes | YES)
-                return 0;
-            ;;
-            n | N | NO | no )
-                let "count+=1"
-                inputIP=""
-                if [ $count -eq 3 ]; then
-                    logError "Incorrect IP Details Entered $count Times, Please Try Again"
-                    return 1;
-                fi        
-            ;;
-        esac
+        [[ ${#host} -eq 0 ]] && error=1;
+        if [[ $error -eq 0 ]]; then 
+            inputIP="$host:$ip" 
+            logUser "You Have Entered The Following Destination IP: $inputIP" 
+            read -p "Confirm These Details Are Correct: " confirm
+            [[ ${#confirm} -eq 0 ]] && return 0;
+            case $confirm in
+                y | Y | Yes | yes | YES )
+                    return 0;
+                ;;
+                n | N | NO | no )
+                    let "count+=1"
+                    inputIP=""
+                    if [ $count -eq 3 ]; then
+                        logError "Incorrect IP Details Entered $count Times, Please Try Again"
+                        return 1;
+                    fi        
+                ;;
+            esac
+        else
+            logUser "Input Error, Please Try Again"
+        fi
     done
 }
 
 # file name
 getZipFileName() {
     read -p "Enter the Output Filename Here, or Press Enter To Use 'Default.tar.gz':: " output
-    [[ ${#output} -eq 0 ]] && outputFileName=$output && return 0;
+    [[ ${#output} -ne 0 ]] && outputFileName=$output && return 0;
 }
 
 # destination folder
@@ -95,6 +103,8 @@ createZip() {
         rm "$outputFileName.tar.gz";
     fi 
     tar -czvf "$outputFileName.tar.gz" $userInputDirectory 2>>$log;
+    echo $?
+    return $?
 }
 
 askUserForDirectory() {
@@ -162,13 +172,17 @@ getUserInput() {
         ok=$?;
         [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && let "counter+=1" && askUserForDirectory;
         [[ $ok -eq 0 ]] && getZipFileName && ok=$?;
+        pause
         [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && let "counter+=1" && getZipFileName;
-        [[ $ok -eq 0 ]] && logUser "Output File Name: $outputFileName";
-        
+        [[ $ok -eq 0 ]] && logUser "Output File Name: $outputFileName" && createZip && ok=$?;
+        pause
+        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && let "counter+=1" && createZip;
+        [[ $ok -eq 0 ]] && logUser "Zip File Successfully Created." && getDestinationIP && ok=$?;
+        pause
         # ZIP file
 
-        getDestinationIP;
-        ok=$?;
+        #getDestinationIP;
+        #ok=$?;
         # get destination directory
 
         # get port number for transfer
