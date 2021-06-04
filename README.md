@@ -88,3 +88,12 @@ edsger.dijkstra@tue.nl;1930/05/11;sudo;/sharedUsers
 
 ### Task 2
 
+#### What to do if an error occurs
+
+When writing your README file, think about the reader as someone who does not know the
+instructions provided in this document. Make sure to write the documentation for someone
+who has limited knowledge of the Linux operating system. Additionally, think of yourself half
+a year down the road, and what documentation you will need to understand the scripts you have
+authored, how to run them, and what their purposes are.
+
+NOTE: The other components of the formal aspects of this assignment (including error handling, code commenting and code modularity) are all assessed during review of your scripts for Task 1 and Task 2.
