@@ -16,27 +16,25 @@
      - task2.sh
 4. Change the current working directory, enter either: `cd Task-1` or `cd Task-2`
 5. Next, set the permission on the `task1.sh` or `task2.sh` files as needed so these have the correct permission to run on your system.
-   1. `chmod u+x task1.sh`
-   2. `chmod u+x task2.sh`
+   - `chmod u+x task1.sh`
+   - `chmod u+x task2.sh`
 6. Lastly, enter: `./task1.sh` or `./task2.sh` from within the `/Task-1` or `/Task-2` sub-folders to run the script.
-   1. `Task-1` comes with a `LocalUsers.csv` file to be used if the remote download source is offline. If this file is not required, it can be deleted by entering: `rm ./Task-1/LocalUsers.csv` 
-   2. If it is removed, the user can load in a different local file by selecting the second option in the main menu, then entering the full file path when prompted. 
+   - `Task-1` comes with a `LocalUsers.csv` file to be used if the remote download source is offline. If this file is not required, it can be deleted by entering: `rm ./Task-1/LocalUsers.csv`
+   - If it is removed, the user can load in a different local file by selecting the second option in the main menu, then entering the full file path when prompted.
 
-# Task 1 - User Administration Script
-
-## Overview
+## Task 1 - User Administration Script
 
 `task1.sh` will automate the creation and permission configuration of new system users. User configurations are parsed from a `.csv` file that is loaded in from one of three sources selected by the user at runtime.
 
-**Script Location:** `./Task-1/task1.sh`   
+**Script Location:** `./Task-1/task1.sh`
 
-## User Input Options
+### User Input Options
 
-When the script runs, the user can choose to download the csv from a remote server or use the csv provided in the `Task-1/` directory. The user can input a path to a different file if the command `rm LocalUsers.csv` before running the `task-1.sh` script. 
+When the script runs, the user can choose to download the csv from a remote server or use the csv provided in the `Task-1/` directory. The user can input a path to a different file if the command `rm LocalUsers.csv` before running the `task-1.sh` script.
 
-Before creating the new users, the script will confirm the number of users the will be created and will prompt the user to confirm they want to proceed.  As the script runs, it will output its current state to the console and will copy output to a `log.txt` file that is generated in the 
+Before creating the new users, the script will confirm the number of users the will be created and will prompt the user to confirm they want to proceed.  As the script runs, it will output its current state to the console and will copy output to a `log.txt` file that is generated in the
 
-## Script Input/Output (Example)
+### Script Input/Output (Example)
 
 **Example Input User Data Provided In a .csv File:**
 
@@ -44,7 +42,7 @@ Before creating the new users, the script will confirm the number of users the w
 edsger.dijkstra@tue.nl;1930/05/11;sudo;/sharedUsers
 ```
 
-**Example User Configuration:** 
+**Example User Configuration:**
 
 - **User Name**: edijkstra
 - **Temporary User Password:** 051930 *Password must be changed by the user when they log on for the first time*
@@ -54,17 +52,9 @@ edsger.dijkstra@tue.nl;1930/05/11;sudo;/sharedUsers
 
 ### Error Handling
 
-
-
 ### Known Bugs
 
-
-
-
-
-# Task 2 - Directory Compression and Transfer
-
-## Overview
+## Task 2 - Directory Compression and Transfer
 
 **Script Location:** `./Task-2/task2.sh`
 
@@ -72,21 +62,11 @@ edsger.dijkstra@tue.nl;1930/05/11;sudo;/sharedUsers
 
 **User Input Options:**
 
-**Error Handling:** 
+**Error Handling:**
 
 **Expected Results:**
 
-
-
-# Known 
-
-
-
-### Task 1
-
-
-
-### Task 2
+### Task 2 Bugs
 
 #### What to do if an error occurs
 
