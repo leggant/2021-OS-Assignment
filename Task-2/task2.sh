@@ -40,7 +40,6 @@ pause() {
 
 quit() {
     read -p "Do You Want To Continue? Enter 'q' to quit or 'c' to continue" answer
-
 }
 
 # ---------------------------------------------------------------------------- #
@@ -50,7 +49,6 @@ quit() {
 # Destination Ip
 getDestinationIP() {
     count=0
-    error=0
     while [ $count -le 3 ]
     do
         clear
@@ -60,29 +58,26 @@ getDestinationIP() {
         logUser "You Have Entered The Following Destination IP: $inputIP" 
         read -p "Confirm These Details Are Correct: " confirm
         if [[ ${#confirm} -eq 0 ]]; then
-            error=0;
             count=4;
             return 0;
         elif [[ $confirm = "y" || $confirm = "yes" || $confirm = "Y" || $confirm = "YES" ]]; then
-            error=0;
             count=4;
             return 0;
         elif [[ $confirm = "n" || $confirm = "no" || $confirm = "N" || $confirm = "NO" ]]; then
-            error=1
-            inputIP=""
-            host=""
-            ip=""
-            ((count=count+1))
+            inputIP="";
+            host="";
+            ip="";
+            ((count=count+1));
         else 
-            ((count=count+1))
-            logError "Please Enter Yes Or No....." #"$STR" == *"$SUB"*
+            ((count=count+1));
+            logError "Please Enter Yes Or No.....";
         fi
         if [ $count -eq 3 ]; then
-            logError "Incorrect IP Details Entered $count Times, Please Try Again"
-            inputIP=""
-            host=""
-            ip=""
-            return $1
+            logError "Incorrect IP Details Entered $count Times, Please Try Again";
+            inputIP="";
+            host="";
+            ip="";
+            return $1;
         fi
     done
 }
@@ -94,9 +89,9 @@ getZipFileName() {
     do
         read -p "Enter the Output Filename Here, or Press Enter To Use 'Default.tar.gz':: " output
         if [[ ${#output} -eq 0 ]]; then
-            outputFileName="Default"
+            outputFileName="Default";
         elif [[ ! ${#output} -eq 0 ]]; then 
-            outputFileName="$output"
+            outputFileName="$output";
         fi
         logUser "You Have Entered The Following File Name: $outputFileName" 
         read -p "Confirm These Details Are Correct: " confirm
@@ -107,16 +102,16 @@ getZipFileName() {
             count=4;
             return 0;
         elif [[ $confirm = "n" || $confirm = "no" || $confirm = "N" || $confirm = "NO" ]]; then
-            outputFileName="Default"
-            ((count=count+1))
+            outputFileName="Default";
+            ((count=count+1));
         else 
-            ((count=count+1))
-            logError "Please Enter Yes Or No....." 
+            ((count=count+1));
+            logError "Please Enter Yes Or No....." ;
         fi
         if [ $count -eq 3 ]; then
-            logError "Incorrect Input Entered $count Times, Please Try Again"
-            outputFileName="Default"
-            return $1
+            logError "Incorrect Input Entered $count Times, Please Try Again";
+            outputFileName="Default";
+            return 1;
         fi
     done
 }
@@ -124,52 +119,53 @@ getZipFileName() {
 # destination folder
 getDestinationDirectory() {
     count=0
-    error=0
     while [ $count -le 3 ]
     do
         clear
         logUser "Enter the full path to the directory you would like to transfer"
         read -p "to on the remote host. example: '/home/yourname/documents' :: " path
-        destinationPath=$path
-        logUser "You Have Entered The Following Destination Directory Path: $destinationPath" 
-        read -p "Confirm These Details Are Correct: " confirm
-        if [[ ${#confirm} -eq 0 ]]; then
-            error=0;
-            count=4;
-            return 0;
-        elif [[ $confirm = "y" || $confirm = "yes" || $confirm = "Y" || $confirm = "YES" ]]; then
-            error=0;
-            count=4;
-            return 0;
-        elif [[ $confirm = "n" || $confirm = "no" || $confirm = "N" || $confirm = "NO" ]]; then
-            error=1
-            destinationPath=""
-            ((count=count+1))
-        else 
-            ((count=count+1))
-            logError "Please Enter Yes Or No....." #"$STR" == *"$SUB"*
-        fi
-        if [ $count -eq 3 ]; then
-            logError "Incorrect Path Entered $count Times, Please Try Again"
-            destinationPath=""
-            return $1
+        if [[ ${#path} -eq 0 ]]; then
+            ((count=count+1));
+            continue;
+        elif [[ ! ${#path} -eq 0 ]]; then
+            destinationPath=$path
+            logUser "You Have Entered The Following Destination Directory Path: $destinationPath" 
+            read -p "Confirm These Details Are Correct: " confirm
+            if [[ ${#confirm} -eq 0 ]]; then
+                count=4;
+                return 0;
+            elif [[ $confirm = "y" || $confirm = "yes" || $confirm = "Y" || $confirm = "YES" ]]; then
+                count=4;
+                return 0;
+            elif [[ $confirm = "n" || $confirm = "no" || $confirm = "N" || $confirm = "NO" ]]; then
+                destinationPath="";
+                ((count=count+1));
+            elif [ $count -eq 3 ]; then
+                logError "Incorrect Path Entered $count Times, Please Try Again";
+                destinationPath="";
+                return 1;
+            else 
+                ((count=count+1));
+                logError "Please Enter Yes Or No.....";
+            fi
+        else
+            logError "Incorrect Path Entered $count Times, Please Try Again";
+            destinationPath="";
+            StartScript;
         fi
     done
 }
 
 getPortNumber() {
     count=0
-    error=0
     while [ $count -le 3 ]
     do
         clear
         logUser "The Default Port For SSH is 22."
         read -p "Press Enter If You Wish To Use This Port, or Enter A New Port Number Here: " newport
         if [[ ${#newport} -eq 0 ]]; then
-            error=0;
             port=22;
         else 
-            error=0;
             port=$newport;
         fi
         read -p "You Have Entered Port# $port - Confirm Yes or No: " confirm;
@@ -179,21 +175,19 @@ getPortNumber() {
             count=4;
             return 0;
         elif [[ $confirm = "y" || $confirm = "yes" || $confirm = "Y" || $confirm = "YES" ]]; then
-            error=0;
             count=4;
             return 0;
         elif [[ $confirm = "n" || $confirm = "no" || $confirm = "N" || $confirm = "NO" ]]; then
-            error=1
-            port=22
-            ((count=count+1))
+            port=22;
+            ((count=count+1));
         else 
-            ((count=count+1))
-            logError "Please Enter Yes Or No....." #"$STR" == *"$SUB"*
+            ((count=count+1));
+            logError "Please Enter Yes Or No.....";
         fi
         if [ $count -eq 3 ]; then
-            logError "Incorrect Port Entered $count Times, Please Try Again"
-            port=22
-            return $1
+            logError "Incorrect Port Entered $count Times, Please Try Again";
+            port=22;
+            return 1;
         fi
     done
 
@@ -225,13 +219,41 @@ askUserForDirectory() {
         return $ok;    
     fi
 }
-sendToRemoteHost() {
-    echo "Sending $outputFileName to......."
-    #scp -P 22 default.tar.gz #username@ipaddress : inputfiledirectoryonremote
+
+confirmContinue() {
+    count=0
+    while [ $count -le 3 ]
+    do
+        clear
+        logUser "$outputFileName.tar.gz is now ready to be transferred: $host:$ip Path: $destinationPath";
+        read -p "Do You Want To Proceed? Enter Y or N: " confirm
+        if [[ ${#confirm} -eq 0 ]]; then
+            count=4;
+            return 0;
+        elif [[ $confirm = "y" || $confirm = "yes" || $confirm = "Y" || $confirm = "YES" ]]; then
+            count=4;
+            return 0;
+        elif [[ $confirm = "n" || $confirm = "no" || $confirm = "N" || $confirm = "NO" ]]; then
+            count=4;
+            return 1;
+        else 
+            ((count=count+1));
+            logError "Please Enter Yes Or No.....";
+        fi
+        if [ $count -eq 3 ]; then
+            logError "Incorrect Path Entered $count Times, Please Try Again";
+            return 1;
+        fi
+    done
 }
 
-
-
+sendToRemoteHost() {
+    logUser "Sending $outputFileName to $ip";
+    scp -P $port "$outputFileName".tar.gz "$host"@"$ip":"$destinationPath">>$log;
+    echo $?
+    pause
+    return $?;
+}
 
 checkDirectoryExists() {
     [[ -d $1 ]] && logUser "$1 directory exists!" && userInputDirectory=$1 && return 0;
@@ -265,14 +287,18 @@ getUserInput() {
         [[ $ok -eq 0 ]] && logUser "Destination Directory Confirmed: $destinationPath" && getPortNumber;
         ok=$?;
         pause
-
-        # confirm proceeding
-
-        # Send File
-
-        # Confirm Transfer
-        [[ $ok -eq 0 ]] && exitapp "Program Has Successfully Compressed $outputFileName and Transferred to $inputIP"
+        [[ $ok -eq 1 ]] && logUser "An Input Error Occured, Please Try Again" && getPortNumber;
+        [[ $ok -eq 0 ]] && logUser "Port Confirmed: $port" && confirmContinue;
+        ok=$?;
+        pause
+        [[ $ok -eq 1 ]] && logUser "Aborting Transfer.......";
+        [[ $ok -eq 0 ]] && logUser "Starting Transfer......." && sendToRemoteHost;
+        ok=$?;
+        pause
+        [[ $ok -eq 1 ]] && logError "An Error Occured During Transfer, Check Your Input Credentials and Try Again" && StartScript;
+        [[ $ok -eq 0 ]] && exitapp "Program Has Successfully Compressed $outputFileName and Transferred to $inputIP" && pause;
     done
+    exitapp "Come Back Soon :)";
 }
 
 StartScript() {
@@ -286,21 +312,21 @@ StartScript() {
     until [ $counter -eq 3 ]
     do
         if [[ $answer = "yes" || $answer = "y" || $answer = "YES" || $answer = "Y" ]]; then
-            clear
-            return 0
+            clear;
+            return 0;
             elif [[ $answer = "no" || $answer = "n" || $answer = "NO" || $answer = "N" ]]; then
             exitapp "# ----------------------- Now Exiting the Program...... ---------------------- #";
         else
             echo -e "\n>>>> Start Script Input Error Occured">>$log;
-            logUser "Sorry, I Dont Understand. Please Enter Yes Or No."
+            logUser "Sorry, I Dont Understand. Please Enter Yes Or No.";
             read -p "Do You Wish To Continue? " answer
         fi
-        ((counter++))
+        ((counter++));
         if [ $counter -eq 3 ]; then
-            logError "$counter Attempts Failed."
-            logUser "Please Try Again Later."
-            sleep 1
-            exit 1
+            logError "$counter Attempts Failed.";
+            logUser "Please Try Again Later.";
+            sleep 1;
+            exit 1;
         fi
     done
 }
@@ -330,10 +356,6 @@ if [ $runscript -eq 0 ]; then
                 ;;
             esac
         done
-    else
-        pause
-        logUser "Ready to Transfer Your File >>>>"
-        sendToRemoteHost
     fi
 else
     exitapp "# -------------------------- NOW EXITING THE PROGRAM ------------------------- #"
