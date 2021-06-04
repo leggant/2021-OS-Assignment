@@ -250,7 +250,7 @@ confirmContinue() {
 sendToRemoteHost() {
     logUser "Sending $outputFileName to $ip";
     scp -P $port "$outputFileName".tar.gz "$host"@"$ip":"$destinationPath">>$log;
-    echo $?
+    [[ $? -eq 0 ]] && logUser "$outputFileName.tar.gz Can now be unzipped on the remote host using the command: sudo tar -xzvf $outputFileName.tar.gz" 
     pause
     return $?;
 }
