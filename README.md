@@ -43,7 +43,7 @@ Each time the As the script runs, it will output options to the command line whi
 
 After the `.csv` file has been parsed, the user will be advised of the number of new users that will be created on the system and will prompt the user for a final confirmation before continuing. 
 
-### Script Input/Output (Example)
+### Example Script Input & Output
 
 **Example Input User Data Provided In a .csv File:**
 
@@ -59,7 +59,7 @@ edsger.dijkstra@tue.nl;1930/05/11;sudo;/sharedUsers
 - **Shared Folder Access:** `/home/sharedUsers`
 - **Link To Shared Folder From Users Directory:** `/home/edijkstra/shared`
 
-## Known Bugs
+### Known Bugs
 
 1. The script currently does not have an option provided to allow a user to enter a different URL to download a csv file from. The default URL is hard coded in to the script. 
 2. Currently, there is no option provided in the menu that will allow the user to enter a path to an alternative file. The functionality is there, but can only be accessed by renaming or deleting the `LocalUsers.csv` file provided first.
@@ -69,24 +69,28 @@ edsger.dijkstra@tue.nl;1930/05/11;sudo;/sharedUsers
 
 ## Task 2 - Directory Compression and Transfer
 
+`task2.sh` will compress a local directory selected by the user into a tar file using gunzip compression. Once created, the user will be prompted to enter the details of a remote host to transfer the compressed files to. After asking the user to confirm the information provided, the script will start a secure session with the remote host; the user will be prompted to enter the remote host password. Once the remote host accepts password, the script will securely copy the compressed file to the directory entered by the user.
+
 **Script Location:** `./Task-2/task2.sh`
 
-**Directory:**
+### Command Line User Input
 
-**User Input Options:**
 
-**Error Handling:**
 
-**Expected Results:**
+### Example Script Input & Output
 
-### Task 2 Bugs
+**Example Input User Data Provided In a .csv File:**
 
-#### What to do if an error occurs
+```bash
+edsger.dijkstra@tue.nl;1930/05/11;sudo;/sharedUsers
+```
 
-When writing your README file, think about the reader as someone who does not know the
-instructions provided in this document. Make sure to write the documentation for someone
-who has limited knowledge of the Linux operating system. Additionally, think of yourself half
-a year down the road, and what documentation you will need to understand the scripts you have
-authored, how to run them, and what their purposes are.
+**Example User Configuration:**
 
-NOTE: The other components of the formal aspects of this assignment (including error handling, code commenting and code modularity) are all assessed during review of your scripts for Task 1 and Task 2.
+- **User Name**: edijkstra
+- **Temporary User Password:** 051930 *Password must be changed by the user when they log on for the first time*
+- **Secondary Group Assignment:** sudo
+- **Shared Folder Access:** `/home/sharedUsers`
+- **Link To Shared Folder From Users Directory:** `/home/edijkstra/shared`
+
+### Known Bugs
