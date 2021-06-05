@@ -98,9 +98,15 @@ edsger.dijkstra@tue.nl;1930/05/11;sudo;/sharedUsers
 
 **Script Location:** `./Task-2/task2.sh`
 
+### Error Handling
+
+The user is asked to confirm the information they provide each time they enter information to the command line. they provide in the command line. Each question has a maximum of 4 incorrect entries before the script logs an error to a `log.txt` file that is created in the `Task-2` directory. 
+
 ### Command Line User Input
 
-### Example Script Input & Output
+1. `task-2.sh` starts by collecting input from the user regarding the full path to the directory to be compressed and the name of the output file. The user can choose the current working directory and or `Default.tar.gz` as the output file name by pressing the enter key.
+2. 
 
 ### Known Bugs
 
+Script does not have any function to check that the destination device has the directory path entered by the user.

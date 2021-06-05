@@ -1,5 +1,9 @@
 #!/bin/bash
+# ---------------------------------------------------------------------------- #
+#                   CODED BY ANTHONY LEGG 03007276 06-06-2021                  #
+# ---------------------------------------------------------------------------- #
 
+# ------------------- GLOBAL DEFAULT VARIABLE DECLARATIONS ------------------- #
 currentPath=$(pwd)
 currentFileName=$(echo "${currentPath##*/}")
 userInputDirectory=""
@@ -13,26 +17,39 @@ log="log.txt"
 #                          LOGGING AND ERROR HANDLING                          #
 # ---------------------------------------------------------------------------- #
 
+# ----------- RETURN INFORMATION TO THE USER VIA THE TERMNINAL AND ----------- #
+# ---------------------- ALSO APPEND TO THE LOG.TXT FILE --------------------- #
+
 logUser() {
     message=$1;
     echo -e "\n>>>> $message";
     echo -e "\n>>>> $message">>$log;
 }
 
+# ---- RETURN AN ERROR MESSAGE TO THE USER AND APPEND TO THE LOG.TXT FILE ---- #
+
 logError() {
     message=$1;
     echo -e "\n$message";
     echo -e "\n$message">>$log;
 }
+
+# -------- FUNCTION TO EXIT THE APP, LOG A BANNER MESSAGE TO THE USER -------- #
+# ------------------- AND LOG THE EXIT TO THE LOG.TXT FILE ------------------- #
+
 exitapp() {
+    message=$1;
     echo -e "\n\n# ---------------------------------------------------------------------------- #"
-    echo $1
+    echo $message>>$log
     echo -e "# ---------------------------------------------------------------------------- #\n\n"
     pause
     echo "Exiting the Program.....">>$log;
     clear
     exit 1
 }
+
+# ---------- ADD A PAUSE BETWEEN EACH STAGE IN THE FUNCTION TO ALLOW --------- #
+# ------------- THE USER TO SEE THE PROGRESSION BETWEEN EACH STEP ------------ #
 
 pause() {
     sleep 2;
