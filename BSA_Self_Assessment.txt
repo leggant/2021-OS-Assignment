@@ -1,0 +1,139 @@
+# BSA Self Assessment
+
+## Task 1
+
+### Reading local file / URL
+
+- [ ] Completed 
+5 Points
+Result
+
+Self-assessment Comments: 
+
+
+Lecturer Feedback
+
+------
+
+### Input Validation
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+------
+
+### Script Interaction
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+------
+
+### User Management
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+------
+
+### Group Management
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+------
+
+### Shared Folder Configuration
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+### Link Creation
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+### Alias Management
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+### Handling Script Input
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+## Task 2
+
+### Create Compressed Archive
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+### SCP Transfer
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+### Handling Script Input
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+### Code Modularity
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+### Code Commenting
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
+### Git Usage
+
+- [ ] Completed 
+
+Self-assessment Comments:
+
+Lecturer Feedback
+
