@@ -4,12 +4,11 @@
 
 ### Reading local file / URL
 
-- [ ] Completed 
-5 Points
-Result
+[x] Completed 
 
 Self-assessment Comments: 
-
+Completed. Script parses the user input file. If no local file is available the user is able to enter a path to a different csv file if needed.
+Used a function to read the csv file line by line, convert each value to meet the require format.
 
 Lecturer Feedback
 
@@ -17,9 +16,10 @@ Lecturer Feedback
 
 ### Input Validation
 
-- [ ] Completed 
+[x] Completed 
 
 Self-assessment Comments:
+
 
 Lecturer Feedback
 
@@ -87,53 +87,76 @@ Self-assessment Comments:
 
 Lecturer Feedback
 
+ #####################################################################################################################################################################
+ #####################################################################################################################################################################
+
 ## Task 2
 
 ### Create Compressed Archive
 
-- [ ] Completed 
+[x] Completed 
 
 Self-assessment Comments:
+Separate function created to handle the compression of the file, user is provided the option to compress the current working directory or enter an absolute path to a different directory. User can also name the output compressed file.
 
 Lecturer Feedback
+
+----
 
 ### SCP Transfer
 
-- [ ] Completed 
+[x] Completed 
 
 Self-assessment Comments:
 
+Script has a seperate function to handle the transfer of the file to the remote host machine. This has been tested, proven to work as required. 
+
 Lecturer Feedback
+
+----
 
 ### Handling Script Input
 
-- [ ] Completed 
+[x] Completed 
 
 Self-assessment Comments:
+For the most part, all possible options have been accounted for and handled.  In task 1, I would have like to have added a function in the main menu to allow the user to enter an alternative URL or path to a csv file as a fall back rather than only offering this option if there was no local file available. 
+Task 2, there is not as much input checking as I would have liked; every input is confirmed by the user. Some inputs should have included some regex checks on formatting/type of data values that are provided.
 
 Lecturer Feedback
+
+----
 
 ### Code Modularity
 
-- [ ] Completed 
+[x] Completed 
 
 Self-assessment Comments:
+All code is called from individual functions. Tried to give each function a single purpose, show a menu, parse a file, get an IP address etc
 
 Lecturer Feedback
+
+----
 
 ### Code Commenting
 
-- [ ] Completed 
+[o] Completed 
 
 Self-assessment Comments:
+Code was left under-commented if anything. I did add banner comments to section off blocks of functions related to a particular task
+some functions got very long a difficult to follow, some comments have been added to these to help
 
 Lecturer Feedback
 
+----
+
 ### Git Usage
 
-- [ ] Completed 
+[x] Completed 
 
 Self-assessment Comments:
+Over 80 commits to the assignment repository. Some of these were needed in order to transfer code code developed on my PC to a VM for testing.
+Commit messages could have been more descriptive about the changes made - mine were very generic.
 
 Lecturer Feedback
 

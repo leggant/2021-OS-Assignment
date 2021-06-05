@@ -96,17 +96,19 @@ edsger.dijkstra@tue.nl;1930/05/11;sudo;/sharedUsers
 
 `task2.sh` will compress a local directory selected by the user into a tar file using gunzip compression. Once created, the user will be prompted to enter the details of a remote host to transfer the compressed files to. After asking the user to confirm the information provided, the script will start a secure session with the remote host; the user will be prompted to enter the remote host password. Once the remote host accepts password, the script will securely copy the compressed file to the directory entered by the user.
 
+Upon completion, the script will output confirmation of the successful transfer and will log a successful result to the `log.txt` file.
+
 **Script Location:** `./Task-2/task2.sh`
 
 ### Error Handling
 
-The user is asked to confirm the information they provide each time they enter information to the command line. they provide in the command line. Each question has a maximum of 4 incorrect entries before the script logs an error to a `log.txt` file that is created in the `Task-2` directory. 
+The user is asked to confirm the information they provide each time they enter information to the command line. they provide in the command line. Each question has a maximum of 4 incorrect entries before the script outputs an error. 
 
-### Command Line User Input
-
-1. `task-2.sh` starts by collecting input from the user regarding the full path to the directory to be compressed and the name of the output file. The user can choose the current working directory and or `Default.tar.gz` as the output file name by pressing the enter key.
-2. 
+If the user does not enter a destination path they will continue to be prompted to enter this before the script will proceed to the next stage. When all inputs have been received the user is prompted to confirm they want to proceed with the transfer to the destination directory on the remote host  using the username and IP address information provided. At this point the user can opt to exit and re-enter the information if needed. 
 
 ### Known Bugs
 
-Script does not have any function to check that the destination device has the directory path entered by the user.
+Script does not have any function to check that the destination device has the directory path entered by the user or if the remote host is online/available to accept the transfer.
+
+The IP function currently does not check if the user does not enter a required value when asked for a IP address or username.
+
