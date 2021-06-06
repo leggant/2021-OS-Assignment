@@ -5,6 +5,7 @@
 ### Reading local file / URL
 
 [x] Completed 
+[ ] Bugs
 
 Self-assessment Comments: 
 Completed. Script parses the user input file. If no local file is available the user is able to enter a path to a different csv file if needed.
@@ -17,9 +18,15 @@ Lecturer Feedback
 ### Input Validation
 
 [x] Completed 
+[x] Bugs
 
 Self-assessment Comments:
 
+Would have like to have added a function in the main menu to allow the user 
+to enter an alternative URL or path to a csv file as a fall back rather than only offering this option if there was no local file available.
+
+Included a function check to see if the download URL is available/online before allowing the download to occur. This function will advise the user if 
+the download url is unavailable and return them to the main menu.
 
 Lecturer Feedback
 
@@ -27,9 +34,15 @@ Lecturer Feedback
 
 ### Script Interaction
 
-- [ ] Completed 
+[x] Completed 
+[ ] Bugs
 
 Self-assessment Comments:
+
+Each error is logged to a log.txt file as well as any choice a user inputs. ie if they opt to exit out of the program. Script is structured in a way that allows the user to return to the main menu,
+or exit out of the script without closing the terminal window. At each step of the user creation a function to pause for 2 second is called to allow the user to read the output to the terminal - at the last step of 
+each users creation, a confirmation message is given then a pause, before the terminal window is cleared and the next user is created, making the output less cluttered. Also, ensured that there are line breaks between each
+piece of output to make it easier to read.
 
 Lecturer Feedback
 
@@ -37,9 +50,17 @@ Lecturer Feedback
 
 ### User Management
 
-- [ ] Completed 
+[x] Completed 
+[x] Bugs
 
 Self-assessment Comments:
+
+A function to parse the downloaded/local csv file is called from the main menu. Data is parsed line by line, each line assigns user information to global and local variables which get passed down to
+individual function when create each piece of the user configuration.
+
+User has their temporary password generated from their date of birth, this is set to expire which will force the user to change this when they first login to the system.
+
+Bugs - There is no fall back if the dob is not provided to generate a password.
 
 Lecturer Feedback
 
@@ -47,9 +68,16 @@ Lecturer Feedback
 
 ### Group Management
 
-- [ ] Completed 
+[x] Completed 
+[x] Bugs
 
 Self-assessment Comments:
+
+seperate functions created to first check if a groups provided in the csv file currently exists. This function iterates through each comma seperate group name. if it does not exist
+a second function is called to create the group.
+Then the script will assign the current user to the group(s) provided. 
+
+Bug that I was not able to create a fall back for occurs when a user has no group parameter provided. 
 
 Lecturer Feedback
 
@@ -57,33 +85,59 @@ Lecturer Feedback
 
 ### Shared Folder Configuration
 
-- [ ] Completed 
+[x] Completed 
+[x] Bugs
 
 Self-assessment Comments:
 
+There are a series of functions involved with the creation of a shared folder, a check for the shared folders existance, creation of the shared folder itself, parsing the name of the shared folder and finally
+setting the permission for the newly created shared folder. If the shared folder already exists in the /home/ directory the script will continue without recreating this folder/overwriting its permissions etc.
+
+Bug that I was not able create a fallback for occurs when a user has no shared folder parameter provided.  
+
 Lecturer Feedback
+
+----
 
 ### Link Creation
 
-- [ ] Completed 
+[x] Completed 
+[x] Bugs
 
 Self-assessment Comments:
 
+Each user has a soft link created to the shared folder set for them in the csv file. However, this function currently does not account for users that do not have a shared folder provided in 
+the csv. For those users, I believe the script creates a soft link to the root of the system which is owned by root. I ran out of time to figure out how to include a check for this prior to 
+creating the soft link.
+
 Lecturer Feedback
+
+----
 
 ### Alias Management
 
-- [ ] Completed 
+[x] Completed 
+[ ] Bugs
 
 Self-assessment Comments:
+
+Each user has an alias created for them in their /home/username/.bash_aliases file. The function which performs this action first creates this file (does not check if it already exists),
+then inserts the alias into the file, and sets the user permissions so that the user has ownership and the file has 644 read, write execute permissions set.
 
 Lecturer Feedback
 
+----
+
 ### Handling Script Input
 
-- [ ] Completed 
+[x] Completed 
+[ ] Bugs
 
 Self-assessment Comments:
+
+User inputs are handled by a series of functions, each of which contain a while loop that has a maximum of 3 iterations. 
+Each input function is called by a higher level function, for instance the StartScript function or the parseData function, which sends data down to
+lower level child functions to perform an action with.
 
 Lecturer Feedback
 
@@ -95,9 +149,12 @@ Lecturer Feedback
 ### Create Compressed Archive
 
 [x] Completed 
+[ ] Bugs
 
 Self-assessment Comments:
-Separate function created to handle the compression of the file, user is provided the option to compress the current working directory or enter an absolute path to a different directory. User can also name the output compressed file.
+Separate function created to handle the compression of the file, 
+user is provided the option to compress the current working directory or enter an absolute path to a different directory. 
+User can also optionally name the output file.
 
 Lecturer Feedback
 
@@ -105,7 +162,8 @@ Lecturer Feedback
 
 ### SCP Transfer
 
-[x] Completed 
+[x] Completed
+[ ] Bugs 
 
 Self-assessment Comments:
 
@@ -118,10 +176,13 @@ Lecturer Feedback
 ### Handling Script Input
 
 [x] Completed 
+[x] Bugs
 
 Self-assessment Comments:
-For the most part, all possible options have been accounted for and handled.  In task 1, I would have like to have added a function in the main menu to allow the user to enter an alternative URL or path to a csv file as a fall back rather than only offering this option if there was no local file available. 
-Task 2, there is not as much input checking as I would have liked; every input is confirmed by the user. Some inputs should have included some regex checks on formatting/type of data values that are provided.
+For the most part, all possible options have been accounted for and handled.  In task 1, I would have like to have added a function in the main menu to allow the user 
+to enter an alternative URL or path to a csv file as a fall back rather than only offering this option if there was no local file available. 
+Task 2, there is not as much input checking as I would have liked; every input is confirmed by the user. Some inputs should have included
+some regex checks on formatting/type of data values that are provided.
 
 Lecturer Feedback
 
@@ -130,9 +191,10 @@ Lecturer Feedback
 ### Code Modularity
 
 [x] Completed 
+[ ] Bugs
 
 Self-assessment Comments:
-All code is called from individual functions. Tried to give each function a single purpose, show a menu, parse a file, get an IP address etc
+All code is called from individual functions. Each function a single purpose, show a menu, parse a file, get an IP address etc
 
 Lecturer Feedback
 
@@ -140,7 +202,7 @@ Lecturer Feedback
 
 ### Code Commenting
 
-[o] Completed 
+[ ] Completed 
 
 Self-assessment Comments:
 Code was left under-commented if anything. I did add banner comments to section off blocks of functions related to a particular task
@@ -153,9 +215,10 @@ Lecturer Feedback
 ### Git Usage
 
 [x] Completed 
+[ ] Bugs
 
 Self-assessment Comments:
-Over 80 commits to the assignment repository. Some of these were needed in order to transfer code code developed on my PC to a VM for testing.
+Over 150 commits to the assignment repository. Some of these were needed in order to transfer code code developed on my PC to a VM for testing.
 Commit messages could have been more descriptive about the changes made - mine were very generic.
 
 Lecturer Feedback
