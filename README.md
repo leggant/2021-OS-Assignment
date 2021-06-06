@@ -111,4 +111,3 @@ If the user does not enter a destination path they will continue to be prompted 
 Script does not have any function to check that the destination device has the directory path entered by the user or if the remote host is online/available to accept the transfer.
 
 The IP function currently does not check if the user does not enter a required value when asked for a IP address or username.
-
